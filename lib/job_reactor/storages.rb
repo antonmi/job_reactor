@@ -9,3 +9,4 @@
 
 require 'job_reactor/storages/active_record_storage'
 require 'job_reactor/storages/memory_storage'
+require 'job_reactor/storages/redis_storage'

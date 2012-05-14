@@ -5,7 +5,6 @@ require 'eventmachine'
 require 'job_reactor'
 require 'logger'
 require 'node'
-#require 'storages'
 require 'distributor'
 
 
@@ -34,7 +33,7 @@ module JobReactor
 
   def wait_em_and_run(&block)
     Thread.new do
-      sleep(1) until EM.reactor_running?
+      sleep(1) until EM.reactor_running? #TODO better solution?
       start(&block)
     end
   end
