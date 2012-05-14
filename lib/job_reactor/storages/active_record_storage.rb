@@ -2,14 +2,19 @@
 require 'active_record'
 module JobReactor
   class ActiveRecordStorage < ::ActiveRecord::Base
-    establish_connection :adapter => 'mysql2', :database => 'em', :user => 'root', :password => '123456'
+    establish_connection(
+        :adapter => JR.config[:active_record_adapter],
+        :database => JR.config[:active_record_database],
+        :user => JR.config[:active_record_user],
+        :password => JR.config[:active_record_password]
+    ) if JR.config[:use_custom_active_record_connection]
 
     serialize :args, Hash
 
     ATTRS = %w(name args last_error run_at failed_at attempt period make_after node status)
     attr_accessible *ATTRS
 
-    self.table_name = 'reactor_jobs'
+    self.table_name = JR.config[:active_record_table_name]
     class << self
 
       def load(hash, &block)

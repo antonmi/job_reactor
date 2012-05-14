@@ -5,38 +5,29 @@ include JobReactor
 puts "="*100
 
 
-job 'create' do |args|
+job 'test_job' do |args|
   puts 'job'
-  puts self
   puts args
+  (1..10_000_000).to_a.shuffle!.sort!
 end
 
-job_callback 'create', 'first_callback' do |args|
+
+job_callback 'test_job', 'first_callback' do |args|
   puts 'callback'
-  puts args
 end
 
-job_callback 'create', 'second_callback' do |args|
+job_callback 'test_job', 'second_callback' do |args|
   puts 'another_callback'
-  (1..1_000_000).to_a.shuffle!.sort!
-  puts args[:job_itself]
-  puts args
-  ewrwer
+  puts 'Test job is complete'
 end
 
-job_errback 'create', 'first_errback' do |args|
+job_errback 'test_job', 'first_errback' do |args|
+  puts args[:error]
   puts 'errback'
-  puts args
-  puts args[:job]
-  puts args[:job_itself]
-  #raise JobReactor::CancelJob
-  puts args
-  puts args[:exception]
 end
 
-job_errback 'create', 'second_errback' do |args|
+job_errback 'test_job', 'second_errback' do |args|
   puts 'another_errback'
-
 end
 
 
