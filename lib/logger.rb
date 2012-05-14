@@ -3,7 +3,9 @@ module JobReactor
 ################
 #   To set output stream
 
-    #mattr_writer :stdout #TODO
+    def self.stdout=(value)
+      @@stdout = value
+    end
 
     def self.stdout
       @@stdout ||= $stdout

@@ -4,7 +4,6 @@ module JobReactor
   class Node
 
     def initialize(opts)
-      #opts.assert_valid_keys([:storage, :name, :server, :distributors])  #TODO
       @config = { storage: opts[:storage], name: opts[:name], server: opts[:server], distributors: opts[:distributors]}
     end
 
