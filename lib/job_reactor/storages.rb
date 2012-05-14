@@ -7,6 +7,6 @@
 # The last one is being used when node is restarting to retry saved jobs.
 # The storage may not be thread safe, because each node manage it own jobs and don't now anything about others.
 
-require 'job_reactor/storages/active_record_storage'
-require 'job_reactor/storages/memory_storage'
-require 'job_reactor/storages/redis_storage'
+require 'storages/active_record_storage'
+require 'storages/memory_storage'
+require 'storages/redis_storage'

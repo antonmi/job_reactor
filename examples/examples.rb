@@ -2,9 +2,8 @@ $: << Dir.pwd
 
 require 'lib/job_reactor'
 JR.run! do
-  JR.config[:distributor] = ['localhost', 5000]
+  #JR.config[:distributor] = ['localhost', 5000]
 
-  require 'lib/job_reactor/storages/redis_storage' #TODO Need to be required inside reactor
 
   JR.start_node({:storage => JobReactor::RedisStorage, :name => "redis_node", :server => ['localhost', 6015], :distributors => [['localhost', 5000]] })
 

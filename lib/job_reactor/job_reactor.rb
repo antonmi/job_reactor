@@ -109,6 +109,8 @@ module JobReactor
     # Have in mind 'Now we are inside EventMachine Reactor'.
     #
     def start(&block)
+      require 'storages' #TODO Need to be required inside reactor
+
       block.call if block_given?
       JR::Distributor.start
       EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
