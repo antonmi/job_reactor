@@ -1,0 +1,97 @@
+require 'distributor/client'
+require 'distributor/server'
+
+module JobReactor
+  module Distributor
+    extend self
+
+    def nodes
+      @@nodes ||= []
+    end
+
+    # Contains connections pool
+    def connections
+      @@connections ||= []
+    end
+
+    # TODO Need show these too
+    def start
+      EM.add_periodic_timer(3) do
+        JR::Logger.log 'Available nodes'
+        JR::Logger.log JR::Distributor.connections.map(&:name)
+      end
+      start_server(JR.config[:distributor])
+    end
+
+    # Tries to find available node connection
+    # If it is distributor will send marshalled data
+    # If get_connection returns nil distributor will try again after 1 second
+    #
+    def send_data_to_node(hash)
+      connection = get_connection(hash)
+      if connection
+        data = Marshal.dump(hash)
+        connection.send_data(data)
+        connection.lock
+      else
+        EM.next_tick do
+          puts 'locked'
+          send_data_to_node(hash)
+        end
+      end
+    end
+
+    private
+
+    # Trying to start server in specified port
+    # If it fails increase port number
+    #TODO Need to show iformation about port and host
+
+    def start_server(location)
+      begin
+        EM.start_server(*location, JobReactor::Distributor::Server, location)
+        JR::Logger.log "Distributor listens #{location.join(' ')}"
+      rescue
+        location[1] += 1
+        start_server(location)
+      end
+    end
+
+    # Looks for available connection.
+    # If job hash specified node, tries check if the node is available.
+    # If not, returns nil or tries to find any other free node if :always_use_specified_node == true
+    # If job hasn't any specified node, methods return any available connection or nil (and will be launched again in one second)
+
+    def get_connection(hash)
+      check_node_pool
+      if hash['node']
+        node_connection = connections.select{ |con| con.name == hash['node'] }.first
+        JR::Logger.log("WARNING: Node #{hash['node']} is not available") unless node_connection
+        if node_connection.try(:available?)
+          node_connection
+        else
+          JR.config[:always_use_specified_node] ?  nil : connections.select{ |con| con.available? }.first
+        end
+      else
+        connections.select{ |con| con.available? }.first
+      end
+    end
+
+    # Checks node poll. If it is empty will fail after :when_node_pull_is_empty_will_raise_exception_after seconds
+    # The distributor will fail when number of timers raise to EM.get_max_timers which if default 100000 for the majority system
+    # To exit earlier may be useful for error detection
+    #
+    def check_node_pool
+      if connections.size == 0
+        JR::Logger.log 'WARNING: POOL IS EMPTY'
+        JR::Logger.log 'I WILL RAISE EXCEPTION' #TODO It may die some day (or hour, or minute) and exception will not be thrown
+        EM::Timer.new(JR.config[:when_node_pull_is_empty_will_raise_exception_after]) do
+          if connections.size == 0
+            raise JobReactor::NodePoolIsEmpty
+          end
+        end
+      end
+    end
+
+  end
+end
