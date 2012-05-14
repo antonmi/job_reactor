@@ -2,10 +2,10 @@
 #If you don't need to make heavy calculation, but just want to execute a bunch of background task
 #In this example distributor and one node with 'redis' storage are run in one thread and use one EM reactor instance.
 #Scheduled jobs are stored in Redis storage. You need to install Redis.
-#Use redis storage is the best idea.
-#It is fast and work asynchronously with EventMachine.
+#To use redis storage is the best idea.
+#It works asynchronously with EventMachine.
 #Does not guarantee 100% persistance, but extremely fast.
-#If you decide to use many working nodes with one storage, you should use Redis to feel the power
+#If you decide to use many working nodes with one storage, you should use Redis to feel the power!
 
 $: << "lib"
 require 'job_reactor'
