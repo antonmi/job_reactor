@@ -14,9 +14,8 @@ module JobReactor
       @@connections ||= []
     end
 
-    # TODO Need show these too
     def start
-      EM.add_periodic_timer(3) do
+      EM.add_periodic_timer(5) do
         JR::Logger.log('Available nodes: ' << JR::Distributor.connections.map(&:name).join(' '))
       end
       start_server(JR.config[:distributor])
@@ -82,8 +81,7 @@ module JobReactor
     #
     def check_node_pool
       if connections.size == 0
-        JR::Logger.log 'WARNING: POOL IS EMPTY'
-        JR::Logger.log 'I WILL RAISE EXCEPTION' #TODO It may die some day (or hour, or minute) and exception will not be thrown
+        JR::Logger.log 'Warning: Node pool is empty'
         EM::Timer.new(JR.config[:when_node_pull_is_empty_will_raise_exception_after]) do
           if connections.size == 0
             raise JobReactor::NodePoolIsEmpty
