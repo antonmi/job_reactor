@@ -65,7 +65,7 @@ module JobReactor
     end
 
 
-    # This method is being used by node (Node#schedule).
+    # This method is used by node (Node#schedule).
     # It makes job from hash by calling callback and errback methods.
     #
     # The strategy is the following:
@@ -73,8 +73,8 @@ module JobReactor
     # Second is the proc specified in JR.job method.
     # Third and ... are the procs specified in job_callbacks.
     #
-    # Then errbacks are being attached.
-    # They are being called when error occurs in callbacks.
+    # Then errbacks are attached.
+    # They are called when error occurs in callbacks.
     # The last errback raise exception again to return job back to node workflow.
     # See Node#do_job method to better understand how this works.
     #
@@ -104,7 +104,7 @@ module JobReactor
 
     private
 
-    # Private. Method is being called by JR.run, JR.run!, JR.wait_em_and_run.
+    # Private. Method is called by JR.run, JR.run!, JR.wait_em_and_run.
     # Calls the block and starts distributor and .
     # Have in mind 'Now we are inside EventMachine Reactor'.
     #

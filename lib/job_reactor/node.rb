@@ -36,7 +36,7 @@ module JobReactor
     end
 
     # Connects to distributor.
-    # This method is public, because it is being called by client when connection interrupt.
+    # This method is public, because it is called by client when connection interrupt.
     #
     def connect_to(distributor)
       if connections[distributor]
@@ -47,7 +47,7 @@ module JobReactor
       end
     end
 
-    # The method is being called by node server.
+    # The method is called by node server.
     # It makes a job and run do_job.
     #
     def schedule(hash)
