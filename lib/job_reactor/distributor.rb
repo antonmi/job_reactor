@@ -17,8 +17,7 @@ module JobReactor
     # TODO Need show these too
     def start
       EM.add_periodic_timer(3) do
-        JR::Logger.log 'Available nodes'
-        JR::Logger.log JR::Distributor.connections.map(&:name)
+        JR::Logger.log('Available nodes: ' << JR::Distributor.connections.map(&:name).join(' '))
       end
       start_server(JR.config[:distributor])
     end
@@ -45,7 +44,7 @@ module JobReactor
 
     # Trying to start server in specified port
     # If it fails increase port number
-    #TODO Need to show iformation about port and host
+    #TODO Need to show information about port and host
 
     def start_server(location)
       begin

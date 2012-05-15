@@ -1,4 +1,4 @@
-puts $LOAD_PATH.unshift 'lib/job_reactor'
+$LOAD_PATH.unshift 'lib/job_reactor'
 
 puts 'loading JR'
 require 'eventmachine'
@@ -45,6 +45,6 @@ end
 #-----------------------
 
 Dir[JR.config[:job_directory]].each {|file| load file } #TODO Recursively load all files in folder and subfolders
-puts JR.jobs
+
 
 

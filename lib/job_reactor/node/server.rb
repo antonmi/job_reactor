@@ -7,8 +7,7 @@ module JobReactor
       end
 
       def post_init
-        JR::Logger.log("=====#{@node}======")
-        JR::Logger.log("Job reactor connected\nReady to work")
+        JR::Logger.log("#{@node.name} ready to work")
       end
 
       # It is the place where job life cycle begins.
@@ -19,12 +18,10 @@ module JobReactor
       # -and schedule job;
       #
       def receive_data(data)
-        JR::Logger.log("=====#{@node}======")
-        JR::Logger.log("Node receive job")
         hash = Marshal.load(data)
+        JR::Logger.log("#{@node.name} received job: #{hash}")
         hash.merge!('node' => @node.name)
         @storage.save(hash) do |hash|
-          JR::Logger.log(hash)
           @node.schedule(hash)
         end
         send_data('ok')

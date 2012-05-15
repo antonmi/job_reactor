@@ -27,7 +27,6 @@ module JobReactor
   end
 
   def job_callback(name, callback_name = 'noname', &block)
-    JR::Logger.log(block)
     JR.jobs[name].merge!(callbacks: []) unless JR.jobs[name][:callbacks]
     JR.jobs[name][:callbacks] << [callback_name, block]
   end

@@ -27,15 +27,11 @@ module JobReactor
       end
 
       def receive_data(data)
-        if data == 'ok'
-          self.unlock
-        else
-          #TODO
-        end
+        self.unlock if data == 'ok'
       end
 
       def unbind
-        JR::Logger.log 'Node disconnected'
+        JR::Logger.log "#{@name} disconnected"
         close_connection
         JobReactor::Distributor.connections.delete(self)
       end
