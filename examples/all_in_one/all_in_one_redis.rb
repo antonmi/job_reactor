@@ -1,5 +1,5 @@
 #The simplest direction of use.
-#If you don't need to make heavy calculation, but just want to execute a bunch of background task
+#If you don't need to make heavy calculation, but just want to execute a bunch of background tasks
 #In this example distributor and one node with 'redis' storage are run in one thread and use one EM reactor instance.
 #Scheduled jobs are stored in Redis storage. You need to install Redis.
 #To use redis storage is the best idea.
@@ -12,10 +12,11 @@ require 'job_reactor'
 
 #This code you should place in application initializer.
 #It should be run only once
-JR.run do
+#You see wait_em_and_run method which you should use if your application use EventMachine
+JR.wait_em_and_run do
   JR.config[:distributor] = ['localhost', 5000] #Default option. If port is not available, distributor will increase port number
   #Job directory
-  JR.config[:job_directory] = 'reactor_jobs/*.rb'
+  JR.config[:job_directory] = 'reactor_jobs'
   #Default Redis host, port options
   JR.config[:redis_host] = 'localhost'
   JR.config[:redis_port] = 6379
@@ -25,7 +26,12 @@ JR.run do
 end
 
 
-#Your application
-sleep(5)
-JR.enqueue('test_job', {arg1: 1, arg2: 2})
-sleep(10)
+#Your application with EM
+#Do not schedule jobs at start
+#Reactor needs time to parse jobs
+#This is #TODO
+EM.run do
+  EM::Timer.new(1) do
+  JR.enqueue('periodic', {arg1: 1, arg2: 2})
+    end
+end

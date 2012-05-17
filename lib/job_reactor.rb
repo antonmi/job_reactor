@@ -1,4 +1,4 @@
-$LOAD_PATH.unshift 'lib/job_reactor'
+$LOAD_PATH.unshift 'lib/job_reactor' #TODO
 
 puts 'loading JR'
 require 'eventmachine'
@@ -26,25 +26,27 @@ module JobReactor
   end
 
   def run!(&block)
-    EM.run do
+    if EM.reactor_running?
       start(&block)
+    else
+      EM.run do
+        start(&block)
+      end
     end
   end
 
   def wait_em_and_run(&block)
     Thread.new do
       sleep(1) until EM.reactor_running? #TODO better solution?
-      start(&block)
+      EM.schedule do
+        start(&block)
+      end
     end
   end
 end
 
-#JR config
-#need to be removed to another file
 
-#-----------------------
 
-Dir[JR.config[:job_directory]].each {|file| load file } #TODO Recursively load all files in folder and subfolders
 
 
 

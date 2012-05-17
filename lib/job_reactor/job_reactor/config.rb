@@ -8,7 +8,7 @@ end
 
 JR = JobReactor
 
-JR.config[:job_directory] = 'reactor_jobs/*.rb'
+JR.config[:job_directory] = 'reactor_jobs'
 JR.config[:max_attempt] = 10
 JR.config[:retry_multiplier] = 2
 JR.config[:distributor] = ['localhost', 5000]

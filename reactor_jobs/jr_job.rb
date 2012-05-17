@@ -46,14 +46,16 @@ end
 
 #peridic job
 job 'periodic' do |args|
+  puts '()'*100 if args[:retrying]
+  raise JobReactor::CancelJob if args[:retrying]
   puts 'I am periodic job'
+  puts args[:job_itself]
   puts args[:arg1]
   puts args.class
-  gdfgdf
+  dsfsd
 end
 
 job_errback 'periodic' do |args|
   puts 'periodic errback'
-  puts args[:job_itself]
   puts args[:error]
 end

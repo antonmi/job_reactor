@@ -146,6 +146,7 @@ module JobReactor
     #
     def retry_jobs
       storage.jobs_for(name) do |job_to_retry|
+        job_to_retry['args'].merge!(:retrying => true)
         try_again(job_to_retry) if job_to_retry
       end
     end

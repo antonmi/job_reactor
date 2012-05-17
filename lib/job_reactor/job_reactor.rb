@@ -111,8 +111,14 @@ module JobReactor
     def start(&block)
       require 'storages'
       block.call if block_given?
+      parse_jobs
       JR::Distributor.start
       EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
+    end
+
+    def parse_jobs
+      JR.config[:job_directory] += '/*.rb'
+      Dir[JR.config[:job_directory]].each {|file| load file } #TODO Recursively load all files in folder and subfolders
     end
 
     # Logs the beginning.
@@ -150,4 +156,3 @@ module JobReactor
 
   end
 end
-

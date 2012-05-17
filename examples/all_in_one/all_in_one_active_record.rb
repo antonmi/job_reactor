@@ -1,5 +1,5 @@
 #The simplest direction of use.
-#If you don't need to make heavy calculation, but just want to execute a bunch of background task
+#If you don't need to make heavy calculation, but just want to execute a bunch of background tasks
 #In this example distributor and one node with active_record storage are run in one thread and use one EM reactor instance.
 #Use within rails application if you prefer store your jobs in DelayedJob like style,
 #if you don't want install and use Redis, and if you want 'extra' persistance.
@@ -22,7 +22,7 @@ JR.run do
   JR.config[:active_record_table_name] = 'reactor_jobs'
 
   #Job directory
-  JR.config[:job_directory] = 'reactor_jobs/*.rb'
+  JR.config[:job_directory] = 'reactor_jobs'
 
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
