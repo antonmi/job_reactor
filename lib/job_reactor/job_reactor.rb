@@ -22,7 +22,6 @@ module JobReactor
       Distributor.start(host, port)
     end
 
-
     # Creates and start node.
     #
     def start_node(opts={})
@@ -108,9 +107,12 @@ module JobReactor
       EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
     end
 
+    #Loads all *.rb files in the :job_directory folder
+    #See job_reactor/job_parser to understand how job hash is built
+    #
     def parse_jobs
       JR.config[:job_directory] += '/*.rb'
-      Dir[JR.config[:job_directory]].each {|file| load file } #TODO Recursively load all files in folder and subfolders
+      Dir[JR.config[:job_directory]].each {|file| load file }
     end
 
     # Logs the beginning.

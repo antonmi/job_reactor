@@ -123,7 +123,7 @@ module JobReactor
       if  hash['period'] && hash['period'] > 0
         hash['make_after'] = hash['period']
       else
-        hash['make_after'] = (hash['attempt'] * JobReactor.config[:retry_multiplier])
+        hash['make_after'] = hash['attempt'] * JobReactor.config[:retry_multiplier]
       end
       self.storage.save(hash) do |hash|
         self.schedule(hash)
