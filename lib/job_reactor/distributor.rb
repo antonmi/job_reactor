@@ -14,11 +14,14 @@ module JobReactor
       @@connections ||= []
     end
 
-    def start
+    #Starts distributor on given hast and port
+
+    def start(host, port)
+      EM.start_server(host, port, JobReactor::Distributor::Server, [host, port])
+      JR::Logger.log "Distributor listens #{host}:#{port}"
       EM.add_periodic_timer(5) do
         JR::Logger.log('Available nodes: ' << JR::Distributor.connections.map(&:name).join(' '))
       end
-      start_server(JR.config[:distributor])
     end
 
     # Tries to find available node connection
@@ -40,20 +43,6 @@ module JobReactor
     end
 
     private
-
-    # Trying to start server in specified port
-    # If it fails increase port number
-    #TODO Need to show information about port and host
-
-    def start_server(location)
-      begin
-        EM.start_server(*location, JobReactor::Distributor::Server, location)
-        JR::Logger.log "Distributor listens #{location.join(' ')}"
-      rescue
-        location[1] += 1
-        start_server(location)
-      end
-    end
 
     # Looks for available connection.
     # If job hash specified node, tries check if the node is available.

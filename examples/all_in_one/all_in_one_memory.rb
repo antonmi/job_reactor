@@ -14,6 +14,7 @@ JR.run do
   JR.config[:distributor] = ['localhost', 5000] #Default option. If port is not available, distributor will increase port number
   #Job directory
   JR.config[:job_directory] = 'reactor_jobs'
+  JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
   JR.start_node({:storage => JobReactor::MemoryStorage, :name => "memory_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })

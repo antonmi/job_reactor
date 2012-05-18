@@ -10,8 +10,6 @@ require 'job_reactor'
 #This code you should place in application initializer.
 #It should be run only once
 JR.run do
-  JR.config[:distributor] = ['localhost', 5000] #Default option. If port is not available, distributor will increase port number
-
   #if this option is false, active_record will use your default options
   JR.config[:use_custom_active_record_connection] = true
   #unnecessary options if you use JobReactor with rails application
@@ -25,6 +23,7 @@ JR.run do
   JR.config[:job_directory] = 'reactor_jobs'
 
   #Starts node in the same process
+  JR::Distributor.start('localhost', 5000)
   #Node will search distributor on 'localhost:5000'
   JR.start_node({:storage => JobReactor::ActiveRecordStorage, :name => "db_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
 end

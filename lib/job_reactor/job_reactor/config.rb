@@ -11,7 +11,6 @@ JR = JobReactor
 JR.config[:job_directory] = 'reactor_jobs'
 JR.config[:max_attempt] = 10
 JR.config[:retry_multiplier] = 2
-JR.config[:distributor] = ['localhost', 5000]
 JR.config[:merge_job_itself_to_args] = true
 JR.config[:log_job_processing] = true
 JR.config[:always_use_specified_node] = false #will send job to another node if specified node is not available

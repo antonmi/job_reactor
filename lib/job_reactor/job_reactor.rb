@@ -17,24 +17,17 @@ module JobReactor
 
   class << self
 
+    #Start distributor
+    def start_distributor(host, port)
+      Distributor.start(host, port)
+    end
+
+
     # Creates and start node.
     #
     def start_node(opts={})
-      start = proc do
-        node = Node.new(opts)
-        node.start!
-      end
-      EM.reactor_running? ? start.call : EM.run(&start)
-    end
-
-    # Starts many nodes in one process.
-    # Just call JR.start_node many times in the block.
-    # Not a good idea if nodes make intensive calculations. EM Reactor is singleton.
-    # Useful when these node do some infrastructure work.
-    # For advanced usage.
-    #
-    def start_nodes(&block)
-      EM.reactor_running? ? block.call : EM.run(&block)
+      node = Node.new(opts)
+      node.start!
     end
 
     # Accessors to jobs.
@@ -112,7 +105,6 @@ module JobReactor
       require 'storages'
       block.call if block_given?
       parse_jobs
-      JR::Distributor.start
       EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
     end
 

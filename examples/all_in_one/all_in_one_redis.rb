@@ -14,12 +14,12 @@ require 'job_reactor'
 #It should be run only once
 #You see wait_em_and_run method which you should use if your application use EventMachine
 JR.wait_em_and_run do
-  JR.config[:distributor] = ['localhost', 5000] #Default option. If port is not available, distributor will increase port number
   #Job directory
   JR.config[:job_directory] = 'reactor_jobs'
   #Default Redis host, port options
   JR.config[:redis_host] = 'localhost'
   JR.config[:redis_port] = 6379
+  JR.start_distributor('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
   JR.start_node({:storage => JobReactor::RedisStorage, :name => "redis_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
