@@ -3,11 +3,11 @@ require 'job_reactor'
 
 describe JobReactor do
   context "initializaiton" do
-    before { JobReactor.stub(:start) }
+    before { JobReactor.should_receive(:start) }
     describe '.run' do
       before do
         Thread.should_receive(:new).and_yield
-        EM.should_receive(:run)
+        EM.should_receive(:run).and_yield
       end
       it "should run EM in different thead" do
         JobReactor.run
@@ -25,7 +25,7 @@ describe JobReactor do
     context "not EM.reactor_running?" do
         before do
           EM.stub(:reactor_running? => false)
-          EM.should_receive(:run)
+          EM.should_receive(:run).and_yield
         end
         it("should start EM") { JobReactor.run! }
       end
@@ -33,7 +33,7 @@ describe JobReactor do
     describe '.wait_em_and_run' do
       before do
         Thread.should_receive(:new).and_yield
-        EM.should_receive(:schedule)
+        EM.should_receive(:schedule).and_yield
       end
       it "should call sleep till EM isn't running" do
         EM.stub(:reactor_running?).and_return(false, true)
