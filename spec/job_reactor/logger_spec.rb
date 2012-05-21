@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'job_reactor'
 
 describe JobReactor::Logger do
   subject { JobReactor::Logger }
