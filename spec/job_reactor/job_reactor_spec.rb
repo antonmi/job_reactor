@@ -10,10 +10,10 @@ module JobReactor
       it 'jobs returns hash' do
         JobReactor.jobs.should be_instance_of Hash
       end
-      it 'should has key "test_job"' do
+      it 'should have key "test_job"' do
         JobReactor.jobs.keys.include?('test_job').should be_true
       end
-      it 'should has job, callbacks and errbacks' do
+      it 'should have job, callbacks and errbacks' do
         (JobReactor.jobs['test_job'].keys - [:job, :callbacks, :errbacks]).should == []
       end
       it 'job should be Proc' do
