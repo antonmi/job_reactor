@@ -52,15 +52,15 @@ module JobReactor
     def get_connection(hash)
       check_node_pool
       if hash['node']
-        node_connection = connections.select{ |con| con.name == hash['node'] }.first
+        node_connection = connections.select{ |con| con.name == hash['node'] && con.name != hash['not_node']}.first
         JR::Logger.log("WARNING: Node #{hash['node']} is not available") unless node_connection
         if node_connection.try(:available?)
           node_connection
         else
-          JR.config[:always_use_specified_node] ?  nil : connections.select{ |con| con.available? }.first
+          JR.config[:always_use_specified_node] ?  nil : connections.select{ |con| con.available? && con.name != hash['not_node'] }.first
         end
       else
-        connections.select{ |con| con.available? }.first
+        connections.select{ |con| con.available? && con.name != hash['not_node'] }.first
       end
     end
 

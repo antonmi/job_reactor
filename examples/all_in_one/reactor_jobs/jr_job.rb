@@ -4,7 +4,6 @@ include JobReactor
 
 puts "="*100
 
-
 job 'test_job' do |args|
   puts 'job'
   puts args.merge!(:aaa=>'wewewewewe')

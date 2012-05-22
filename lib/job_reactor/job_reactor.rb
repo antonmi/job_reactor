@@ -41,7 +41,7 @@ module JobReactor
     # Options are :after and :period (for deferred and periodic jobs), and :node to specify the preferred node to launch job.
     # Use :always_use_specified_node option to be sure that job will launched in the specified node.
     # Job itself is a hash with the following keys:
-    # name, args, make_after, last_error, run_at, failed_at, attempt, period, node, status.
+    # name, args, make_after, last_error, run_at, failed_at, attempt, period, node, not_node, status.
     #
     def enqueue(name, args = { }, opts = { })
       raise NoSuchJob unless JR.jobs[name]
@@ -52,6 +52,7 @@ module JobReactor
       hash.merge!('make_after' => (opts[:after] || 0))
 
       hash.merge!('node' => opts[:node]) if opts[:node]
+      hash.merge!('not_node' => opts[:not_node]) if opts[:not_node]
 
       JR::Distributor.send_data_to_node(hash)
     end
