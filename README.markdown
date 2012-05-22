@@ -11,7 +11,7 @@ The main goal is to get the best and to give more.
 
 Resque:
 -------
-- JobReactor likes Redis as Resque does. We recommend use Redis storage with JobReactor to save your task. Now there are thee types of storages in JobReactor: RedisStorage, ActiveRecordStorage and MemoryStorage.
+- JobReactor likes Redis as Resque does. We recommend use Redis storage with JobReactor to save your tasks. Now there are thee types of storages in JobReactor: RedisStorage, ActiveRecordStorage and MemoryStorage.
 But only RedisStore gives you persistance and asynchronous work with EventMachine. (As you see below, storages are very simple, so you can write your own easily)
 - JobReactor doesn't have such pretty monitoring solution as Resque, but we plan introduce similar solution in the future.
 
