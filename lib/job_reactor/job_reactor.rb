@@ -1,9 +1,9 @@
 # The core.
 # Gives API to parse jobs, send them to node using distributor, and make them for node.
 
-require 'job_reactor/config'
-require 'job_reactor/job_parser'
-require 'job_reactor/exceptions'
+require 'job_reactor/job_reactor/config'
+require 'job_reactor/job_reactor/job_parser'
+require 'job_reactor/job_reactor/exceptions'
 
 module JobReactor
 

@@ -1,5 +1,5 @@
-require 'node/server'
-require 'node/client'
+require 'job_reactor/node/server'
+require 'job_reactor/node/client'
 module JobReactor
   class Node
 
@@ -21,7 +21,7 @@ module JobReactor
     # Store distributor connection instances.
     #
     def connections
-      @connections || {}
+      @connections ||= {}
     end
 
     # Retrying jobs if any,

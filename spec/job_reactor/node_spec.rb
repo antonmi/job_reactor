@@ -5,8 +5,8 @@ def options
   { storage: 'storage', name: 'name', server: 'server', distributors: ['distributors'] }
 end
 
-describe JR::Node do
-  subject { JR::Node.new(options) }
+describe JobReactor::Node do
+  subject { JobReactor::Node.new(options) }
   describe '.initialize' do
     options.keys.each do |option|
       it("should set #{option}") { subject.config[option].should == options[option] }
@@ -39,4 +39,23 @@ describe JR::Node do
     end
   end
 
+  describe '.connect_to' do
+    context 'with existing connection' do
+      before do
+        fake_connection = double('fake_connection')
+        fake_connection.should_receive(:reconnect)
+        subject.instance_variable_set(:@connections, {connect1: fake_connection})
+      end
+      it "should reconnect to distributor" do
+        subject.connect_to(:connect1)
+      end
+    end
+    context 'without existing connection' do
+      before { EM.should_receive(:connect).and_return('success') }
+      it "should connect to distributor" do
+        subject.connect_to(:connect1)
+        subject.connections.should have_key(:connect1)
+      end
+    end
+  end
 end

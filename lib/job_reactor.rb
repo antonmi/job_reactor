@@ -2,10 +2,10 @@ $LOAD_PATH.unshift 'lib/job_reactor' #TODO
 
 puts 'loading JR'
 require 'eventmachine'
-require 'job_reactor'
-require 'logger'
-require 'node'
-require 'distributor'
+require 'job_reactor/job_reactor'
+require 'job_reactor/logger'
+require 'job_reactor/node'
+require 'job_reactor/distributor'
 
 
 #JobReactor initialization process.
@@ -44,9 +44,3 @@ module JobReactor
     end
   end
 end
-
-
-
-
-
-

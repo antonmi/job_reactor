@@ -1,5 +1,5 @@
-require 'distributor/client'
-require 'distributor/server'
+require 'job_reactor/distributor/client'
+require 'job_reactor/distributor/server'
 
 module JobReactor
   module Distributor
