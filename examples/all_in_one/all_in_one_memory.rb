@@ -5,7 +5,7 @@
 #But, of course, this storage is the fastest.
 #Use it if have a lot of chaotic jobs and you don't want to store them
 
-$: << "lib"
+$: << 'lib'
 require 'job_reactor'
 
 #This code you should place in application initializer.
@@ -13,7 +13,7 @@ require 'job_reactor'
 JR.run do
   JR.config[:distributor] = ['localhost', 5000] #Default option. If port is not available, distributor will increase port number
   #Job directory
-  JR.config[:job_directory] = 'reactor_jobs'
+  JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
   JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
