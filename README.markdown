@@ -11,22 +11,21 @@ The main goal is to get the best and to give more.
 
 Resque:
 -------
-JobReactor likes Redis as Resque do. We recommend use Redis storage with JobReactor to save your task. Now there are thee types of storages in JobReactor: RedisStorage, ActiveRecordStorage and MemoryStorage.
+- JobReactor likes Redis as Resque do. We recommend use Redis storage with JobReactor to save your task. Now there are thee types of storages in JobReactor: RedisStorage, ActiveRecordStorage and MemoryStorage.
 But only RedisStore gives you persistance and asynchronous work with EventMachine. (As you see below, storages are very simple, so you can write your own easily)
-
-JobReactor doesn't have such pretty monitoring solution as Resque, but we plan introduce similar solution in the future.
+- JobReactor doesn't have such pretty monitoring solution as Resque, but we plan introduce similar solution in the future.
 
 
 Delayed::Job:
 -------------
-If you want simple and easy integration, you can run JobReactor in one process with your application.
+- If you want simple and easy integration, you can run JobReactor in one process with your application.
 We provide ActiveRecordStorage so you can store your jobs in database like Delayed::Job does.
 
 Stalker:
 --------
-Stalker is extremely fast. One JobReactor distributor can serve more than 1000 jobs per second.
-And remember: JobReactor is extremely scalable, so you can run own distributor for each part of your application.
-We also use the same job defenition and quering syntax.
+- Stalker is extremely fast. JobReactor is fast enough too. One distributor can serve more than 1000 jobs per second.
+And remember: JobReactor is extremely scalable, so you can run distributor for each part of your application.
+- We offer you to use the same job defenition and quering syntax as in Stalker.
 
 
 Main features
