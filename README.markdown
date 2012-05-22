@@ -31,15 +31,58 @@ We also use the same job defenition and quering syntax.
 
 Main features
 =============
-- Client-server architecture.
+1. Client-server architecture
 -----------------------------
 You can run as many distributors and working nodes as you need. You are free to choose the strategy.
 If you have many background tasks from each part of your application you can use, for example, 3 distributors (one in each process) and 10 working nodes.
-If you don't have many jobsm you can leave only one node which will be connected to 3 distributors.
-Nodes are connected to distributor via TCP. So, you can run them on any machine you can connect.
+If you don't have many jobs you can leave only one node which will be connected to 3 distributors.
+2. High scalability
+-------------------
+Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect.
 Nodes may use different storages or the same one. So, you can store vitally important jobs in relational database and 
 simple innsignificant jobs in memory.
 And more: your nodes may create jobs for others nodes and communicate with each other. See page [advance usage].
+3. Reliability
+--------------
+Distributor is smart enough to send jobs to another node if someone is crashed.
+If no nodes are connected to distributor it will keep jobs in memory and send them when nodes connect.
+If nodes is crashed for some reason it will retry stored jobs after start.
+4. EventMachine available
+-------------------------
+Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
+Use asynchronous [http requests], [websockets], [etc.], [etc.], and [etc]. See page [advance usage].
+5. Deferred and periodic jobs
+-----------------------------
+You can use deferred jobs which will run 'after' some time or 'run_at' given time.
+6. No polling
+-------------
+There is no storage polling. Absolutely. When node receives job (no matter instant, periodic or deferred) there will be EventMachine timer created 
+which will give job at the right time.
+7. Full job control
+-------------------
+If error occur in the job you can see it in errbacks and do what you want.
+You can control job itself! Inside the job you can get information about when it starts, which node execute job and etc.
+You also can add some arguments to the job on-the-fly which will be used in the subsequent callbacks and errbacks. See [advance usage].
+8. Job retrying
+--------------
+If job fails it will be retried. You can choose global retrying strategy or manage separate jobs.
+9. Predefined nodes
+-------------------
+You can specify node for jobs, so they will be executed in that node environment. And you can specify wich node if forbidden for the job.
+If no nodes are specified distributor will try to sen the job to the first free node.
+10.Node based priorities
+-----------------------
+There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
+You can specify the node wich should execute the job. You can reserve several nodes for high priority jobs.
+
+
+
+
+
+
+
+
+
 
 
 
