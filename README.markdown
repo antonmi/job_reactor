@@ -69,7 +69,7 @@ If job fails it will be retried. You can choose global retrying strategy or mana
 -------------------
 You can specify node for jobs, so they will be executed in that node environment. And you can specify wich node if forbidden for the job.
 If no nodes are specified distributor will try to sen the job to the first free node.
-10.Node based priorities
+10. Node based priorities
 -----------------------
 There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
 You can specify the node wich should execute the job. You can reserve several nodes for high priority jobs.
