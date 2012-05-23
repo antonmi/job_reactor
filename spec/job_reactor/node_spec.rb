@@ -19,7 +19,7 @@ describe JobReactor::Node do
     end
   end
 
-  describe '.start!' do
+  describe '.start' do
     before do
       subject.stub(:retry_jobs)
       EM.stub(:start_server)
@@ -27,15 +27,15 @@ describe JobReactor::Node do
     end
     it "should retry_jobs" do
       subject.should_receive(:retry_jobs)
-      subject.start!
+      subject.start
     end
     it "should start EM server" do
       EM.should_receive(:start_server)
-      subject.start!
+      subject.start
     end
     it "should try to connect to each distributor given" do
       subject.should_receive(:connect_to).exactly(options[:distributors].size).times
-      subject.start!
+      subject.start
     end
   end
 

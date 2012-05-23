@@ -27,7 +27,7 @@ module JobReactor
     # Retrying jobs if any,
     # starts server and tries to connect to distributors.
     #
-    def start!
+    def start
       retry_jobs
       EM.start_server(*self.config[:server], Server, self, self.storage)
       self.config[:distributors].each do |distributor|
@@ -99,7 +99,7 @@ module JobReactor
           rescue JobReactor::CancelJob
             cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
           rescue Exception => e #TODO may be add another info. failed_at, node, attempt for more precise control??? Or may be send all attributes???
-            try_again(job) if job['attempt'].to_i < JobReactor.config[:max_attempt] #If not, try again
+            try_again(job) if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1 #If not, try again
           end
         end
       end

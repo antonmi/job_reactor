@@ -11,9 +11,9 @@ require 'job_reactor'
 #This code you should place in application initializer.
 #It should be run only once
 JR.run do
-  JR.config[:distributor] = ['localhost', 5000] #Default option. If port is not available, distributor will increase port number
   #Job directory
   JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
+  #Starts distributor
   JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'

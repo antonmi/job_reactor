@@ -5,7 +5,7 @@ module JobReactor
   describe JobReactor do
 
     describe 'parse_jobs' do
-      JobReactor.config[:job_directory] = File.expand_path("../../../spec/jobs", __FILE__)
+      JobReactor.config[:job_directory] = File.expand_path("../../jobs", __FILE__)
       JobReactor.send(:parse_jobs)
       it 'jobs returns hash' do
         JobReactor.jobs.should be_instance_of Hash

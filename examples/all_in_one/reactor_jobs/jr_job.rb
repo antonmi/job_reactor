@@ -14,7 +14,7 @@ end
 job_callback 'test_job', 'first_callback' do |args|
   puts 'callback'
   puts args[:aaa]
-  iui
+  raise Fail
 end
 
 job_callback 'test_job', 'second_callback' do |args|

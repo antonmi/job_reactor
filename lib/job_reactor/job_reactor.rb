@@ -26,7 +26,7 @@ module JobReactor
     #
     def start_node(opts={})
       node = Node.new(opts)
-      node.start!
+      node.start
     end
 
     # Accessors to jobs.
@@ -48,7 +48,7 @@ module JobReactor
       hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new' }
 
       hash.merge!('period' => opts[:period]) if opts[:period]
-      opts[:after] = opts[:start_at] - Time.now if opts[:start_at]
+      opts[:after] = (opts[:run_at] - Time.now) if opts[:run_at]
       hash.merge!('make_after' => (opts[:after] || 0))
 
       hash.merge!('node' => opts[:node]) if opts[:node]

@@ -22,8 +22,8 @@ JR.run do
   #Job directory
   JR.config[:job_directory] = 'reactor_jobs'
 
-  #Starts node in the same process
   JR::Distributor.start('localhost', 5000)
+  #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
   JR.start_node({:storage => JobReactor::ActiveRecordStorage, :name => "db_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
 end
