@@ -30,6 +30,7 @@ Use asynchronous [http requests], [websockets], [etc.], [etc.], and [etc]. See p
 5. Deferred and periodic jobs
 -----------------------------
 You can use deferred jobs which will run 'after' some time or 'start_at' given time.
+You can create periodic jobs which will every given time period and cancel them with condition.
 6. No polling
 -------------
 There is no storage polling. Absolutely. When node receives job (no matter instant, periodic or deferred) there will be EventMachine timer created
