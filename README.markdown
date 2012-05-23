@@ -45,7 +45,7 @@ You also can add some arguments to the job on-the-fly which will be used in the 
 If job fails it will be retried. You can choose global retrying strategy or manage separate jobs.
 9. Predefined nodes
 -------------------
-You can specify node for jobs, so they will be executed in that node environment. And you can specify wich node if forbidden for the job.
+You can specify node for jobs, so they will be executed in that node environment. And you can specify which node is forbidden for the job.
 If no nodes are specified distributor will try to sen the job to the first free node.
 10. Node based priorities
 -----------------------
