@@ -82,19 +82,23 @@ module JobReactor
         rescue JobReactor::CancelJob
           cancel_job(job)
         rescue Exception => e
+          rescue_job(e, job)
+        end
+      end
+    end
+
+    def rescue_job(e, job)
+      begin
+        job['failed_at']  = Time.now #Save error info
+        job['last_error'] = e
+        job['status']     = 'error'
+        self.storage.save(job) do |job|
           begin
-            job['failed_at']  = Time.now #Save error info
-            job['last_error'] = e
-            job['status']     = 'error'
-            self.storage.save(job) do |job|
-              begin
-                job.fail(job['args'].merge(:error => e).merge(JR.config[:merge_job_itself_to_args] ? {:job_itself => job.dup} : {})) #Fire errbacks. You can access error in you errbacks (args[:error])
-              rescue JobReactor::CancelJob
-                cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
-              rescue Exception => e #TODO may be add another info. failed_at, node, attempt for more precise control??? Or may be send all attributes???
-                try_again(job) if job['attempt'].to_i < JobReactor.config[:max_attempt] #If not, try again
-              end
-            end
+            job.fail(job['args'].merge(:error => e).merge(JR.config[:merge_job_itself_to_args] ? { :job_itself => job.dup } : { })) #Fire errbacks. You can access error in you errbacks (args[:error])
+          rescue JobReactor::CancelJob
+            cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
+          rescue Exception => e #TODO may be add another info. failed_at, node, attempt for more precise control??? Or may be send all attributes???
+            try_again(job) if job['attempt'].to_i < JobReactor.config[:max_attempt] #If not, try again
           end
         end
       end
