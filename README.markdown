@@ -21,7 +21,7 @@ And more: your nodes may create jobs for others nodes and communicate with each 
 --------------
 You can run additional nodes and stop any nodes on-the-fly.
 Distributor is smart enough to send jobs to another node if someone is stopped or crashed.
-If no nodes are connected to distributor it will keep jobs in memory and send them when nodes connect.
+If no nodes are connected to distributor it will keep jobs in memory and send them when nodes start.
 If node is stopped or crashed it will retry stored jobs after start.
 4. EventMachine available
 -------------------------
