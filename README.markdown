@@ -4,30 +4,6 @@ JobReactor
 JobReactor is a library for creating and processing background jobs.
 It is client-server distributed system based on [EventMachine][0].
 
-Inspired by:
-============
-JobReactor is inspired by classical background worker systems such as [Resque][1], [Delayed::Job][2], [Stalker][3], and etc.
-The main goal is to get the best and to give more.
-
-Resque:
--------
-- JobReactor likes Redis as Resque does. We recommend use Redis storage with JobReactor to save your tasks. Now there are thee types of storages in JobReactor: RedisStorage, ActiveRecordStorage and MemoryStorage.
-But only RedisStore gives you persistance and asynchronous work with EventMachine. (As you see below, storages are very simple, so you can write your own easily)
-- JobReactor doesn't have such pretty monitoring solution as Resque, but we plan introduce similar solution in the future.
-
-
-Delayed::Job:
--------------
-- If you want simple and easy integration, you can run JobReactor in one process with your application.
-We provide ActiveRecordStorage so you can store your jobs in database like Delayed::Job does.
-
-Stalker:
---------
-- Stalker is extremely fast. JobReactor is fast enough too. One distributor can serve more than 1000 jobs per second.
-And remember: JobReactor is extremely scalable, so you can run distributor for each part of your application.
-- We offer you to use the same job defenition and quering syntax as in Stalker.
-
-
 Main features
 =============
 1. Client-server architecture
@@ -38,7 +14,7 @@ If you don't have many jobs you can leave only one node which will be connected 
 2. High scalability
 -------------------
 Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect.
-Nodes may use different storages or the same one. So, you can store vitally important jobs in relational database and 
+Nodes may use different storages or the same one. So, you can store vitally important jobs in relational database and
 simple innsignificant jobs in memory.
 And more: your nodes may create jobs for others nodes and communicate with each other. See page [advance usage].
 3. Reliability
@@ -56,7 +32,7 @@ Use asynchronous [http requests], [websockets], [etc.], [etc.], and [etc]. See p
 You can use deferred jobs which will run 'after' some time or 'start_at' given time.
 6. No polling
 -------------
-There is no storage polling. Absolutely. When node receives job (no matter instant, periodic or deferred) there will be EventMachine timer created 
+There is no storage polling. Absolutely. When node receives job (no matter instant, periodic or deferred) there will be EventMachine timer created
 which will give job at the right time.
 7. Full job control
 -------------------
@@ -78,6 +54,28 @@ You can specify the node wich should execute the job. You can reserve several no
 
 
 
+Inspired by:
+============
+JobReactor is inspired by classical background worker systems such as [Resque][1], [Delayed::Job][2], [Stalker][3], and etc.
+The main goal is to get the best and to give more.
+
+Resque
+------
+- JobReactor likes Redis as Resque does. We recommend use Redis storage with JobReactor to save your tasks. Now there are thee types of storages in JobReactor: RedisStorage, ActiveRecordStorage and MemoryStorage.
+But only RedisStore gives you persistance and asynchronous work with EventMachine. (As you see below, storages are very simple, so you can write your own easily)
+- JobReactor doesn't have such pretty monitoring solution as Resque, but we plan introduce similar solution in the future.
+
+
+Delayed::Job
+------------
+- If you want simple and easy integration, you can run JobReactor in one process with your application.
+We provide ActiveRecordStorage so you can store your jobs in database like Delayed::Job does.
+
+Stalker
+-------
+- Stalker is extremely fast. JobReactor is fast enough too. One distributor can serve more than 1000 jobs per second.
+And remember: JobReactor is extremely scalable, so you can run distributor for each part of your application.
+- We offer you to use the same job defenition and quering syntax as in Stalker.
 
 
 
@@ -86,7 +84,7 @@ You can specify the node wich should execute the job. You can reserve several no
 
 
 
-Each node needs environment to be loaded. 
+Each node needs environment to be loaded.
 But remember that distributor is in the same process with your application.
 So if your application doesn't scale to many process there no reason to launch more than one distributor.
 
