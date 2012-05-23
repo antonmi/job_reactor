@@ -52,13 +52,12 @@ module JobReactor
     #
     def schedule(hash)
       EM::Timer.new(hash['make_after']) do  #Of course, we can start job immediately (unless it is 'after' job), but we let EM take care about it. Maybe there is another job is ready to start
-        if self.storage.load(hash) do |hash|  #Maybe someone delete jobs from storage
+        self.storage.load(hash) do |hash|
           if job = JR.make(hash)  #If we decide fail silently. See JR.make
             do_job(job)
+          else
+            #TODO Do nothing or raise exception ????
           end
-        end
-        else
-          #TODO Do nothing or raise exception ????
         end
       end
     end
