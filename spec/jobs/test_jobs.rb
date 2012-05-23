@@ -28,8 +28,6 @@ end
 job 'simple_after' do |args|
   ARRAY << Time.now
 end
-
-
 #-----------
 
 
