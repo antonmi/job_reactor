@@ -87,6 +87,8 @@ module JobReactor
       end
     end
 
+    #Lanches job errbacks
+    #
     def rescue_job(e, job)
       begin
         job['failed_at']  = Time.now #Save error info
