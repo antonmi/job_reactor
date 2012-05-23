@@ -21,9 +21,6 @@ JR.config[:when_node_pull_is_empty_will_raise_exception_after] = 3600
 JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 
-JR.config[:redis_key_life_time] = 24*3600
-
-
 JR.config[:active_record_adapter] = 'mysql2'
 JR.config[:active_record_database] = 'em'
 JR.config[:active_record_user] = ''

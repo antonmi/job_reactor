@@ -13,6 +13,6 @@ sleep(10)
 loop do
   JR.enqueue('test_job', {arg1: 1, arg2: 2})
   puts i+=1
-  sleep(0.001)
+  sleep(0.0005)
 end
 

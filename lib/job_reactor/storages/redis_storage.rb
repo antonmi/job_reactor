@@ -38,7 +38,7 @@ module JobReactor
 
         storage.hmset(key, *ATTRS.map{|attr| [attr, hash[attr]]}.flatten) do
           hash.merge!('storage' => RedisStorage)
-          storage.expire("#{hash['node']}_#{hash['id']}", JobReactor.config[:redis_key_life_time])
+          storage.expire("#{hash['node']}_#{hash['id']}")
           hash['args'] = args
 
           block.call(hash) if block_given?
