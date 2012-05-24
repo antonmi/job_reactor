@@ -18,11 +18,6 @@ module JobReactor
 
   class << self
 
-    #Start distributor
-    def start_distributor(host, port)
-      Distributor.start(host, port)
-    end
-
     # Requires storage
     # Creates and start node.
     #
