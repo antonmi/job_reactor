@@ -23,7 +23,7 @@ JR.wait_em_and_run do
   JR.start_distributor('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
-  JR.start_node({:storage => JobReactor::RedisStorage, :name => "redis_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
+  JR.start_node({:storage => 'redis_storage', :name => 'redis_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
 end
 
 

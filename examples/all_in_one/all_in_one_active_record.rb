@@ -13,7 +13,7 @@ JR.config[:use_custom_active_record_connection] = true
 JR.config[:active_record_adapter] = 'mysql2'
 JR.config[:active_record_database] = 'em'
 JR.config[:active_record_user] = 'root'
-JR.config[:active_record_password] = '123456'
+JR.config[:active_record_password] = ''
 JR.config[:active_record_table_name] = 'reactor_jobs'
 
 #Job directory
@@ -25,7 +25,7 @@ JR.run do
   JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
-  JR.start_node({:storage => JobReactor::ActiveRecordStorage, :name => "db_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
+  JR.start_node({:storage => 'active_record_storage', :name => "db_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
 end
 
 

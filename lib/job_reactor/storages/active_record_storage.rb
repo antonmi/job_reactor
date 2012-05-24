@@ -1,7 +1,9 @@
 # TODO comment it
 require 'active_record'
+
 module JobReactor
   class ActiveRecordStorage < ::ActiveRecord::Base
+
     establish_connection(
         :adapter => JR.config[:active_record_adapter],
         :database => JR.config[:active_record_database],
@@ -15,6 +17,7 @@ module JobReactor
     attr_accessible *ATTRS
 
     self.table_name = JR.config[:active_record_table_name]
+
     class << self
 
       def load(hash, &block)

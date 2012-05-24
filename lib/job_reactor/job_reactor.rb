@@ -4,6 +4,7 @@
 require 'job_reactor/job_reactor/config'
 require 'job_reactor/job_reactor/job_parser'
 require 'job_reactor/job_reactor/exceptions'
+require 'job_reactor/job_reactor/storages'
 
 module JobReactor
 
@@ -22,9 +23,11 @@ module JobReactor
       Distributor.start(host, port)
     end
 
+    # Requires storage
     # Creates and start node.
     #
-    def start_node(opts={})
+    def start_node(opts)
+      require_storage!(opts)
       node = Node.new(opts)
       node.start
     end
@@ -102,10 +105,16 @@ module JobReactor
     # Have in mind 'Now we are inside EventMachine Reactor'.
     #
     def start(&block)
-      require 'job_reactor/storages'
       block.call if block_given?
       parse_jobs
       EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
+    end
+
+    # Requires storage and change opts[:storage] to the constant
+    #
+    def require_storage!(opts)
+      require "job_reactor/storages/#{opts[:storage]}"
+      opts[:storage] = STORAGES[opts[:storage]]
     end
 
     #Loads all *.rb files in the :job_directory folder

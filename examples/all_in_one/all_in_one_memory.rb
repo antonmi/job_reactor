@@ -18,7 +18,7 @@ JR.run do
   JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
-  JR.start_node({:storage => JobReactor::MemoryStorage, :name => "memory_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
+  JR.start_node({:storage => 'memory_storage', :name => "memory_node", :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
 end
 
 

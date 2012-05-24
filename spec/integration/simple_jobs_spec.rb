@@ -10,17 +10,18 @@ module JobReactor
 end
 
 describe 'simple job' do
-  before do
+  before :all do
     JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
     JR.config[:retry_multiplier] = 0
     JR.config[:max_attempt]      = 5
     JR.run do
       JR::Distributor.start('localhost', 5000)
-      JR.start_node({ :storage => JobReactor::MemoryStorage, :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
+      JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
     end
-
     wait_until(EM.reactor_running?)
+  end
 
+  before do
     ARRAY = []
     JobReactor::MemoryStorage.flush_storage
   end
