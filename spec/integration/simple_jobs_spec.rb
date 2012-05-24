@@ -9,18 +9,18 @@ module JobReactor
   end
 end
 
-JR.run do
-  JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
-  JR.config[:retry_multiplier] = 0
-  JR.config[:max_attempt]      = 5
-  JR::Distributor.start('localhost', 5000)
-  JR.start_node({ :storage => JobReactor::MemoryStorage, :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
-end
-
-wait_until(EM.reactor_running?)
-
 describe 'simple job' do
   before do
+    JR.run do
+      JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
+      JR.config[:retry_multiplier] = 0
+      JR.config[:max_attempt]      = 5
+      JR::Distributor.start('localhost', 5000)
+      JR.start_node({ :storage => JobReactor::MemoryStorage, :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
+    end
+
+    wait_until(EM.reactor_running?)
+
     ARRAY = []
     JobReactor::MemoryStorage.flush_storage
   end
@@ -57,28 +57,24 @@ describe 'simple job' do
       ARRAY.size.should == 1
     end
 
-    it 'should not run "after" job' do
-      JR.enqueue 'simple_after', { }, { :after => 1 }
+    it 'should not run "after" job immediately' do
+      JR.enqueue 'simple_after', { }, { :after => 2 }
       sleep(1)
       ARRAY.size.should == 0
-      sleep(4)
     end
   end
 
   describe 'run "run_at" job' do
     it 'should run "run_at" job' do
       JR.enqueue 'simple_after', { }, { :run_at => Time.now + 1 }
-      sleep(5)
+      wait_until(ARRAY.size == 1)
       ARRAY.size.should == 1
     end
 
-    it 'should not run "run_at" job' do
-      JR.enqueue 'simple_after', { }, { :start_at => Time.now + 1 }
+    it 'should not run "run_at" job immediately' do
+      JR.enqueue 'simple_after', { }, { :run_at => Time.now + 2 }
       sleep(1)
       ARRAY.size.should == 0
-      sleep(5)
     end
   end
-
-
 end
