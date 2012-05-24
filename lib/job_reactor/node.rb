@@ -12,6 +12,7 @@ module JobReactor
     end
 
     # Config accessors.
+    #
     [:storage, :name, :server, :distributors].each do |method|
       define_method(method) do
         config[method]
