@@ -59,21 +59,22 @@ describe 'simple job' do
     end
 
     it 'should not run "after" job immediately' do
-      JR.enqueue 'simple_after', { }, { :after => 2 }
-      sleep(1)
+      JR.enqueue 'simple_after', { }, { :after => 1 }
+      sleep(0.5)
       ARRAY.size.should == 0
+      sleep(5)
     end
   end
 
   describe 'run "run_at" job' do
     it 'should run "run_at" job' do
-      JR.enqueue 'simple_after', { }, { :run_at => Time.now + 1 }
+      JR.enqueue 'simple_run_at', { }, { :run_at => Time.now + 1 }
       wait_until(ARRAY.size == 1)
       ARRAY.size.should == 1
     end
 
     it 'should not run "run_at" job immediately' do
-      JR.enqueue 'simple_after', { }, { :run_at => Time.now + 2 }
+      JR.enqueue 'simple_run_at', { }, { :run_at => Time.now + 2 }
       sleep(1)
       ARRAY.size.should == 0
     end

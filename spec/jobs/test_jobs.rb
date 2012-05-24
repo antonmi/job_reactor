@@ -25,7 +25,11 @@ job 'simple_fail' do
   raise Fail
 end
 
-job 'simple_after' do |args|
+job 'simple_after' do
+  ARRAY << Time.now
+end
+
+job 'simple_run_at' do
   ARRAY << Time.now
 end
 #-----------
