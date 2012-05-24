@@ -39,9 +39,8 @@ module JobReactor
       end
 
       it 'should require memory_storage' do
-        defined?(JobReactor::MemoryStorage.save).should be_nil
+        JobReactor.should_receive(:require).with('job_reactor/storages/memory_storage')
         JR.start_node(@opts)
-        defined?(JobReactor::MemoryStorage.save).should == 'method'
       end
 
       it 'should call start method on node' do
