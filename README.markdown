@@ -76,7 +76,7 @@ Stalker
 -------
 - Stalker is extremely fast. JobReactor is fast enough too. One distributor can serve more than 1000 jobs per second.
 And remember: JobReactor is extremely scalable, so you can run distributor for each part of your application.
-- We offer you to use the same job defenition and quering syntax as in Stalker.
+- We offer you to use the same job definition and querying syntax as in Stalker.
 
 
 
