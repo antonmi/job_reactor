@@ -8,11 +8,12 @@
 $: << 'lib'
 require 'job_reactor'
 
+#Job directory
+JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
+
 #This code you should place in application initializer.
 #It should be run only once
 JR.run do
-  #Job directory
-  JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
   #Starts distributor
   JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
@@ -22,6 +23,6 @@ end
 
 
 #Your application
-sleep(3)
+sleep(5)
 JR.enqueue('test_job', {arg1: 1, arg2: 2})
-sleep(3)
+sleep(10)

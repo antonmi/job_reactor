@@ -7,21 +7,21 @@
 $: << "lib"
 require 'job_reactor'
 
+#if this option is false, active_record will use your default options
+JR.config[:use_custom_active_record_connection] = true
+#unnecessary options if you use JobReactor with rails application
+JR.config[:active_record_adapter] = 'mysql2'
+JR.config[:active_record_database] = 'em'
+JR.config[:active_record_user] = 'root'
+JR.config[:active_record_password] = '123456'
+JR.config[:active_record_table_name] = 'reactor_jobs'
+
+#Job directory
+JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
+
 #This code you should place in application initializer.
 #It should be run only once
 JR.run do
-  #if this option is false, active_record will use your default options
-  JR.config[:use_custom_active_record_connection] = true
-  #unnecessary options if you use JobReactor with rails application
-  JR.config[:active_record_adapter] = 'mysql2'
-  JR.config[:active_record_database] = 'em'
-  JR.config[:active_record_user] = 'root'
-  JR.config[:active_record_password] = '123456'
-  JR.config[:active_record_table_name] = 'reactor_jobs'
-
-  #Job directory
-  JR.config[:job_directory] = 'reactor_jobs'
-
   JR::Distributor.start('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
