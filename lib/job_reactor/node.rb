@@ -28,7 +28,7 @@ module JobReactor
     # starts server and tries to connect to distributors.
     #
     def start
-      retry_jobs
+      retry_jobs if JR.config[:retry_jobs_at_start]
       EM.start_server(*self.config[:server], Server, self, self.storage)
       self.config[:distributors].each do |distributor|
         connect_to(distributor)
