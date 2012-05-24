@@ -102,7 +102,7 @@ module JobReactor
     # Have in mind 'Now we are inside EventMachine Reactor'.
     #
     def start(&block)
-      require 'storages'
+      require 'job_reactor/storages'
       block.call if block_given?
       parse_jobs
       EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
