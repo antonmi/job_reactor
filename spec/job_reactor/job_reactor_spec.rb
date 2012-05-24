@@ -1,8 +1,19 @@
 require 'spec_helper'
 require 'job_reactor'
+require 'eventmachine'
 
 module JobReactor
   describe JobReactor do
+
+    describe 'start' do
+      it 'should call the block and parse jobs' do
+        block = proc {}
+        EM.stub(:add_periodic_timer)
+        block.should_receive(:call)
+        JobReactor.should_receive(:parse_jobs)
+        JobReactor.send(:start, &block)
+      end
+    end
 
     describe 'parse_jobs' do
       JobReactor.config[:job_directory] = File.expand_path("../../jobs", __FILE__)
@@ -21,8 +32,122 @@ module JobReactor
       end
     end
 
+    describe 'start_node' do
+      before do
+        @opts = { :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] }
+        Node.any_instance.stub(:start).and_return(true)
+      end
+
+      it 'should require memory_storage' do
+        defined?(JobReactor::MemoryStorage.save).should be_nil
+        JR.start_node(@opts)
+        defined?(JobReactor::MemoryStorage.save).should == 'method'
+      end
+
+      it 'should call start method on node' do
+        Node.any_instance.should_receive(:start)
+        JR.start_node(@opts)
+      end
+
+      it 'should change opts[:storage]' do
+        JR.start_node(@opts)
+        @opts[:storage].should == JobReactor::MemoryStorage
+      end
+    end
+
+    describe 'enqueue job' do
+      before do
+        JobReactor.config[:job_directory] = File.expand_path("../../jobs", __FILE__)
+        JobReactor::Distributor.stub(:send_data_to_node).and_return(true)
+      end
+
+      it 'should raise NoSuchJob' do
+        lambda { JR.enqueue('no_job') }.should raise_error(JobReactor::NoSuchJob)
+      end
+
+      it 'should enqueue simple job' do
+        hash = { 'name' => 'test_job', 'args' => {}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0 }
+        JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
+        JR.enqueue('test_job')
+      end
+
+      it 'should enqueue job with args' do
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0 }
+        JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
+        JR.enqueue('test_job', { a: 1, b: 2 })
+      end
+
+      it 'should enqueue "after" job with args' do
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 1 }
+        JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
+        JR.enqueue('test_job', { a: 1, b: 2 }, { after: 1 })
+      end
+
+      #TODO
+      #it 'should enqueue "run_at" with args' do
+      #  hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 1 }
+      #  JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
+      #  JR.enqueue('test_job', { a: 1, b: 2 }, { run_at: Time.now + 1 })
+      #end
+
+      it 'should enqueue "periodic" job with args' do
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'period' => 5 }
+        JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
+        JR.enqueue('test_job', { a: 1, b: 2 }, { period: 5 })
+      end
+
+      it 'should enqueue job for specific node' do
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'node' => 'A', 'not_node' => 'B' }
+        JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
+        JR.enqueue('test_job', { a: 1, b: 2 }, { node: 'A', not_node: 'B' })
+      end
+    end
+
+    describe 'make job' do
+      before do
+       @hash = {'name' => 'test_job'}
+      end
+
+      it 'should receive 2 callbacks' do
+        JR.config[:log_job_processing] = false
+        @hash.should_receive(:callback).exactly(2)
+        JobReactor.make(@hash)
+      end
+
+      it 'should receive 4 callbacks' do
+        JR.config[:log_job_processing] = true
+        @hash.should_receive(:callback).exactly(4)
+        JobReactor.make(@hash)
+      end
+
+      it 'JR should receive add_callback' do
+        JR.config[:log_job_processing] = true
+        JobReactor.should_receive(:add_start_callback)
+        JobReactor.should_receive(:add_last_callback)
+        JobReactor.make(@hash)
+      end
+
+      it 'should receive 2 errback' do
+        JR.config[:log_job_processing] = false
+        @hash.should_receive(:errback).exactly(2)
+        JobReactor.make(@hash)
+      end
+
+      it 'should receive 4 errback' do
+        JR.config[:log_job_processing] = true
+        @hash.should_receive(:errback).exactly(3)
+        JobReactor.make(@hash)
+      end
+
+      it 'JR should receive add_errback' do
+        JR.config[:log_job_processing] = true
+        JobReactor.should_receive(:add_start_errback)
+        JobReactor.should_receive(:add_exception_errback)
+        JobReactor.make(@hash)
+      end
 
 
+    end
 
 
   end
