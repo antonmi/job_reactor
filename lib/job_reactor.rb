@@ -8,11 +8,12 @@ require 'job_reactor/node'
 require 'job_reactor/distributor'
 
 
-#JobReactor initialization process.
-#The ::run method run EM in Thread to do not prevent execution of application.
-#The ::wait_em_and_run is for using JobReactor with
-#applications already have EventMachine inside and run it at start. Server Thin, for example.
-#The run! method is for using JobReactor as standalone application. Advanced usage. For exapmle you wand use node with distibutor in on e process
+# JobReactor initialization process.
+# Parses jobs, runs EventMachine reactor and call given block inside reactor.
+# The ::run method run EM in Thread to do not prevent execution of application.
+# The ::wait_em_and_run is for using JobReactor with
+# applications already have EventMachine inside and run it at start. Server Thin, for example.
+# The run! method is for using JobReactor as standalone application. Advanced usage. For example you wand use node with distributor in one process
 #
 module JobReactor
   extend self
