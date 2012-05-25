@@ -14,7 +14,8 @@ end
 
 
 #For integration/simple_jobs_spec
-ARRAY = []
+ARRAY ||= []
+ARRAY.clear
 
 job 'simple' do |args|
   ARRAY << ['simple', args]

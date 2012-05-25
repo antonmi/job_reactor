@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'job_reactor'
 require 'eventmachine'
 
 module JobReactor

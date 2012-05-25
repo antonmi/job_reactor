@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'job_reactor'
 
 module JobReactor
   module MemoryStorage
@@ -9,8 +8,8 @@ module JobReactor
   end
 end
 
-describe 'simple job' do
-  before :all do
+describe 'simple job', :slow => true do
+  before do
     JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
     JR.config[:retry_multiplier] = 0
     JR.config[:max_attempt]      = 5
@@ -19,11 +18,14 @@ describe 'simple job' do
       JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
     end
     wait_until(EM.reactor_running?)
+    JobReactor::MemoryStorage.flush_storage
   end
 
-  before do
-    ARRAY = []
-    JobReactor::MemoryStorage.flush_storage
+  after do
+    if EM.reactor_running?
+      JR.stop
+      wait_until(!EM.reactor_running?)
+    end
   end
 
   describe 'simple_job' do
@@ -43,7 +45,7 @@ describe 'simple job' do
   end
 
   describe 'job with error' do
-    it 'should retry job 20 times' do
+    it 'should retry job 5 times' do
       JR.enqueue 'simple_fail'
       wait_until(ARRAY.size == 5)
       ARRAY.size.should == 5
@@ -59,10 +61,10 @@ describe 'simple job' do
     end
 
     it 'should not run "after" job immediately' do
-      JR.enqueue 'simple_after', { }, { :after => 1 }
-      sleep(0.5)
+      JR.enqueue 'simple_after', { }, { :after => 2 }
+      sleep(1)
       ARRAY.size.should == 0
-      sleep(5)
+      wait_until(ARRAY.size > 0)
     end
   end
 

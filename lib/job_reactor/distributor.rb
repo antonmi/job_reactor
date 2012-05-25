@@ -36,7 +36,6 @@ module JobReactor
         connection.lock
       else
         EM.next_tick do
-          puts 'locked'
           send_data_to_node(hash)
         end
       end

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'job_reactor'
 
 def options
   { storage: 'storage', name: 'name', server: 'server', distributors: ['distributors'] }

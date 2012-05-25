@@ -47,4 +47,8 @@ module JobReactor
       end
     end
   end
+
+  def stop
+    EM.stop
+  end
 end

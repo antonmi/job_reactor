@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'job_reactor'
 
 describe JobReactor do
   context "initializaiton" do

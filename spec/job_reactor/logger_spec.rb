@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'job_reactor'
 
 describe JobReactor::Logger do
   subject { JobReactor::Logger }
@@ -8,7 +7,7 @@ describe JobReactor::Logger do
 
   describe '.log_event' do
     let(:event) { mock(:to_s => "MyEvent") }
-    let(:job) { {'name' => 'my_job_name'} }
+    let(:job) { { 'name' => 'my_job_name' } }
     before { subject.log_event(event, job) }
     it('should log event') { stdout.string.should include('MyEvent') }
     it('should log job') { stdout.string.should include('my_job_name') }
@@ -43,5 +42,16 @@ describe JobReactor::Logger do
       before { JR::Logger.development = true }
       it('should return true') { subject.development?.should be_true }
     end
+  end
+
+  describe '.development=' do
+    before { JR::Logger.development = 1 }
+    it("should set value as boolean") { JR::Logger.class_variable_get(:@@development).should == true }
+  end
+
+  describe '.stdout=' do
+    let(:stream){mock('stream')}
+    before { JR::Logger.stdout = stream }
+    it("should set @@stdout") { JR::Logger.class_variable_get(:@@stdout).should == stream }
   end
 end
