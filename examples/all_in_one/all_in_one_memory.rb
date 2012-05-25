@@ -10,7 +10,7 @@ require 'job_reactor'
 
 #Job directory
 JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
-
+JR.config[:retry_multiplier] = 0
 #This code you should place in application initializer.
 #It should be run only once
 JR.run do
@@ -23,5 +23,16 @@ end
 
 
 #Your application
-JR.enqueue('test_job', {arg1: 1, arg2: 2})
-sleep(10)
+success = Proc.new do |args|
+  puts 'YAY'*100
+  puts args
+end
+
+error = Proc.new do |args|
+  puts 'YAY'*100
+  puts args
+end
+
+#sleep(1)
+JR.enqueue('test_job', {arg1: 1, arg2: 2}, {}, success, error)
+sleep(20)

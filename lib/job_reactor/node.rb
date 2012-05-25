@@ -77,7 +77,9 @@ module JobReactor
       job['status'] = 'in progress'
       job['storage'].save(job) do |job|
         begin
-          job.succeed(job['args'].merge(JR.config[:merge_job_itself_to_args] ? {:job_itself => job.dup} : {}))
+          args = job['args'].merge(JR.config[:merge_job_itself_to_args] ? {:job_itself => job.dup} : {})
+          job.succeed(args)
+          job['args'] = args
           job_completed(job)
         rescue JobReactor::CancelJob
           cancel_job(job)
@@ -96,17 +98,28 @@ module JobReactor
         job['status']     = 'error'
         self.storage.save(job) do |job|
           begin
-            job.fail(job['args'].merge(:error => e).merge(JR.config[:merge_job_itself_to_args] ? { :job_itself => job.dup } : { })) #Fire errbacks. You can access error in you errbacks (args[:error])
+            args = job['args'].merge!(:error => e).merge(JR.config[:merge_job_itself_to_args] ? { :job_itself => job.dup } : { })
+            job.fail(args) #Fire errbacks. You can access error in you errbacks (args[:error])
+            job['args'] = args
           rescue JobReactor::CancelJob
             cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
           rescue Exception => e #TODO may be add another info. failed_at, node, attempt for more precise control??? Or may be send all attributes???
-            try_again(job) if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1 #If not, try again
+            if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1
+              try_again(job)
+            else
+              report_error(job) if job['on_error']
+            end
           end
         end
       end
     end
 
+    # Reports success to distributor if should do it.
+    # If job is 'periodic' job schedule it again.
+    # Sets status completed or removes job from storage.
+    #
     def job_completed(job)
+      report_success(job) if job['on_success']
       if job['period'] && job['period'] > 0
         job['status'] = 'queued'
         job['make_after'] = job['period']
@@ -155,6 +168,29 @@ module JobReactor
         job_to_retry['args'].merge!(:retrying => true)
         try_again(job_to_retry) if job_to_retry
       end
+    end
+
+    # Reports success to node, sends jobs args
+    #
+    def report_success(job)
+      host, port = job['distributor'].split(':')
+      port = port.to_i
+      distributor = self.connections[[host, port]]
+      data = {:success => { callback_id: job['on_success'], :args => job['args']}}
+      data = Marshal.dump(data)
+      distributor.send_data(data)
+    end
+
+    # Reports error to node, sends jobs args.
+    # Exception class is merged to args.
+    #
+    def report_error(job)
+      host, port = job['distributor'].split(':')
+      port = port.to_i
+      distributor = self.connections[[host, port]]
+      data = {:error => { errback_id: job['on_error'], :args => job['args']}}
+      data = Marshal.dump(data)
+      distributor.send_data(data)
     end
 
   end

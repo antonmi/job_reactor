@@ -6,20 +6,22 @@ puts "="*100
 
 job 'test_job' do |args|
   puts 'job'
-  puts args.merge!(:aaa=>'wewewewewe')
+  args.merge!(:aaa=>'wewewewewe')
   (1..1_000_000).to_a.shuffle!.sort!
 end
 
 
 job_callback 'test_job', 'first_callback' do |args|
   puts 'callback'
-  puts args[:aaa]
-  raise Fail
+  puts args
 end
 
 job_callback 'test_job', 'second_callback' do |args|
   puts 'another_callback'
   puts 'Test job is complete'
+  args.merge!('result' => 'TTTTTT')
+  puts args
+  sdfg
 end
 
 job_errback 'test_job', 'first_errback' do |args|

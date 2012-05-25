@@ -5,6 +5,14 @@ module JobReactor
   module Distributor
     extend self
 
+    def host
+      @@host
+    end
+
+    def port
+      @@port
+    end
+
     def nodes
       @@nodes ||= []
     end
@@ -17,6 +25,8 @@ module JobReactor
     #Starts distributor on given hast and port
 
     def start(host, port)
+      @@host = host
+      @@port = port
       EM.start_server(host, port, JobReactor::Distributor::Server, [host, port])
       JR::Logger.log "Distributor listens #{host}:#{port}"
       EM.add_periodic_timer(5) do
