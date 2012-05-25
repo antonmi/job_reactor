@@ -3,7 +3,6 @@ require 'job_reactor'
 
 describe JobReactor do
   context "initializaiton" do
-    before { JobReactor.should_receive(:start) }
     describe '.run' do
       before do
         Thread.should_receive(:new).and_yield
