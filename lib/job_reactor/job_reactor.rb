@@ -136,8 +136,8 @@ module JobReactor
       opts[:storage] = STORAGES[opts[:storage]]
     end
 
-    #Loads all *.rb files in the :job_directory folder
-    #See job_reactor/job_parser to understand how job hash is built
+    # Loads all *.rb files in the :job_directory folder
+    # See job_reactor/job_parser to understand how job hash is built
     #
     def parse_jobs
       JR.config[:job_directory] += '/*.rb'
@@ -153,7 +153,7 @@ module JobReactor
       hash.merge!('on_success' => callback_id)
     end
 
-    #Adds error callback which will launch when node reports error
+    # Adds error callback which will launch when node reports error
     #
     def add_errback!(hash, errback)
       distributor = "#{JR::Distributor.host}:#{JR::Distributor.port}"
@@ -170,7 +170,7 @@ module JobReactor
       end
     end
 
-    # Log the completing
+    # Logs the completing
     #
     def add_last_callback(job)
       job.callback do
@@ -178,7 +178,7 @@ module JobReactor
       end
     end
 
-    # Log the beginning or error cycle.
+    # Logs the beginning or error cycle.
     #
     def add_start_errback(job)
       job.errback do
