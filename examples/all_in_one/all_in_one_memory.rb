@@ -23,6 +23,5 @@ end
 
 
 #Your application
-sleep(5)
 JR.enqueue('test_job', {arg1: 1, arg2: 2})
 sleep(10)

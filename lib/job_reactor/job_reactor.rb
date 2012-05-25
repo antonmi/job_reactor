@@ -95,16 +95,6 @@ module JobReactor
 
     private
 
-    # Private. Method is called by JR.run, JR.run!, JR.wait_em_and_run.
-    # Calls the block and starts distributor and .
-    # Have in mind 'Now we are inside EventMachine Reactor'.
-    #
-    def start(&block)
-      block.call if block_given?
-      parse_jobs
-      EM.add_periodic_timer(5) { JR::Logger.dev_log('Reactor is running') } #TODO remove in live
-    end
-
     # Requires storage and change opts[:storage] to the constant
     #
     def require_storage!(opts)

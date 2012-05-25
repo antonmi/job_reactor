@@ -8,7 +8,6 @@ JR.run do
 end
 
 i=0
-sleep(10)
 loop do
   JR.enqueue('test_job', {arg1: 1, arg2: 2})
   puts i+=1

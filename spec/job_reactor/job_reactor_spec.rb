@@ -5,16 +5,6 @@ require 'eventmachine'
 module JobReactor
   describe JobReactor do
 
-    describe 'start' do
-      it 'should call the block and parse jobs' do
-        block = proc {}
-        EM.stub(:add_periodic_timer)
-        block.should_receive(:call)
-        JobReactor.should_receive(:parse_jobs)
-        JobReactor.send(:start, &block)
-      end
-    end
-
     describe 'parse_jobs' do
       JobReactor.config[:job_directory] = File.expand_path("../../jobs", __FILE__)
       JobReactor.send(:parse_jobs)

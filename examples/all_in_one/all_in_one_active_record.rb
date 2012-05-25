@@ -13,7 +13,7 @@ JR.config[:use_custom_active_record_connection] = true
 JR.config[:active_record_adapter] = 'mysql2'
 JR.config[:active_record_database] = 'em'
 JR.config[:active_record_user] = 'root'
-JR.config[:active_record_password] = ''
+JR.config[:active_record_password] = '123456'
 JR.config[:active_record_table_name] = 'reactor_jobs'
 
 #Job directory
@@ -30,7 +30,6 @@ end
 
 
 #Your application
-sleep(5)
 JR.enqueue('test_job', {arg1: 1, arg2: 2})
 sleep(10)
 
