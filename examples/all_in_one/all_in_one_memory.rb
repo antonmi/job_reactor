@@ -29,10 +29,10 @@ success = Proc.new do |args|
 end
 
 error = Proc.new do |args|
-  puts 'YAY'*100
+  puts 'YAY '*100
   puts args
 end
 
-#sleep(1)
-JR.enqueue('test_job', {arg1: 1, arg2: 2}, {}, success, error)
+sleep(1)
+JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
 sleep(20)

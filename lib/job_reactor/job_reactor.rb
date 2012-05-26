@@ -62,13 +62,8 @@ module JobReactor
 
       hash.merge!('distributor' => "#{JR::Distributor.host}:#{JR::Distributor.port}")
 
-      if success_proc
-        add_callback!(hash, success_proc)
-      end
-
-      if error_proc
-        add_errback!(hash, error_proc)
-      end
+      add_callback!(hash, success_proc) if success_proc
+      add_errback!(hash, error_proc) if error_proc
 
       JR::Distributor.send_data_to_node(hash)
     end
@@ -114,7 +109,7 @@ module JobReactor
     # Runs success callbacks with job args
     #
     def run_callback(data)
-      proc = callbacks.delete(data[:callback_id])
+      proc = data[:do_not_delete] ? callbacks[data[:callback_id]] : callbacks.delete(data[:callback_id])
       proc.call(data[:args])
     end
 

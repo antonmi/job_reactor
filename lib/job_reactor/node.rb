@@ -89,6 +89,26 @@ module JobReactor
       end
     end
 
+    # Reports success to distributor if should do it.
+    # If job is 'periodic' job schedule it again.
+    # Sets status completed or removes job from storage.
+    #
+    def job_completed(job)
+      report_success(job) if job['on_success']
+      if job['period'] && job['period'] > 0
+        job['status'] = 'queued'
+        job['make_after'] = job['period']
+        job['storage'].save(job) { |job| schedule(job) }
+      else
+        if JR.config[:remove_done_jobs]
+          job['storage'].destroy(job)
+        else
+          job['status'] = 'complete'
+          job['storage'].save(job)
+        end
+      end
+    end
+
     #Lanches job errbacks
     #
     def rescue_job(e, job)
@@ -114,23 +134,15 @@ module JobReactor
       end
     end
 
-    # Reports success to distributor if should do it.
-    # If job is 'periodic' job schedule it again.
-    # Sets status completed or removes job from storage.
+    # Cancels job. Remove or set 'cancelled status'
     #
-    def job_completed(job)
-      report_success(job) if job['on_success']
-      if job['period'] && job['period'] > 0
-        job['status'] = 'queued'
-        job['make_after'] = job['period']
-        job['storage'].save(job) { |job| schedule(job) }
+    def cancel_job(job)
+      report_error(job) if job['on_error']
+      if JR.config[:remove_cancelled_jobs]
+        storage.destroy(job)
       else
-        if JR.config[:remove_done_jobs]
-          job['storage'].destroy(job)
-        else
-          job['status'] = 'complete'
-          job['storage'].save(job)
-        end
+        job['status'] = 'cancelled'
+        storage.save(job)
       end
     end
 
@@ -146,17 +158,6 @@ module JobReactor
       end
       self.storage.save(hash) do |hash|
         self.schedule(hash)
-      end
-    end
-
-    # Cancels job. Remove or set 'cancelled status'
-    #
-    def cancel_job(job)
-      if JR.config[:remove_cancelled_jobs]
-        storage.destroy(job)
-      else
-        job['status'] = 'cancelled'
-        storage.save(job)
       end
     end
 
@@ -176,7 +177,8 @@ module JobReactor
       host, port = job['distributor'].split(':')
       port = port.to_i
       distributor = self.connections[[host, port]]
-      data = {:success => { callback_id: job['on_success'], :args => job['args']}}
+      data = {:success => { callback_id: job['on_success'], args: job['args']}}
+      data[:success].merge!(do_not_delete: true) if job['period']
       data = Marshal.dump(data)
       distributor.send_data(data)
     end
@@ -188,7 +190,7 @@ module JobReactor
       host, port = job['distributor'].split(':')
       port = port.to_i
       distributor = self.connections[[host, port]]
-      data = {:error => { errback_id: job['on_error'], :args => job['args']}}
+      data = {:error => { errback_id: job['on_error'], args: job['args']}}
       data = Marshal.dump(data)
       distributor.send_data(data)
     end
