@@ -15,11 +15,12 @@ JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
 #Default Redis host, port options
 JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
+JR.config[:retry_jobs_at_start] = false
 
 #This code you should place in application initializer.
 #It should be run only once
 #You see wait_em_and_run method which you should use if your application use EventMachine
-JR.wait_em_and_run do
+JR.run do
   JR.start_distributor('localhost', 5000)
   #Starts node in the same process
   #Node will search distributor on 'localhost:5000'
@@ -27,12 +28,17 @@ JR.wait_em_and_run do
 end
 
 
-#Your application with EM
-#Do not schedule jobs at start
-#Reactor needs time to parse jobs
-#This is #TODO
-EM.run do
-  EM::Timer.new(1) do
-  JR.enqueue('periodic', {arg1: 1, arg2: 2})
-    end
+#Your application
+success = Proc.new do |args|
+  puts 'YAY'*100
+  puts args
 end
+
+error = Proc.new do |args|
+  puts 'YAY '*100
+  puts args
+end
+
+sleep(0.01) until JR.ready?
+JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
+sleep(20)

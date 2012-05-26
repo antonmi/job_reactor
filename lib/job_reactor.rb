@@ -23,6 +23,7 @@ module JobReactor
     Thread.new do
       EM.run do
         block.call if block_given?
+        JR.ready!
       end
     end
   end
@@ -31,9 +32,11 @@ module JobReactor
     parse_jobs
     if EM.reactor_running?
       block.call if block_given?
+      JR.ready!
     else
       EM.run do
         block.call if block_given?
+        JR.ready!
       end
     end
   end
@@ -44,6 +47,7 @@ module JobReactor
       sleep(1) until EM.reactor_running? #TODO better solution?
       EM.schedule do
         block.call if block_given?
+        JR.ready!
       end
     end
   end

@@ -30,6 +30,17 @@ end
 
 
 #Your application
-JR.enqueue('test_job', {arg1: 1, arg2: 2})
-sleep(10)
+success = Proc.new do |args|
+  puts 'YAY'*100
+  puts args
+end
+
+error = Proc.new do |args|
+  puts 'YAY '*100
+  puts args
+end
+
+sleep(0.01) until JR.ready?
+JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
+sleep(20)
 

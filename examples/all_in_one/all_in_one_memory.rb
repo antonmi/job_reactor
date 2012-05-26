@@ -33,6 +33,6 @@ error = Proc.new do |args|
   puts args
 end
 
-sleep(1)
+sleep(0.01) until JR.ready?
 JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
 sleep(20)

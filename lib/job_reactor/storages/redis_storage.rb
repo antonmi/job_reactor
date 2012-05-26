@@ -4,7 +4,7 @@ require 'em-redis'
 module JobReactor
   module RedisStorage
     @@storage = EM::Protocols::Redis.connect(host: JobReactor.config[:redis_host], port: JobReactor.config[:redis_port])
-    ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status)
+    ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error)
 
     class << self
 

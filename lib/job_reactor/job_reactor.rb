@@ -18,6 +18,23 @@ module JobReactor
 
   class << self
 
+    # Accessors to jobs.
+    #
+    def jobs
+      @@jobs ||= { }
+    end
+
+    # Ready flag.
+    # @@ready is true when block is called inside EM reactor.
+    #
+    def ready!
+      @@ready = true
+    end
+
+    def ready?
+      @@ready ||= false
+    end
+
     # Requires storage
     # Creates and start node.
     #
@@ -27,10 +44,8 @@ module JobReactor
       node.start
     end
 
-    # Accessors to jobs.
-    #
-    def jobs
-      @@jobs ||= { }
+    def start_distributor(host, port)
+      JR::Distributor.start(host, port)
     end
 
     def callbacks

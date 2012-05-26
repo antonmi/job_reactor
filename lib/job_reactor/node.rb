@@ -98,6 +98,7 @@ module JobReactor
       if job['period'] && job['period'] > 0
         job['status'] = 'queued'
         job['make_after'] = job['period']
+        job['args'].delete(:job_itself)
         job['storage'].save(job) { |job| schedule(job) }
       else
         if JR.config[:remove_done_jobs]

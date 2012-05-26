@@ -7,7 +7,7 @@ puts "="*100
 job 'test_job' do |args|
   puts 'job'
   args.merge!(:aaa=>'wewewewewe')
-  (1..1_000_000).to_a.shuffle!.sort!
+  (1..100_000).to_a.shuffle!.sort!
 end
 
 
@@ -56,7 +56,7 @@ job 'periodic' do |args|
   puts args[:job_itself]
   puts args[:arg1]
   puts args.class
-  dsfsd
+  #dsfsd
 end
 
 job_errback 'periodic' do |args|
