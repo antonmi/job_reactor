@@ -14,23 +14,27 @@ end
 
 
 #For integration/simple_jobs_spec
-ARRAY ||= []
-ARRAY.clear
+ARRAY = []
+#ARRAY.clear
 
 job 'simple' do |args|
+  puts 's'*100
   ARRAY << ['simple', args]
 end
 
 job 'simple_fail' do
+  puts 'sf'*100
   ARRAY << 'fail'
   raise Fail
 end
 
 job 'simple_after' do
+  puts 'sa'*100
   ARRAY << Time.now
 end
 
 job 'simple_run_at' do
+  puts 'sra'*100
   ARRAY << Time.now
 end
 #-----------

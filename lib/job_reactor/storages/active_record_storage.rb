@@ -23,8 +23,6 @@ module JobReactor
       def load(hash, &block)
         if record = self.find_by_id(hash['id'])
           hash = record.attributes
-          hash.merge!('storage' => ActiveRecordStorage)
-          hash
           block.call(hash) if block_given?
         end
       end
@@ -39,7 +37,6 @@ module JobReactor
           record = self.create(hash)
         end
         hash.merge!('id' => record.id)
-        hash.merge!('storage' => ActiveRecordStorage)
         block.call(hash) if block_given?
       end
 

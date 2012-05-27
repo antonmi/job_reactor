@@ -75,7 +75,7 @@ module JobReactor
     def do_job(job)
       job['run_at'] = Time.now
       job['status'] = 'in progress'
-      job['storage'].save(job) do |job|
+      storage.save(job) do |job|
         begin
           args = job['args'].merge(JR.config[:merge_job_itself_to_args] ? {:job_itself => job.dup} : {})
           job.succeed(args)
@@ -99,13 +99,13 @@ module JobReactor
         job['status'] = 'queued'
         job['make_after'] = job['period']
         job['args'].delete(:job_itself)
-        job['storage'].save(job) { |job| schedule(job) }
+        storage.save(job) { |job| schedule(job) }
       else
         if JR.config[:remove_done_jobs]
-          job['storage'].destroy(job)
+          storage.destroy(job)
         else
           job['status'] = 'complete'
-          job['storage'].save(job)
+          storage.save(job)
         end
       end
     end
@@ -181,7 +181,7 @@ module JobReactor
       data = {:success => { callback_id: job['on_success'], args: job['args']}}
       data[:success].merge!(do_not_delete: true) if job['period']
       data = Marshal.dump(data)
-      distributor.send_data(data)
+      send_data_to_distributor(distributor, data)
     end
 
     # Reports error to node, sends jobs args.
@@ -193,7 +193,18 @@ module JobReactor
       distributor = self.connections[[host, port]]
       data = {:error => { errback_id: job['on_error'], args: job['args']}}
       data = Marshal.dump(data)
-      distributor.send_data(data)
+      send_data_to_distributor(distributor, data)
+    end
+
+    def send_data_to_distributor(distributor, data)
+      if distributor.locked?
+        EM.next_tick do
+          send_data_to_distributor(distributor, data)
+        end
+      else
+        distributor.send_data(data)
+        distributor.lock
+      end
     end
 
   end

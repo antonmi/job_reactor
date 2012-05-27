@@ -8,18 +8,19 @@ module JobReactor
       end
 
       def receive_data(data)
-
         data = Marshal.load(data)
-        node_info = data[:node_info]
         if data[:node_info]
+          node_info = data[:node_info]
           JR::Logger.log "Receive data from node: #{data[:node_info]}"
           JobReactor::Distributor.nodes << node_info
           connection = EM.connect(*node_info[:server], Client, node_info[:name])
           JobReactor::Distributor.connections << connection
         elsif data[:success]
           JR.run_callback(data[:success])
+          send_data('ok')
         elsif data[:error]
           JR.run_errback(data[:error])
+          send_data('ok')
         end
 
         data

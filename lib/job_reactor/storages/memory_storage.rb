@@ -13,7 +13,6 @@ module JobReactor
         hash      = storage[hash['id']]
         hash_copy = { }
         hash.each { |k, v| hash_copy.merge!(k => v) }
-        hash_copy.merge!('storage' => MemoryStorage)
         block.call(hash_copy) if block_given?
       end
 
@@ -23,7 +22,6 @@ module JobReactor
           hash.merge!('id' => id)
         end
         storage.merge!(hash['id'] => hash)
-        hash.merge!('storage' =>  MemoryStorage)
 
         block.call(hash) if block_given?
       end

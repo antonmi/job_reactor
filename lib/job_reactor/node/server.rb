@@ -24,6 +24,7 @@ module JobReactor
       # -and schedules job;
       #
       def receive_data(data)
+
         hash = Marshal.load(data)
         JR::Logger.log("#{@node.name} received job: #{hash}")
         hash.merge!('node' => @node.name)

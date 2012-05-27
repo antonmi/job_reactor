@@ -24,7 +24,6 @@ module JobReactor
             hash_copy[attr] = hash_copy[attr].to_i
           end
           hash_copy['args'] = Marshal.load(hash_copy['args'])
-          hash_copy.merge!('storage' => RedisStorage)
 
           block.call(hash_copy) if block_given?
         end
@@ -37,7 +36,6 @@ module JobReactor
         args, hash['args'] = hash['args'], Marshal.dump(hash['args'])
 
         storage.hmset(key, *ATTRS.map{|attr| [attr, hash[attr]]}.flatten) do
-          hash.merge!('storage' => RedisStorage)
           hash['args'] = args
 
           block.call(hash) if block_given?
