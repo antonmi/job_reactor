@@ -11,8 +11,6 @@ module JobReactor
 
         data = Marshal.load(data)
         node_info = data[:node_info]
-        puts '['*100
-        puts data
         if data[:node_info]
           JR::Logger.log "Receive data from node: #{data[:node_info]}"
           JobReactor::Distributor.nodes << node_info
