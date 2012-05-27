@@ -45,6 +45,8 @@ module JobReactor
 
     describe 'enqueue job' do
       before do
+        EM.stub(:start_server).and_return(true)
+        JobReactor.start_distributor('localhost', '3000')
         JobReactor.config[:job_directory] = File.expand_path("../../jobs", __FILE__)
         JobReactor::Distributor.stub(:send_data_to_node).and_return(true)
       end
@@ -54,19 +56,19 @@ module JobReactor
       end
 
       it 'should enqueue simple job' do
-        hash = { 'name' => 'test_job', 'args' => {}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0 }
+        hash = { 'name' => 'test_job', 'args' => {}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'distributor' => 'localhost:3000' }
         JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
         JR.enqueue('test_job')
       end
 
       it 'should enqueue job with args' do
-        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0 }
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'distributor' => 'localhost:3000' }
         JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
         JR.enqueue('test_job', { a: 1, b: 2 })
       end
 
       it 'should enqueue "after" job with args' do
-        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 1 }
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 1, 'distributor' => 'localhost:3000' }
         JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
         JR.enqueue('test_job', { a: 1, b: 2 }, { after: 1 })
       end
@@ -79,13 +81,13 @@ module JobReactor
       #end
 
       it 'should enqueue "periodic" job with args' do
-        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'period' => 5 }
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'period' => 5, 'distributor' => 'localhost:3000' }
         JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
         JR.enqueue('test_job', { a: 1, b: 2 }, { period: 5 })
       end
 
       it 'should enqueue job for specific node' do
-        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'node' => 'A', 'not_node' => 'B' }
+        hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'node' => 'A', 'not_node' => 'B', 'distributor' => 'localhost:3000' }
         JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
         JR.enqueue('test_job', { a: 1, b: 2 }, { node: 'A', not_node: 'B' })
       end

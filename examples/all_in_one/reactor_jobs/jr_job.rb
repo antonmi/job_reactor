@@ -21,7 +21,7 @@ job_callback 'test_job', 'second_callback' do |args|
   puts 'Test job is complete'
   args.merge!('result' => 'TTTTTT')
   puts args
-  #sdfg
+  sdfg
 end
 
 job_errback 'test_job', 'first_errback' do |args|
@@ -56,7 +56,6 @@ job 'periodic' do |args|
   puts args[:job_itself]
   puts args[:arg1]
   puts args.class
-  #dsfsd
 end
 
 job_errback 'periodic' do |args|

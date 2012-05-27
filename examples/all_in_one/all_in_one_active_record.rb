@@ -8,12 +8,13 @@ $: << "lib"
 require 'job_reactor'
 
 #if this option is false, active_record will use your default options
+#JR.config[:retry_jobs_at_start] = false
 JR.config[:use_custom_active_record_connection] = true
 #unnecessary options if you use JobReactor with rails application
 JR.config[:active_record_adapter] = 'mysql2'
 JR.config[:active_record_database] = 'em'
 JR.config[:active_record_user] = 'root'
-JR.config[:active_record_password] = '123456'
+JR.config[:active_record_password] = ''
 JR.config[:active_record_table_name] = 'reactor_jobs'
 
 #Job directory
@@ -42,5 +43,5 @@ end
 
 sleep(0.01) until JR.ready?
 JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
-sleep(20)
+sleep(30)
 

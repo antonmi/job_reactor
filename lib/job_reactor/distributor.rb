@@ -29,9 +29,9 @@ module JobReactor
       @@port = port
       EM.start_server(host, port, JobReactor::Distributor::Server, [host, port])
       JR::Logger.log "Distributor listens #{host}:#{port}"
-      EM.add_periodic_timer(5) do
-        JR::Logger.log('Available nodes: ' << JR::Distributor.connections.map(&:name).join(' '))
-      end
+      #EM.add_periodic_timer(5) do
+      #  JR::Logger.log('Available nodes: ' << JR::Distributor.connections.map(&:name).join(' '))
+      #end
     end
 
     # Tries to find available node connection

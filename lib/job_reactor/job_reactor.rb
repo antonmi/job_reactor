@@ -125,7 +125,7 @@ module JobReactor
     #
     def run_callback(data)
       proc = data[:do_not_delete] ? callbacks[data[:callback_id]] : callbacks.delete(data[:callback_id])
-      proc.call(data[:args])
+      proc.call(data[:args]) if proc
     end
 
     # Runs error callbacks with job args
@@ -133,7 +133,7 @@ module JobReactor
     #
     def run_errback(data)
       proc = errbacks.delete(data[:errback_id])
-      proc.call(data[:args])
+      proc.call(data[:args]) if proc
     end
 
 

@@ -17,7 +17,7 @@ describe 'simple job', :slow => true do
       JR::Distributor.start('localhost', 5000)
       JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 6000], :distributors => [['localhost', 5000]] })
     end
-    wait_until(EM.reactor_running?)
+    wait_until(JR.ready?)
     JobReactor::MemoryStorage.flush_storage
   end
 
