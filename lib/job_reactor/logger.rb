@@ -2,14 +2,22 @@ module JobReactor
   module Logger
 ################
 #   To set output stream
+    @@logger_method = :puts
 
     def self.stdout=(value)
-      @@stdout = value
+      if value.is_a?(Symbol) && value == :rails_logger
+        @@stdout        = Rails.logger
+        @@logger_method = :info
+      else
+        @@stdout        = value
+        @@logger_method = :puts
+      end
     end
 
     def self.stdout
       @@stdout ||= $stdout
     end
+
 #################
 #   Is checked in dev_log
 
@@ -18,13 +26,14 @@ module JobReactor
     def self.development=(value)
       @@development = !!value
     end
+
 #################
 
-    # Log message to output stream
-    #
+# Log message to output stream
+#
     def self.log(msg)
-      stdout.puts '-'*100
-      stdout.puts(msg)
+      stdout.public_send(@@logger_method, '-'*100)
+      stdout.public_send(@@logger_method, msg)
     end
 
     # Build string for job event and log it
