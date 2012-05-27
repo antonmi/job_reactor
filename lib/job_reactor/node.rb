@@ -95,7 +95,7 @@ module JobReactor
     #
     def job_completed(job)
       report_success(job) if job['on_success']
-      if job['period'] && job['period'] > 0
+      if job['period'] && job['period'].to_i > 0
         job['status'] = 'queued'
         job['make_after'] = job['period']
         job['args'].delete(:job_itself)
@@ -179,7 +179,7 @@ module JobReactor
       port = port.to_i
       distributor = self.connections[[host, port]]
       data = {:success => { callback_id: job['on_success'], args: job['args']}}
-      data[:success].merge!(do_not_delete: true) if job['period']
+      data[:success].merge!(do_not_delete: true) if job['period'] && job['period'].to_i > 0
       data = Marshal.dump(data)
       send_data_to_distributor(distributor, data)
     end

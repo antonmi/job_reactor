@@ -10,5 +10,5 @@ JR.config[:active_record_password] = ''
 JR.config[:active_record_table_name] = 'reactor_jobs'
 
 JR.run! do
-  JR.start_node({:storage => 'active_record_storage', :name => "db_node", :server => ['localhost', 2002], :distributors => [['localhost', 5000]] })
+  JR.start_node({:storage => 'active_record_storage', :name => "db_node", :server => ['192.168.1.3', 2002], :distributors => [['192.168.1.4', 5000]] })
 end
