@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.files            += Dir.glob("spec/**/*")
   s.files            += Dir.glob("examples/**/*")
 
-  s.require_path      = 'lib'
+  s.require_path     << 'lib'
 
   s.add_dependency "eventmachine"
   s.add_dependency "em-redis"
