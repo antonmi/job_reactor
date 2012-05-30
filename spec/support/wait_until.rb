@@ -1,5 +1,5 @@
 def wait_until(bool)
-  max_wait_time = 5
+  max_wait_time = 10
   counter       = 0
   until bool || counter > max_wait_time
     sleep(1)

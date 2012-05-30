@@ -20,11 +20,10 @@ module JobReactor
       # This method:
       # -receives data from distributor;
       # -saves them in storage;
-      # -returns 'ok' to unlock node;
+      # -returns 'ok' to unlock node connection;
       # -and schedules job;
       #
       def receive_data(data)
-
         hash = Marshal.load(data)
         JR::Logger.log("#{@node.name} received job: #{hash}")
         hash.merge!('node' => @node.name)
