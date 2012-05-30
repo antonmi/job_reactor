@@ -5,8 +5,8 @@ require 'job_reactor'
 #$logger_stream    ||= StringIO.new
 #JR::Logger.stdout = $logger_stream
 
-Dir[File.expand_path('../support/*', __FILE__)].each do |f|
-  require f
+Dir[File.expand_path('../support/*', __FILE__)].each do |file|
+  require file
 end
 
 RSpec.configure do |config|

@@ -14,8 +14,6 @@ end
 
 
 #For integration/simple_jobs_spec
-ARRAY = []
-#ARRAY.clear
 
 job 'simple' do |args|
   ARRAY << ['simple', args]
@@ -35,4 +33,11 @@ job 'simple_run_at' do
 end
 #-----------
 
+#For integration/jobs_with_feedback_spec
+job 'feedback' do |args|
 
+end
+
+job 'feedback_with_error' do |args|
+  feed_back_error #undefined local variable or method `feed_back_error'
+end

@@ -128,7 +128,7 @@ module JobReactor
             if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1
               try_again(job)
             else
-              report_error(job) if job['on_error']
+              report_error(job) if job['on_error'] #TODO Currently there is now :job_itself in args
             end
           end
         end

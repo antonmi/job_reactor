@@ -10,6 +10,7 @@ end
 
 describe 'simple job', :slow => true do
   before :all do
+    ARRAY = []
     JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
     JR.config[:retry_multiplier] = 0
     JR.config[:max_attempt]      = 5
@@ -22,7 +23,7 @@ describe 'simple job', :slow => true do
 
   before do
     MemoryStorage.flush_storage
-    ARRAY = []
+    ARRAY.clear
   end
 
   describe 'simple_job' do
