@@ -7,11 +7,7 @@ Gem::Specification.new do |s|
   s.email             = "anton.mishchuk@gmial.com"
   s.authors           = [ "Anton Mishchuk", "Andrey Rozhkovskiy" ]
   s.platform          = Gem::Platform::RUBY
-
-  s.files             = %w(README.markdown)
-  s.files            += Dir.glob("lib/**/*")
-  s.files            += Dir.glob("spec/**/*")
-  s.files            += Dir.glob("examples/**/*")
+  s.files = Dir['lib/**/*.rb']
 
   s.require_path     << 'lib'
 
