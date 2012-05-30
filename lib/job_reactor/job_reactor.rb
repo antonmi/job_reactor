@@ -35,12 +35,6 @@ module JobReactor
       @@ready ||= false
     end
 
-    #TODO
-    def stop!
-      EM.stop
-      Thread.current.kill
-    end
-
     # Requires storage
     # Creates and start node.
     #
