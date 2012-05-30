@@ -48,11 +48,11 @@ module JobReactor
       JR::Distributor.start(host, port)
     end
 
-    def callbacks
+    def succ_feedbacks
       @@callbacks ||= { }
     end
 
-    def errbacks
+    def err_feedbacks
       @@errbacks ||= { }
     end
 
@@ -77,8 +77,8 @@ module JobReactor
 
       hash.merge!('distributor' => "#{JR::Distributor.host}:#{JR::Distributor.port}")
 
-      add_callback!(hash, success_proc) if success_proc
-      add_errback!(hash, error_proc) if error_proc
+      add_succ_feedbacks!(hash, success_proc) if success_proc
+      add_err_feedbacks!(hash, error_proc) if error_proc
 
       JR::Distributor.send_data_to_node(hash)
     end
@@ -123,16 +123,16 @@ module JobReactor
 
     # Runs success callbacks with job args
     #
-    def run_callback(data)
-      proc = data[:do_not_delete] ? callbacks[data[:callback_id]] : callbacks.delete(data[:callback_id])
+    def run_succ_feedback(data)
+      proc = data[:do_not_delete] ? succ_feedbacks[data[:callback_id]] : succ_feedbacks.delete(data[:callback_id])
       proc.call(data[:args]) if proc
     end
 
     # Runs error callbacks with job args
     # Exception class is in args[:error]
     #
-    def run_errback(data)
-      proc = errbacks.delete(data[:errback_id])
+    def run_err_feedback(data)
+      proc = err_feedbacks.delete(data[:errback_id])
       proc.call(data[:args]) if proc
     end
 
@@ -156,19 +156,19 @@ module JobReactor
 
     # Adds success callback which will launch when node reports success
     #
-    def add_callback!(hash, callback)
+    def add_succ_feedbacks!(hash, callback)
       distributor = "#{JR::Distributor.host}:#{JR::Distributor.port}"
-      callback_id = "#{distributor}_#{Time.now.utc.to_f}"
-      callbacks.merge!(callback_id => callback)
+      feedback_id = "#{distributor}_#{Time.now.utc.to_f}"
+      succ_feedbacks.merge!(feedback_id => callback)
       hash.merge!('on_success' => callback_id)
     end
 
     # Adds error callback which will launch when node reports error
     #
-    def add_errback!(hash, errback)
+    def add_err_feedbacks!(hash, errback)
       distributor = "#{JR::Distributor.host}:#{JR::Distributor.port}"
-      errback_id = "#{distributor}_#{Time.now.utc.to_f}"
-      errbacks.merge!(errback_id => errback)
+      feedback_id = "#{distributor}_#{Time.now.utc.to_f}"
+      err_feedbacks.merge!(feedback_id => errback)
       hash.merge!('on_error' => errback_id)
     end
 

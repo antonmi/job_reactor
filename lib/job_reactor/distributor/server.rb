@@ -16,10 +16,10 @@ module JobReactor
           connection = EM.connect(*node_info[:server], Client, node_info[:name])
           JobReactor::Distributor.connections << connection
         elsif data[:success]
-          JR.run_callback(data[:success])
+          JR.run_succ_feedback(data[:success])
           send_data('ok')
         elsif data[:error]
-          JR.run_errback(data[:error])
+          JR.run_err_feedback(data[:error])
           send_data('ok')
         end
 
