@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.platform          = Gem::Platform::RUBY
   s.files = Dir['lib/**/*.rb']
 
-  s.require_path     << 'lib'
+  s.require_path     = ['lib']
 
   s.add_dependency "eventmachine"
   s.add_dependency "em-redis"
