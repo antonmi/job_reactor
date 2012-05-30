@@ -1,5 +1,3 @@
-$LOAD_PATH.unshift 'lib/job_reactor' #TODO
-
 require 'eventmachine'
 require 'job_reactor/job_reactor'
 require 'job_reactor/logger'
