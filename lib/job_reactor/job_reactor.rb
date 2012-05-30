@@ -32,7 +32,7 @@ module JobReactor
     end
 
     def ready?
-      @@ready ||= false
+      (@@ready ||= false) && EM.reactor_running?
     end
 
     # Requires storage

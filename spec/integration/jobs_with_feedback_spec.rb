@@ -15,8 +15,8 @@ describe 'simple job', :slow => true do
     JR.config[:retry_multiplier] = 0
     JR.config[:max_attempt]      = 5
     JR.run do
-      JR::Distributor.start('localhost', 5000)
-      JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 7000], :distributors => [['localhost', 5000]] })
+      JR::Distributor.start('localhost', 5001)
+      JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 7001], :distributors => [['localhost', 5001]] })
     end
     wait_until(JR.ready?)
   end
