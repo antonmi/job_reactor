@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.email             = "anton.mishchuk@gmial.com"
   s.authors           = [ "Anton Mishchuk", "Andrey Rozhkovskiy" ]
   s.platform          = Gem::Platform::RUBY
-  s.files = Dir['lib/**/*.rb']
+  s.files = Dir['lib/**/*.rb', 'examples/**/*.rb', 'spec/**/*.rb']
 
-  s.require_path     = ['lib', 'examples', 'spec']
+  s.require_path     = ['lib/job_reactor']
 
   s.add_dependency "eventmachine"
   s.add_dependency "em-redis"
