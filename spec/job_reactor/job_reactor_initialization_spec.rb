@@ -6,7 +6,7 @@ describe JobReactor do
 
     describe '.run' do
       before do
-        wait_until(!EM.reactor_running?)
+        EM.stub(:reactor_running? => false)
         Thread.should_receive(:new).and_yield
         EM.should_receive(:run).and_yield
       end

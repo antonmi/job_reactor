@@ -63,7 +63,8 @@ module JobReactor
     # Options are :after and :period (for deferred and periodic jobs), and :node to specify the preferred node to launch job.
     # Use :always_use_specified_node option to be sure that job will launched in the specified node.
     # Job itself is a hash with the following keys:
-    # name, args, make_after, last_error, run_at, failed_at, attempt, period, node, not_node, status.
+    # name, args, make_after, last_error, run_at, failed_at, attempt, period, node, not_node, status, distributor, on_success, on_error.
+    # TODO examples.
     #
     def enqueue(name, args = { }, opts = { }, success_proc = nil, error_proc = nil)
       hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new' }
