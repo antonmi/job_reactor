@@ -9,5 +9,6 @@ gem 'simplecov'
 gem 'eventmachine'
 gem 'em-redis'
 gem 'redis'
+gem 'rake'
 
 
