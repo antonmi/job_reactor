@@ -1,5 +1,3 @@
-require 'job_reactor'
-
 include JobReactor
 
 puts "="*100

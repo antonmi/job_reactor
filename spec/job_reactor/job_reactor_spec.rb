@@ -51,10 +51,6 @@ module JobReactor
         JobReactor::Distributor.stub(:send_data_to_node).and_return(true)
       end
 
-      it 'should raise NoSuchJob' do
-        lambda { JR.enqueue('no_job') }.should raise_error(JobReactor::NoSuchJob)
-      end
-
       it 'should enqueue simple job' do
         hash = { 'name' => 'test_job', 'args' => {}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'distributor' => 'localhost:3000' }
         JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
@@ -117,22 +113,22 @@ module JobReactor
         JobReactor.make(@hash)
       end
 
-      it 'should receive 2 errback' do
+      it 'should receive 1 errback' do
         JR.config[:log_job_processing] = false
-        @hash.should_receive(:errback).exactly(2)
+        @hash.should_receive(:errback).exactly(1)
         JobReactor.make(@hash)
       end
 
-      it 'should receive 4 errback' do
+      it 'should receive 3 errback' do
         JR.config[:log_job_processing] = true
         @hash.should_receive(:errback).exactly(3)
         JobReactor.make(@hash)
       end
 
-      it 'JR should receive add_errback' do
+      it 'JR should receive add_start_errback and add_complete_errback' do
         JR.config[:log_job_processing] = true
         JobReactor.should_receive(:add_start_errback)
-        JobReactor.should_receive(:add_exception_errback)
+        JobReactor.should_receive(:add_complete_errback)
         JobReactor.make(@hash)
       end
 

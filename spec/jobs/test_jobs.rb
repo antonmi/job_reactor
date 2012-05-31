@@ -1,4 +1,3 @@
-puts 'Loading jobs'
 include JobReactor
 
 #For job_reactor_spec

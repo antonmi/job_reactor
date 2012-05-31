@@ -1,5 +1,3 @@
-require 'job_reactor'
-
 include JobReactor
 
 job 'test_job' do |args|
