@@ -34,7 +34,7 @@ end
 
 #For integration/jobs_with_feedback_spec
 job 'feedback' do |args|
-
+  args.merge!(:result => 'ok')
 end
 
 job 'feedback_with_error' do |args|

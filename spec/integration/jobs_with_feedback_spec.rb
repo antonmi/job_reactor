@@ -60,4 +60,28 @@ describe 'simple job', :slow => true do
     end
   end
 
+  describe 'feedback_args' do
+    it 'should run success feedback with :result => "ok"' do
+      result = ''
+      success = proc { |args| result = args }
+      JR.enqueue 'feedback', {arg1: 'arg1'}, {}, success
+      wait_until(result != '')
+      result.class.should == Hash
+      result[:result].should == 'ok'
+    end
+
+    it 'should has job_itself in args' do
+      result = ''
+      success = proc { |args| result = args }
+      JR.enqueue 'feedback', {arg1: 'arg1'}, {}, success
+      wait_until(result != '')
+      result.class.should == Hash
+      result[:job_itself].class == Hash
+      %w(name args attempt status make_after distributor on_success node run_at).each do |key|
+        result[:job_itself].keys.include?(key).should be_true
+      end
+    end
+
+  end
+
 end
