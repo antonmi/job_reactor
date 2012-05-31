@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.email             = "anton.mishchuk@gmial.com"
   s.authors           = [ "Anton Mishchuk", "Andrey Rozhkovskiy" ]
   s.platform          = Gem::Platform::RUBY
-  s.files             = %w(README.markdown)
-  s.files            += Dir["lib/**/*.rb"]
+  #s.files             = Dir['README.markdown')
+  s.files            = Dir["lib/**/*.rb"]
   s.files            += Dir["examples/**/*.rb"]
   s.files            += Dir["spec/**/*.rb"]
   
