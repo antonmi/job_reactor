@@ -39,6 +39,7 @@ module JobReactor
     # Creates and start node.
     #
     def start_node(opts)
+      parse_jobs
       require_storage!(opts)
       node = Node.new(opts)
       node.start
@@ -65,7 +66,6 @@ module JobReactor
     # name, args, make_after, last_error, run_at, failed_at, attempt, period, node, not_node, status.
     #
     def enqueue(name, args = { }, opts = { }, success_proc = nil, error_proc = nil)
-      raise NoSuchJob unless JR.jobs[name]
       hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new' }
 
       hash.merge!('period' => opts[:period]) if opts[:period]
@@ -98,7 +98,7 @@ module JobReactor
     # See Node#do_job method to better understand how this works.
     #
     def make(hash) #new job is a Hash
-      raise NoSuchJob unless jr_job = JR.jobs[hash['name']] #TODO Fixed question. How he should fail???
+      raise NoSuchJob unless jr_job = JR.jobs[hash['name']]
 
       job = hash
       add_start_callback(job) if JR.config[:log_job_processing]

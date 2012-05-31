@@ -16,17 +16,20 @@ module JobReactor
   extend self
 
   def run(&block)
-    parse_jobs
     Thread.new do
-      EM.run do
+      if EM.reactor_running?
         block.call if block_given?
         JR.ready!
+      else
+        EM.run do
+          block.call if block_given?
+          JR.ready!
+        end
       end
     end
   end
 
   def run!(&block)
-    parse_jobs
     if EM.reactor_running?
       block.call if block_given?
       JR.ready!
@@ -36,21 +39,6 @@ module JobReactor
         JR.ready!
       end
     end
-  end
-
-  def wait_em_and_run(&block)
-    parse_jobs
-    Thread.new do
-      sleep(1) until EM.reactor_running? #TODO better solution?
-      EM.schedule do
-        block.call if block_given?
-        JR.ready!
-      end
-    end
-  end
-
-  def stop
-    EM.stop
   end
 
 end

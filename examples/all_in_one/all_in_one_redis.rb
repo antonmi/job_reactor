@@ -1,11 +1,11 @@
-#The simplest direction of use.
-#If you don't need to make heavy calculation, but just want to execute a bunch of background tasks
-#In this example distributor and one node with 'redis' storage are run in one thread and use one EM reactor instance.
-#Scheduled jobs are stored in Redis storage. You need to install Redis.
-#To use redis storage is the best idea.
-#It works asynchronously with EventMachine.
-#Does not guarantee 100% persistance, but extremely fast.
-#If you decide to use many working nodes with one storage, you should use Redis to feel the power!
+# The simplest direction of use.
+# If you don't need to make heavy calculation, but just want to execute a bunch of background tasks
+# In this example distributor and one node with 'redis' storage are run in one thread and use one EM reactor instance.
+# Scheduled jobs are stored in Redis storage. You need to install Redis.
+# To use redis storage is the best idea.
+# It works asynchronously with EventMachine.
+# Does not guarantee 100% persistance, but extremely fast.
+# If you decide to use many working nodes with one storage, you should use Redis to feel the power!
 
 $: << "lib"
 require 'job_reactor'
@@ -29,16 +29,21 @@ end
 
 
 #Your application
+
+wake_up = false
+
 success = Proc.new do |args|
-  puts 'YAY'*100
+  puts 'Success'
   puts args
+  wake_up = true
 end
 
 error = Proc.new do |args|
-  puts 'YAY '*100
+  puts 'Error'
   puts args
+  wake_up = true
 end
 
-sleep(0.01) until JR.ready?
-JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
-sleep(20)
+sleep(1) until JR.ready?
+JR.enqueue('test_job', {arg1: 1, arg2: 2}, {}, success, error)
+sleep(1) until wake_up
