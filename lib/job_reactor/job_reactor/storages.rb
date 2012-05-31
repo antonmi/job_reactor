@@ -8,15 +8,17 @@
 # The storage may not be thread safe, because each node manage it own jobs and don't now anything about others.
 
 # Defines storages for lazy loading
-require 'active_record'
-class JobReactor::ActiveRecordStorage < ::ActiveRecord::Base; end
+
+# TODO 'NEXT RELEASE'
+# require 'active_record'
+# class JobReactor::ActiveRecordStorage < ::ActiveRecord::Base; end
 
 module JobReactor::MemoryStorage; end
 module JobReactor::RedisStorage; end
 
 module JobReactor
   STORAGES = {
-      'active_record_storage' => JobReactor::ActiveRecordStorage,
+      #'active_record_storage' => JobReactor::ActiveRecordStorage,
       'memory_storage' => JobReactor::MemoryStorage,
       'redis_storage' => JobReactor::RedisStorage
   }
