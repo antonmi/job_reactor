@@ -1,14 +1,20 @@
 source 'https://rubygems.org'
 
 
-gem 'pry'
-gem 'activerecord'
-gem 'mysql2'
+group :development do
+  gem 'pry'
+  gem 'activerecord'
+  gem 'mysql2'
+end
+
 gem 'rspec'
 gem 'simplecov'
 gem 'eventmachine'
 gem 'em-redis'
 gem 'redis'
-gem 'rake'
+
+group :test do
+  gem 'rake'
+end
 
 
