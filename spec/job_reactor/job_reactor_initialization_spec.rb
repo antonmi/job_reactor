@@ -6,6 +6,7 @@ describe JobReactor do
 
     describe '.run' do
       before do
+        wait_until(!EM.reactor_running?)
         Thread.should_receive(:new).and_yield
         EM.should_receive(:run).and_yield
       end
