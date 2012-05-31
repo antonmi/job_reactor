@@ -6,7 +6,7 @@ It is client-server distributed system based on [EventMachine][0].
 
 Quick start
 ===========
-#TODO
+Coming soon, see examples
 
 Main features
 =============
