@@ -122,16 +122,24 @@ module JobReactor
             args = job['args'].merge!(:error => e).merge(JR.config[:merge_job_itself_to_args] ? { :job_itself => job.dup } : { })
             job.fail(args) #Fire errbacks. You can access error in you errbacks (args[:error])
             job['args'] = args
+            complete_rescue(job)
           rescue JobReactor::CancelJob
             cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
-          rescue Exception => e #TODO may be add another info. failed_at, node, attempt for more precise control??? Or may be send all attributes???
-            if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1
-              try_again(job)
-            else
-              report_error(job) if job['on_error'] #TODO Currently there is now :job_itself in args
-            end
+          rescue Exception => e  #Recsue Exceptions in errbacks
+            job['args'].merge!(:errback_error => e)
+            complete_rescue(job)
           end
         end
+      end
+    end
+
+    #Tryes again or report error
+    #
+    def complete_rescue(job)
+      if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1
+        try_again(job)
+      else
+        report_error(job) if job['on_error']
       end
     end
 
@@ -150,15 +158,16 @@ module JobReactor
     # try_again has special condition for periodic jobs.
     # They will be rescheduled after period time.
     #
-    def try_again(hash)
-      hash['attempt'] += 1
-      if  hash['period'] && hash['period'] > 0
-        hash['make_after'] = hash['period']
+    def try_again(job)
+      job['attempt'] += 1
+      if job['period'] && job['period'] > 0
+        job['make_after'] = job['period']
       else
-        hash['make_after'] = hash['attempt'] * JobReactor.config[:retry_multiplier]
+        job['make_after'] = job['attempt'] * JobReactor.config[:retry_multiplier]
       end
-      self.storage.save(hash) do |hash|
-        self.schedule(hash)
+      job['args'].delete(:job_itself)
+      self.storage.save(job) do |job|
+        self.schedule(job)
       end
     end
 
@@ -196,6 +205,8 @@ module JobReactor
       send_data_to_distributor(distributor, data)
     end
 
+    # Sends data to distributor
+    #
     def send_data_to_distributor(distributor, data)
       if distributor.locked?
         EM.next_tick do

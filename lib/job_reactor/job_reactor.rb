@@ -116,7 +116,7 @@ module JobReactor
         job.errback(&errback[1])
       end if jr_job[:errbacks]
 
-      add_exception_errback(job)
+      add_complete_errback(job) if JR.config[:log_job_processing]
 
       job
     end
@@ -136,7 +136,6 @@ module JobReactor
       proc.call(data[:args]) if proc
     end
 
-
     private
 
     # Requires storage and change opts[:storage] to the constant
@@ -150,7 +149,7 @@ module JobReactor
     # See job_reactor/job_parser to understand how job hash is built
     #
     def parse_jobs
-      JR.config[:job_directory] += '/*.rb'
+      JR.config[:job_directory] += '/**/*.rb'
       Dir[JR.config[:job_directory]].each {|file| load file }
     end
 
@@ -196,12 +195,11 @@ module JobReactor
       end
     end
 
-    # Raises Exception again to ensure that jobs returns to node.
-    # If your errbacks raise exception earlier the job will return to node earlier, of course.
+    # Logs the end of error cycle
     #
-    def add_exception_errback(job)
+    def add_complete_errback(job)
       job.errback do
-        raise RuntimeError
+        JR::Logger.log_event(:error_complete, job)
       end
     end
 
