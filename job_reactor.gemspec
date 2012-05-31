@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.authors           = [ "Anton Mishchuk", "Andrey Rozhkovskiy" ]
   s.platform          = Gem::Platform::RUBY
   s.files             = %w(README.markdown)
-  s.files            += Dir.glob("lib/**/*")
-  s.files            += Dir.glob("examples/**/*")
-  s.files            += Dir.glob("spec/**/*")
+  s.files            += Dir["lib/**/*.rb"]
+  s.files            += Dir["examples/**/*.rb"]
+  s.files            += Dir["spec/**/*.rb"]
   
   s.require_path     = ['lib']
   #s.executables       = [ "job_reactor" ]
