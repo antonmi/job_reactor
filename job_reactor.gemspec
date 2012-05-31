@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.files            += Dir.glob("examples/**/*")
   s.files            += Dir.glob("spec/**/*")
   
-  s.require_path     = ['lib/job_reactor']
+  s.require_path     = ['lib']
   #s.executables       = [ "job_reactor" ]
   
   s.add_dependency "eventmachine"
