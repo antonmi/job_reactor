@@ -6,7 +6,7 @@ It is client-server distributed system based on [EventMachine][0].
 
 Quick start
 ===========
-
+#TODO
 
 Main features
 =============
@@ -70,7 +70,7 @@ The main parts of JobReactor are:
 JobReactor module for creating jobs.
 Distributor module for 'distributing' jobs between working nodes.
 Node object for job processing.
-
+#TODO
 
 
 
@@ -81,7 +81,7 @@ Node object for job processing.
 
 How it works
 ------------
-
+#TODO
 
 
 
