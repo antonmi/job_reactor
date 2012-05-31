@@ -4,6 +4,10 @@ JobReactor
 JobReactor is a library for creating and processing background jobs.
 It is client-server distributed system based on [EventMachine][0].
 
+Quick start
+===========
+
+
 Main features
 =============
 1. Client-server architecture
