@@ -60,10 +60,6 @@ There are no priorities like in Delayed::Job or Stalker. Bud there are flexible 
 You can specify the node which should execute the job. You can reserve several nodes for high priority jobs.
 
 
-Each node needs environment to be loaded.
-But remember that distributor is in the same process with your application.
-So if your application doesn't scale to many process there no reason to launch more than one distributor.
-
 
 The main parts of JobReactor are:
 ---------------------------------
