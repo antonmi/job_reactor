@@ -5,13 +5,26 @@ describe JobReactor do
   context "initializaiton" do
 
     describe '.run' do
-      before do
-        EM.stub(:reactor_running? => false)
-        Thread.should_receive(:new).and_yield
-        EM.should_receive(:run).and_yield
+      context "EM.reactor_running?" do
+        before do
+          EM.stub(:reactor_running? => true)
+          Thread.should_receive(:new).and_yield
+          EM.should_not_receive(:run).and_yield
+        end
+        it "should run EM in different thead" do
+          JobReactor.run
+        end
       end
-      it "should run EM in different thead" do
-        JobReactor.run
+
+      context "not EM.reactor_running?" do
+        before do
+          EM.stub(:reactor_running? => false)
+          Thread.should_receive(:new).and_yield
+          EM.should_receive(:run).and_yield
+        end
+        it "should run EM in different thead" do
+          JobReactor.run
+        end
       end
     end
 
