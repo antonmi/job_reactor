@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.homepage          = "http://github.com/antonmi/job_reactor"
   s.email             = "anton.mishchuk@gmial.com"
   s.authors           = [ "Anton Mishchuk", "Andrey Rozhkovskiy" ]
-  s.platform          = Gem::Platform::RUBY
+  s.platform          = Gem::Platform::CURRENT
   #s.files             = Dir['README.markdown')
   s.files            = Dir["lib/**/*.rb"]
   s.files            += Dir["examples/**/*.rb"]
