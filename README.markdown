@@ -11,10 +11,39 @@ Now we are in beta (need to complete documentation).
 Use `gem install job_reactor --pre` to try it.
 
 In you main application:
-- - - - - - - - - - - - 
+`application.rb`
 ``` ruby
+JR.run do
+  JR.start_distributor('localhost', 5000)
+end
+sleep(1) until(JR.ready?)
 
+# The application
+loop do
+  sleep(3) #Your application is working
+  JR.enqueue 'my_job', {arg1: 'Hello'}
+end
 ```
+Define the 'my_job' in separate file:
+`jobs/my_jobs.rb`
+``` ruby
+include JobReactor
+job 'my_job' do |args|
+  puts args[:arg1]
+end  
+```
+And the last file - 'the worker code':
+`worker.rb`
+``` ruby
+require 'job_reactor'
+JR.config[:job_directory] = 'jobs'
+JR.run! do
+  JR.start_node({:storage => 'memory_storage', :name => 'worker_1', :server => ['localhost', 5001], :distributors => [['localhost', 5000], ['localhost', 5001]] })
+end
+```
+Run 'application.rb' in one terminal window and 'worker.rb' in another.
+Node connects to distributor and will does the job.
+Cool! But it was the simplest example. See 'examples' directory and read the wiki (coming soon).
 
 Main features
 =============
