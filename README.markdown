@@ -5,7 +5,7 @@ Now we are in beta (need to complete documentation and fix some bugs)
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
-Inspired by Resque, Stalker, DelayedJob, and etc.
+Inspired by [Resque][1], [Stalker][2], [DelayedJob][3], and etc.
 
 JobReactor hasn't 'rails' integration for the time being.
 But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart processes.
@@ -128,6 +128,7 @@ How it works
 
 
 
-Links:
-------
-[0]: http://rubyeventmachine.com/
+[0]: http://rubyeventmachine.com
+[1]: https://github.com/defunkt/resque
+[2]: https://github.com/han/stalker
+[3]: https://github.com/tobi/delayed_job
