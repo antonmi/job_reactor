@@ -125,7 +125,7 @@ How it works
 #TODO
 
 
-# License
+License
 ---------
 The MIT License - Copyright (c) 2012 Anton Mishchuk
 
