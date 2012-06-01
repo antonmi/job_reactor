@@ -1,5 +1,6 @@
 JobReactor
 ==========
+Now we are in beta (need to complete documentation).
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
@@ -13,8 +14,6 @@ So, read 'features' part and try JobReactor. You can do a lot with it.
 
 Quick start
 ===========
-Now we are in beta (need to complete documentation).
-
 Use `gem install job_reactor --pre` to try it.
 
 In you main application:
