@@ -102,7 +102,7 @@ If no nodes are specified distributor will try to send the job to the first free
 10. Node based priorities
 -----------------------
 There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
-You can specify the node which should execute the job. You can reserve several nodes for high priority jobs.
+You can specify the node which should execute the job and the node is forbidden for given job. You can reserve several nodes for high priority jobs.
 
 
 
