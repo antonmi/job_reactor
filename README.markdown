@@ -6,9 +6,15 @@ It is asynchronous client-server distributed system based on [EventMachine][0].
 
 Quick start
 ===========
-Coming soon, see examples.
 Now we are in beta (need to complete documentation).
-Use `gem install job_reactor --pre` to try.
+
+Use `gem install job_reactor --pre` to try it.
+
+In you main application:
+- - - - - - - - - - - - 
+``` ruby
+
+```
 
 Main features
 =============
