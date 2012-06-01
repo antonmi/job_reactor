@@ -1,6 +1,7 @@
 JobReactor
 ==========
-Now we are in beta (need to complete documentation).
+Now we are in beta (need to complete documentation)
+---------------------------------------------------
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
