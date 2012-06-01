@@ -32,8 +32,8 @@ loop do
   JR.enqueue 'my_job', {arg1: 'Hello'}
 end
 ```
-Define the 'my_job' in separate file:
-`my_jobs.rb`
+Define the 'my_job' in separate directory (files with job's definitions must be in separate directory):
+`reactor_jobs/my_jobs.rb`
 ``` ruby
 include JobReactor
 job 'my_job' do |args|
@@ -44,7 +44,7 @@ And the last file - 'the worker code':
 `worker.rb`
 ``` ruby
 require 'job_reactor'
-JR.config[:job_directory] = ''
+JR.config[:job_directory] = 'reactor_jobs' #this default config so you can omit this line
 JR.run! do
   JR.start_node({:storage => 'memory_storage', :name => 'worker_1', :server => ['localhost', 5001], :distributors => [['localhost', 5000]] })
 end
