@@ -42,7 +42,7 @@ JR.run! do
 end
 ```
 Run 'application.rb' in one terminal window and 'worker.rb' in another.
-Node connects to distributor and will does the job.
+Node connects to distributor, receives the job and works.
 Cool! But it was the simplest example. See 'examples' directory and read the wiki (coming soon).
 
 Main features
