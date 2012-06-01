@@ -41,7 +41,7 @@ module JobReactor
     #
     def connect_to(distributor)
       if connections[distributor]
-        JR::Logger.log 'Searching for distributors ...'
+        JR::Logger.log "Searching for distributor #{distributor.join(' ')}"
         connections[distributor].reconnect(*distributor)
       else
         connections.merge!(distributor => EM.connect(*distributor, Client, self, distributor))
