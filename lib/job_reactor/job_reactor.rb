@@ -35,7 +35,8 @@ module JobReactor
       (@@ready ||= false) && EM.reactor_running?
     end
 
-    # Requires storage
+    # Parses jobs.
+    # Requires storage.
     # Creates and start node.
     #
     def start_node(opts)
@@ -62,9 +63,36 @@ module JobReactor
     # The method set initial arguments and send job to distributor which will send it to node.
     # Options are :after and :period (for deferred and periodic jobs), and :node to specify the preferred node to launch job.
     # Use :always_use_specified_node option to be sure that job will launched in the specified node.
-    # Job itself is a hash with the following keys:
+    # Job itself will be a hash with the following keys:
     # name, args, make_after, last_error, run_at, failed_at, attempt, period, node, not_node, status, distributor, on_success, on_error.
-    # TODO examples.
+    #
+    # Simple job with arguments.
+    # Arguments should be a Hash.
+    # Arguments will be serialized using Marshal.dump before sending to node, so be sure that objects in args can be dumped.
+    # (Do not use procs, objects with singleton methods, etc ... ).
+    #
+    # Example:
+    # JR.enqueue 'job', {:arg1 => 'arg1', :arg2 => 'arg2'}
+    #
+    # You can add the following options:
+    # :run_at - run at given time;
+    # :after - run after some time (in seconds);
+    # :period - will make periodic job which will be launched every opts[:period] seconds;
+    # :node - to send job to the specific node;
+    # :not_node - to do not send job to the node;
+    #
+    # Example:
+    # JR.enqueue 'job', {:arg1 => 'arg1'}, {:period => 100, :node => 'my_favorite_node'}
+    # JR.enqueue 'job', {:arg1 => 'arg1'}, {:after => 10, :not_node => 'some_node'}
+    #
+    # You can add 'success feedback' and 'error feedback'. We use term 'feedback' to distinguish them from callbacks and errbacks which are executed on the node side.
+    # These feedbacks are the procs. The first is 'success feedback', the second - 'error feedback'.
+    # These feedback procs are called with 'job arguments' as arguments.
+    #
+    # Example:
+    # success = proc { |args| result = args }
+    # error = proc { |args| result = args }
+    # JR.enqueue 'job', { :arg1 => 'arg1'}, {}, success, error
     #
     def enqueue(name, args = { }, opts = { }, success_proc = nil, error_proc = nil)
       hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new' }
@@ -95,8 +123,6 @@ module JobReactor
     #
     # Then errbacks are attached.
     # They are called when error occurs in callbacks.
-    # The last errback raise exception again to return job back to node workflow.
-    # See Node#do_job method to better understand how this works.
     #
     def make(hash) #new job is a Hash
       raise NoSuchJob unless jr_job = JR.jobs[hash['name']]
