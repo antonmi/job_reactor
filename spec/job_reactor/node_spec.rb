@@ -43,19 +43,21 @@ describe JobReactor::Node do
       before do
         fake_connection = double('fake_connection')
         fake_connection.should_receive(:reconnect)
-        subject.instance_variable_set(:@connections, { connect1: fake_connection })
+        subject.instance_variable_set(:@connections, %w(host port) => fake_connection )
       end
       it "should reconnect to distributor" do
-        subject.connect_to(:connect1)
+        subject.connect_to(%w(host port))
       end
     end
+
     context 'without existing connection' do
       before { EM.should_receive(:connect).and_return('success') }
       it "should connect to distributor" do
-        subject.connect_to(:connect1)
-        subject.connections.should have_key(:connect1)
+        subject.connect_to(%w(host port))
+        subject.connections.should have_key(%w(host port))
       end
     end
+
   end
 
   describe '#do_job' do
