@@ -83,7 +83,7 @@ If node is stopped or crashed it will retry stored jobs after start.
 5. EventMachine available
 -------------------------
 Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
-Use asynchronous [http requests], [websockets], [etc.], [etc.], and [etc]. See page [advance usage].
+Use asynchronous [em-http-request][4], [em-websocket][5], [etc.], [etc.], and [etc]. See page [advance usage].
 6. Deferred and periodic jobs
 -----------------------------
 You can use deferred jobs which will run 'after' some time or 'run_at' given time.
@@ -132,3 +132,5 @@ How it works
 [1]: https://github.com/defunkt/resque
 [2]: https://github.com/han/stalker
 [3]: https://github.com/tobi/delayed_job
+[4]: https://github.com/igrigorik/em-http-request
+[5]: https://github.com/igrigorik/em-websocket
