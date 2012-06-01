@@ -9,7 +9,7 @@ require 'job_reactor/job_reactor/storages'
 module JobReactor
 
   # Yes, we monkeypatched Ruby core class.
-  # Now all hashes hash EM::Deferrable callbacks and errbacks.
+  # Now all hashes has EM::Deferrable callbacks and errbacks.
   # It is just for simplicity.
   # It's cool use 'job = {}' instead 'job = JobHash.new.
   # We are ready to discuss it and change.

@@ -13,11 +13,16 @@ module JobReactor
       @@port
     end
 
+    # Gets nodes
+    # You can monitor available nodes connections in you application.
+    # For example
+    # EM::PeriodicTimer.new(10) { JR::Logger.log nodes}
+    #
     def nodes
       @@nodes ||= []
     end
 
-    # Contains connections pool
+    # Contains connections pool - all node connections
     #
     def connections
       @@connections ||= []

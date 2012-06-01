@@ -126,7 +126,7 @@ module JobReactor
           rescue JobReactor::CancelJob
             cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
           rescue Exception => e  #Recsue Exceptions in errbacks
-            job['args'].merge!(:errback_error => e)
+            job['args'].merge!(:errback_error => e) #So in args you now have :error and :errback_error
             complete_rescue(job)
           end
         end
