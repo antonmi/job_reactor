@@ -6,7 +6,7 @@ It is asynchronous client-server distributed system based on [EventMachine][0].
 Inspired by Resque, Stalker, DelayedJob, and etc.
 
 JobReactor hasn't 'rails' integration for the time being.
-But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart proccesses.
+But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart processes.
 Collaborators, you are welcome!
 
 So, read 'features' part and try JobReactor. You can do a lot with it.
@@ -37,7 +37,7 @@ Define the 'my_job' in separate file:
 include JobReactor
 job 'my_job' do |args|
   puts args[:arg1]
-end  
+end
 ```
 And the last file - 'the worker code':
 `worker.rb`
@@ -62,7 +62,7 @@ If you don't have many jobs you can leave only one node which will be connected 
 2. High scalability
 -------------------
 Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect to.
-Nodes may use different storages or the same one. So, you can store vitally important jobs in relational database and
+Nodes may use different storage or the same one. So, you can store vitally important jobs in relational database and
 simple insignificant jobs in memory.
 And more: your nodes may create jobs for others nodes and communicate with each other. See page [advance usage].
 3. Full job control
