@@ -1,8 +1,15 @@
 JobReactor
 ==========
 
-JobReactor is a library for creating and processing background jobs.
+JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
+Inspired by Resque, Stalker, DelayedJob, and etc.
+
+JobReactor hasn't 'rails' integration for the time being.
+But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart proccesses.
+Collaborators, you are welcome!
+
+So, read 'features' part and try JobReactor. You can do a lot with it.
 
 Quick start
 ===========
@@ -45,7 +52,7 @@ Run 'application.rb' in one terminal window and 'worker.rb' in another.
 Node connects to distributor, receives the job and works.
 Cool! But it was the simplest example. See 'examples' directory and read the wiki (coming soon).
 
-Main features
+Features
 =============
 1. Client-server architecture
 -----------------------------
