@@ -63,7 +63,7 @@ If you don't have many jobs you can leave only one node which will be connected 
 2. High scalability
 -------------------
 Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect to.
-Nodes may use different storage or the same one. So, you can store vitally important jobs in relational database and
+Nodes may use different storage or the same one. You can store vitally important jobs in database and
 simple insignificant jobs in memory.
 And more: your nodes may create jobs for others nodes and communicate with each other. See page [advance usage].
 3. Full job control
