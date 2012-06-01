@@ -33,7 +33,7 @@ loop do
 end
 ```
 Define the 'my_job' in separate file:
-`jobs/my_jobs.rb`
+`my_jobs.rb`
 ``` ruby
 include JobReactor
 job 'my_job' do |args|
@@ -44,7 +44,7 @@ And the last file - 'the worker code':
 `worker.rb`
 ``` ruby
 require 'job_reactor'
-JR.config[:job_directory] = 'jobs'
+JR.config[:job_directory] = ''
 JR.run! do
   JR.start_node({:storage => 'memory_storage', :name => 'worker_1', :server => ['localhost', 5001], :distributors => [['localhost', 5000]] })
 end
