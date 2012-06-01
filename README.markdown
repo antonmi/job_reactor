@@ -20,6 +20,7 @@ Use `gem install job_reactor --pre` to try it.
 In you main application:
 `application.rb`
 ``` ruby
+require 'job_reactor'
 JR.run do
   JR.start_distributor('localhost', 5000)
 end
@@ -45,7 +46,7 @@ And the last file - 'the worker code':
 require 'job_reactor'
 JR.config[:job_directory] = 'jobs'
 JR.run! do
-  JR.start_node({:storage => 'memory_storage', :name => 'worker_1', :server => ['localhost', 5001], :distributors => [['localhost', 5000], ['localhost', 5001]] })
+  JR.start_node({:storage => 'memory_storage', :name => 'worker_1', :server => ['localhost', 5001], :distributors => [['localhost', 5000]] })
 end
 ```
 Run 'application.rb' in one terminal window and 'worker.rb' in another.
