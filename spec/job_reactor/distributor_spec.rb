@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe JobReactor::Distributor do
 
+  before :all do
+    EM.stop if EM.reactor_running?
+    wait_until(!EM.reactor_running?)
+  end
+
   it 'should try start server' do
     EM.should_receive(:start_server).with('host', 'port', JobReactor::Distributor::Server)
     JobReactor::Distributor.start('host', 'port')
