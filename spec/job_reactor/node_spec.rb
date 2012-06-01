@@ -46,7 +46,7 @@ describe JobReactor::Node do
         subject.instance_variable_set(:@connections, %w(host port) => fake_connection )
       end
       it "should reconnect to distributor" do
-        subject.connect_to(%w(host port))
+        subject.connect_t(%w(host port))
       end
     end
 

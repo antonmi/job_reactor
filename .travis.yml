@@ -1,3 +1,8 @@
 language: ruby
 rvm:
   - 1.9.3
+
+notifications:
+  email:
+    - anton.mishchuk@gmail.com
+    - andrey.rozhkovskiy@gmail.com
