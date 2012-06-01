@@ -33,8 +33,8 @@ module JobReactor
     def start(host, port)
       @@host = host
       @@port = port
-      EM.start_server(host, port, JobReactor::Distributor::Server, [host, port])
       JR::Logger.log "Distributor listens #{host}:#{port}"
+      EM.start_server(host, port, JobReactor::Distributor::Server)
     end
 
     # Tries to find available node connection
