@@ -1,6 +1,6 @@
 JobReactor
 ==========
-Now we are in beta (need to complete documentation)
+Now we are in beta (need to complete documentation and fix some bugs)
 ---------------------------------------------------
 
 JobReactor is a library for creating, scheduling and processing background jobs.
