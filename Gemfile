@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 group :development do
   gem 'pry'
-  #gem 'activerecord'
-  #gem 'mysql2'
+  gem 'activerecord'
+  gem 'mysql2'
 end
 
 gem 'eventmachine'
