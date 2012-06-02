@@ -16,8 +16,10 @@ So, read 'features' part and try JobReactor. You can do a lot with it.
 Quick start
 ===========
 Use `gem install job_reactor --pre` to try it.
+
 You need to install [Redis][6] if you want to persist your jobs.
-``    $ sudo apt-get install redis-server ``
+``$ sudo apt-get install redis-server ``
+
 In you main application:
 `application.rb`
 ``` ruby
