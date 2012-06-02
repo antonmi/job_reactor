@@ -62,7 +62,7 @@ describe JobReactor::Node do
 
   describe '#do_job' do
     let(:storage) { double('storage') }
-    let(:job) { { 'storage' => storage, 'args' => { } } }
+    let(:job) { { 'storage' => storage, 'args' => { }, 'attempt' => 0 } }
     before do
       storage.stub(:save)
       subject.config.merge!( :storage => storage )
