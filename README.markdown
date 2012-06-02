@@ -5,9 +5,9 @@ Now we are in beta (need to complete documentation and fix some bugs)
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
-Inspired by Resque, Stalker, DelayedJob, and etc.
+Inspired by [Resque][1], [Stalker][2], [DelayedJob][3], and etc.
 
-JobReactor hasn't 'rails' integration for the time being.
+JobReactor has not 'rails' integration for the time being.
 But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart processes.
 Collaborators, you are welcome!
 
@@ -16,6 +16,7 @@ So, read 'features' part and try JobReactor. You can do a lot with it.
 Quick start
 ===========
 Use `gem install job_reactor --pre` to try it.
+You need to install [Redis][6] if you want to persist your jobs.
 
 In you main application:
 `application.rb`
@@ -63,7 +64,7 @@ If you don't have many jobs you can leave only one node which will be connected 
 2. High scalability
 -------------------
 Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect to.
-Nodes may use different storage or the same one. So, you can store vitally important jobs in relational database and
+Nodes may use different storage or the same one. You can store vitally important jobs in database and
 simple insignificant jobs in memory.
 And more: your nodes may create jobs for others nodes and communicate with each other. See page [advance usage].
 3. Full job control
@@ -83,7 +84,7 @@ If node is stopped or crashed it will retry stored jobs after start.
 5. EventMachine available
 -------------------------
 Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
-Use asynchronous [http requests], [websockets], [etc.], [etc.], and [etc]. See page [advance usage].
+Use asynchronous [em-http-request][4], [em-websocket][5], [etc.], [etc.], and [etc]. See page [advance usage].
 6. Deferred and periodic jobs
 -----------------------------
 You can use deferred jobs which will run 'after' some time or 'run_at' given time.
@@ -102,7 +103,7 @@ If no nodes are specified distributor will try to send the job to the first free
 10. Node based priorities
 -----------------------
 There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
-You can specify the node which should execute the job. You can reserve several nodes for high priority jobs.
+You can specify the node which should execute the job and the node is forbidden for given job. You can reserve several nodes for high priority jobs.
 
 
 
@@ -125,9 +126,17 @@ How it works
 #TODO
 
 
+License
+---------
+The MIT License - Copyright (c) 2012 Anton Mishchuk
 
 
 
-Links:
-------
-[0]: http://rubyeventmachine.com/
+
+[0]: http://rubyeventmachine.com
+[1]: https://github.com/defunkt/resque
+[2]: https://github.com/han/stalker
+[3]: https://github.com/tobi/delayed_job
+[4]: https://github.com/igrigorik/em-http-request
+[5]: https://github.com/igrigorik/em-websocket
+[6]: http://redis.io
