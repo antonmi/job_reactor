@@ -71,6 +71,7 @@ module JobReactor
     def do_job(job)
       job['run_at'] = Time.now
       job['status'] = 'in progress'
+      job['attempt'] += 1
       storage.save(job) do |job|
         begin
           args = job['args'].merge(JR.config[:merge_job_itself_to_args] ? {:job_itself => job.dup} : {})
@@ -132,7 +133,7 @@ module JobReactor
     #Tryes again or report error
     #
     def complete_rescue(job)
-      if job['attempt'].to_i < JobReactor.config[:max_attempt] - 1
+      if job['attempt'].to_i < JobReactor.config[:max_attempt]
         try_again(job)
       else
         report_error(job) if job['on_error']
@@ -155,7 +156,6 @@ module JobReactor
     # They will be rescheduled after period time.
     #
     def try_again(job)
-      job['attempt'] += 1
       if job['period'] && job['period'] > 0
         job['make_after'] = job['period']
       else
