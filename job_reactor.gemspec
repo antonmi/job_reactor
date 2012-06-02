@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.require_path     = 'lib'
 
   s.add_dependency 'eventmachine'
+  s.add_dependency 'redis'
   s.add_dependency 'em-redis'
 
   s.description = <<description
