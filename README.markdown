@@ -16,6 +16,7 @@ So, read 'features' part and try JobReactor. You can do a lot with it.
 Quick start
 ===========
 Use `gem install job_reactor --pre` to try it.
+You need to install [Redis][6] if you want to persist your jobs.
 
 In you main application:
 `application.rb`
@@ -138,3 +139,4 @@ The MIT License - Copyright (c) 2012 Anton Mishchuk
 [3]: https://github.com/tobi/delayed_job
 [4]: https://github.com/igrigorik/em-http-request
 [5]: https://github.com/igrigorik/em-websocket
+[6]: http://redis.io
