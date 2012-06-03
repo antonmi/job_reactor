@@ -54,7 +54,7 @@ end
 ```
 Run 'application.rb' in one terminal window and 'worker.rb' in another.
 Node connects to distributor, receives the job and works.
-Cool! But it was the simplest example. See 'examples' directory and read the wiki (coming soon).
+Cool! But it was the simplest example. See 'examples' directory and read 'advanced usage'(coming soon).
 
 Features
 =============
@@ -68,7 +68,7 @@ If you don't have many jobs you can leave only one node which will be connected 
 Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect to.
 Nodes may use different storage or the same one. You can store vitally important jobs in database and
 simple insignificant jobs in memory.
-And more: your nodes may create jobs for others nodes and communicate with each other. See page [advance usage].
+And more: your nodes may create jobs for others nodes and communicate with each other. See page [advanced usage].
 3. Full job control
 -------------------
 You can add callback and errbacks to the job which will be called on the node.
