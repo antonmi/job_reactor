@@ -10,7 +10,8 @@ module JobReactor
       @@storage ||= Redis.new(host: JR.config[:redis_host], port: JR.config[:redis_port])
     end
 
-
+    # Returns all job for given node.
+    #
     def jobs_for(name, to_be_retried = false)
       pattern = "*#{name}_*"
       keys = storage.keys(pattern)
@@ -18,7 +19,7 @@ module JobReactor
       keys.each do |key|
         hash = self.load(key)
         if to_be_retried
-          result.merge!(key => hash)  if hash['status'] != 'complete' && hash['status'] != 'cancelled' && hash['attempt'].to_i < JobReactor.config[:max_attempt]
+          result.merge!(key => hash)  if hash['status'] != 'complete' && hash['status'] != 'cancelled' && hash['status'] != 'failed'
         else
           result.merge!(key => hash)
         end
@@ -26,6 +27,8 @@ module JobReactor
       result
     end
 
+    # Load job from storage.
+    #
     def load(key)
       hash = {}
       record = storage.hmget(key, *ATTRS)
@@ -44,6 +47,8 @@ module JobReactor
       storage.del(key)
     end
 
+    # Destroys all job for given node.
+    #
     def destroy_all_jobs_for(name)
       pattern = "*#{name}_*"
       storage.del(*storage.keys(pattern))

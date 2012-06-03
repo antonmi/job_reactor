@@ -45,7 +45,7 @@ module JobReactor
       end
 
       def jobs_for(name, &block)
-        self.where('attempt < ?', JobReactor.config[:max_attempt])
+        self.where('status != ?', 'failed')
         .where('status != ?', 'complete')
         .where('status != ?', 'cancelled')
         .where(node: name).map{ |record| record.attributes }.each do |job|

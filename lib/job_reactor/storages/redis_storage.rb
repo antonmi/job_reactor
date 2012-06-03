@@ -60,7 +60,8 @@ module JobReactor
               hash['id'] = id
               hash['node'] = name
               self.load(hash) do |hash|
-                if hash['status'] != 'complete' && hash['status'] != 'cancelled' && hash['attempt'].to_i < JobReactor.config[:max_attempt]
+                if hash['status'] != 'complete' && hash['status'] != 'cancelled' && hash['status'] != 'failed'
+                else
                   block.call(hash)
                 end
               end
