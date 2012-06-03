@@ -1,4 +1,4 @@
-# TODO comment it
+# Not in gem now. Will be available with next releases
 require 'active_record'
 
 module JobReactor

@@ -5,6 +5,7 @@ require 'job_reactor/job_reactor/config'
 require 'job_reactor/job_reactor/job_parser'
 require 'job_reactor/job_reactor/exceptions'
 require 'job_reactor/job_reactor/storages'
+require 'job_reactor/storages/redis_monitor'
 
 module JobReactor
 

@@ -136,7 +136,13 @@ module JobReactor
       if job['attempt'].to_i < JobReactor.config[:max_attempt]
         try_again(job)
       else
+        job['status'] = 'failed'
         report_error(job) if job['on_error']
+        if JR.config[:remove_failed_jobs]
+          storage.destroy(job)
+        else
+          storage.save(job)
+        end
       end
     end
 
