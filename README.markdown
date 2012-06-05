@@ -114,7 +114,7 @@ You can specify the node which should execute the job and the node is forbidden 
 
 How it works
 ------------
-1. You run JobReactor in your application initializer:
+1. You run JobReactor in your application initializer.
 ``` ruby
 JR.run do
   JR.start_distributor('localhost', 5000)
@@ -124,7 +124,7 @@ This code runs EventMachine reactor loop in the new thread and call the block gi
 JR.start_distributor starts EventMachine TCP server on given host and port.
 And now JobReactor is ready to work.
 
-2. You run JobReactor Node in the different process or different machine:
+2. You run JobReactor Node in the different process or different machine.
 ``` ruby
 JR.run! do
   JR.start_node({
@@ -138,12 +138,11 @@ end
 This code runs EventMachine reactor loop (in the main thread: there is a difference between `run` and `run!`).
 And start the Node inside the reactor.
 When node starts it:
-- parse the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
-- tries to 'retry' the job (if you use 'redis_storage' and `JR.config[:retry_jobs_at_start]` is true) 
-- starts it's own TCP server;
-- connect to Distributor server and send the information about it's server;
-- when distributor receives the credentials it connects to Node server;
-- and now there is a full duplex-connection between Distributor and Node.
+* parses the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
+* tries to 'retry' the job (if you use 'redis_storage' and `JR.config[:retry_jobs_at_start]` is true) 
+* starts it's own TCP server;
+* connects to Distributor server and send the information about it's server;
+When distributor receives the credentials it connects to Node server. And now there is a full duplex-connection between Distributor and Node.
 
 3. You enqueue the job in your application:
 ```ruby
@@ -151,9 +150,9 @@ JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 20}, success, error)
 ```
 The first argument is the name of the job, the second is the arguments will be sent to the job.
 The third is the options. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
-- `after: seconds` - node will try run the job after  `seconds` seconds;
-- `run_at: time` - node will try run the job at given time;
-- `period: seconds` - node will run job periodically, each `seconds` seconds;
+* `after: seconds` - node will try run the job after  `seconds` seconds;
+* `run_at: time` - node will try run the job at given time;
+* `period: seconds` - node will run job periodically, each `seconds` seconds;
 You can add `node: 'node_name'` and `not_node: 'node_name'` to the options. This specify the node on which the job should or shouldn't be run. For example:
 ```ruby
 JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node})
@@ -176,6 +175,15 @@ JR.enqueue('my_job', {arg1: 1}, {}, success)
 The 'success' proc args will be {arg1: 1, result: 'Yay!'}.
 The same story is with 'error feedback'. Note that error feedback will be launched after all attempts on the node.
 See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
+
+4. You disconnect node (stop it manually or node fails itself).
+* distributor will send jobs to any other nodes if present
+* distributor will store in memory enqueued jobs if there is no connected node (or specified node)
+* when node starts again distributor will send then to node
+
+5. You stop the main application.
+* Nodes will continue to work, but
+* You can't receive the results from node when start the application again because all feedbacks are stored in memory.
 
 
 License
