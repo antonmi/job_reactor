@@ -152,7 +152,7 @@ When distributor receives the credentials it connects to Node server. And now th
 ------------------------------------------
 
 ```ruby
-JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 20}, success, error)
+JR.enqueue('my_job',{arg1: 1, arg2: 2}, {after: 20}, success, error)
 ```
 
 The first argument is the name of the job, the second is the arguments will be sent to the job.
@@ -163,7 +163,7 @@ The third is the options. If you don't specify any option job will be instant jo
 You can add `node: 'node_name'` and `not_node: 'node_name'` to the options. This specify the node on which the job should or shouldn't be run. For example:
 
 ```ruby
-JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node})
+JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node'})
 ```
 
 The rule to use specified node is not strict if `JR.config[:always_use_specified_node]` is false (default).
