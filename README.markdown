@@ -139,7 +139,7 @@ JR.run! do
 end
 ```
 
-This code runs EventMachine reactor loop (in the main thread: there is a difference between `run` and `run!`).
+This code runs EventMachine reactor loop (in the main thread: this is the difference between `run` and `run!`).
 And start the Node inside the reactor.
 When node starts it:
 * parses the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
@@ -155,8 +155,8 @@ When distributor receives the credentials it connects to Node server. And now th
 JR.enqueue('my_job',{arg1: 1, arg2: 2}, {after: 20}, success, error)
 ```
 
-The first argument is the name of the job, the second is the arguments will be sent to the job.
-The third is the options. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
+The first argument is the name of the job, the second is the arguments hash for the job.
+The third is the options hash. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
 * `after: seconds` - node will try run the job after  `seconds` seconds;
 * `run_at: time` - node will try run the job at given time;
 * `period: seconds` - node will run job periodically, each `seconds` seconds;
@@ -167,8 +167,8 @@ JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_nod
 ```
 
 The rule to use specified node is not strict if `JR.config[:always_use_specified_node]` is false (default).
-This means that distributor will try to send the job to the given node at first. But if the node is `locked` (maybe you have just sent another job to it and it is very busy) distributor will search another node.
-The last to arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' are executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is complete successfully (or not). The argunments or the 'feedback' is the arguments of the initial job plus all merged in the node side.
+This means that distributor will try to send the job to the given node at first. But if the node is `locked` (maybe you have just sent another job to it and it is very busy) distributor will look for other node.
+The last two arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' is executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is completed (successfully or not). The argunments for the 'feedback' are the arguments of the initial job plus all added on the node side.
 Example:
 
 ```ruby
@@ -184,19 +184,18 @@ JR.enqueue('my_job', {arg1: 1}, {}, success)
 ```
 
 The 'success' proc args will be {arg1: 1, result: 'Yay!'}.
-The same story is with 'error feedback'. Note that error feedback will be launched after all attempts on the node.
+The same story is with 'error feedback'. Note that error feedback will be launched after all attempts failed on the node side.
 See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 
 4. You disconnect node (stop it manually or node fails itself)
 --------------------------------------------------------------
 * distributor will send jobs to any other nodes if present
 * distributor will store in memory enqueued jobs if there is no connected node (or specified node)
-* when node starts again distributor will send then to node
+* when node starts again, then distributor will send jobs to the node
 
 5. You stop the main application.
 ---------------------------------
-* Nodes will continue to work, but
-* You can't receive the results from node when start the application again because all feedbacks are stored in memory.
+* Nodes will continue to work, but you won't be able to receive the results from node when you start the application again because all feedbacks are stored in memory.
 
 
 License
