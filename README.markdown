@@ -107,22 +107,6 @@ If no nodes are specified distributor will try to send the job to the first free
 There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
 You can specify the node which should execute the job and the node is forbidden for given job. You can reserve several nodes for high priority jobs.
 
-
-
-The main parts of JobReactor are:
----------------------------------
-JobReactor module for creating jobs.
-Distributor module for 'distributing' jobs between working nodes.
-Node object for job processing.
-#TODO
-
-
-
-
-
-
-
-
 How it works
 ------------
 1. You run JobReactor in your application initializer:
@@ -144,6 +128,7 @@ end
 This code ruтs EventMachine reactor loop (in the main thread: there is a difference between `run` and `run!`).
 And start the Node inside the reactor.
 When node starts it:
+- parse the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
 - starts it's own TCP server;
 - connect to Distributor server and send the information about it's server;
 - when distributor receives the credentials it connects to Node server;
@@ -153,6 +138,18 @@ When node starts it:
 ```ruby
 JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 20}, success, error)
 ```
+The first argument is the name of the job, the second is the arguments will be sent to the job.
+The third is the options. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
+- `after: seconds` - node will try run the job after  `seconds` seconds;
+- `run_at: time` - node will try run the job at given time;
+- `period: seconds` - node will run job periodically, each `seconds` seconds;
+You can add `node: 'node_name'` and `not_node: 'node_name'` to the options. This specify the node on which the job should or shouldn't be run. For example:
+```ruby
+JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node})
+```
+The last to arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' are executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is complete successfully (or not). The argunments or the 'feedback' is the arguments of the initial job plus all merged in the node side:
+
+                                                      
 
 
 
