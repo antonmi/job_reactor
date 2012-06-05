@@ -5,7 +5,7 @@ Now we are in beta (need to complete documentation and fix some bugs)
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
-Inspired by [Resque][1], [Stalker][2], [DelayedJob][3], and etc.
+Inspired by [Resque][1], [Beanstalkd][2]([Stalker][3]), [DelayedJob][4], and etc.
 
 JobReactor has not 'rails' integration for the time being.
 But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart processes.
@@ -17,7 +17,7 @@ Quick start
 ===========
 Use `gem install job_reactor --pre` to try it.
 
-You need to install [Redis][6] if you want to persist your jobs.
+You need to install [Redis][5] if you want to persist your jobs.
 ``$ sudo apt-get install redis-server ``
 
 In you main application:
@@ -86,7 +86,7 @@ If node is stopped or crashed it will retry stored jobs after start.
 5. EventMachine available
 -------------------------
 Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
-Use asynchronous [em-http-request][4], [em-websocket][5], [etc.], [etc.], and [etc]. See page [advance usage].
+Use asynchronous [em-http-request][6], [em-websocket][7], [etc.], [etc.], and [etc]. See page [advance usage].
 6. Deferred and periodic jobs
 -----------------------------
 You can use deferred jobs which will run 'after' some time or 'run_at' given time.
@@ -137,8 +137,9 @@ The MIT License - Copyright (c) 2012 Anton Mishchuk
 
 [0]: http://rubyeventmachine.com
 [1]: https://github.com/defunkt/resque
-[2]: https://github.com/han/stalker
-[3]: https://github.com/tobi/delayed_job
-[4]: https://github.com/igrigorik/em-http-request
-[5]: https://github.com/igrigorik/em-websocket
-[6]: http://redis.io
+[2]: http://kr.github.com/beanstalkd/
+[3]: https://github.com/han/stalker
+[4]: https://github.com/tobi/delayed_job
+[5]: http://redis.io
+[6]: https://github.com/igrigorik/em-http-request
+[7]: https://github.com/igrigorik/em-websocket
