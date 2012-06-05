@@ -125,7 +125,35 @@ Node object for job processing.
 
 How it works
 ------------
-#TODO
+1. You run JobReactor in your application initializer:
+``` ruby
+JR.run do
+  JR.start_distributor('localhost', 5000)
+end
+```
+This code runs EventMachine reactor loop in the new thread and call the block given.
+JR.start_distributor starts EventMachine TCP server on given host and port.
+And now JobReactor is ready to work.
+
+2. You run JobReactor Node in the different process or different machine:
+``` ruby
+JR.run! do
+  JR.start_node({:storage => 'redis_storage', :name => 'redis_node1', :server => ['localhost', 5001], :distributors => [['localhost', 5000]] })
+end
+```
+This code ruтs EventMachine reactor loop (in the main thread: there is a difference between `run` and `run!`).
+And start the Node inside the reactor.
+When node starts it:
+- starts it's own TCP server;
+- connect to Distributor server and send the information about it's server;
+- when distributor receives the credentials it connects to Node server;
+- and now there is a full duplex-connection between Distributor and Node.
+
+3. You enqueue the job in your application:
+```ruby
+JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 20}, success, error)
+```
+
 
 
 License
