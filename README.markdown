@@ -147,18 +147,26 @@ You can add `node: 'node_name'` and `not_node: 'node_name'` to the options. This
 ```ruby
 JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node})
 ```
-The last to arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' are executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is complete successfully (or not). The argunments or the 'feedback' is the arguments of the initial job plus all merged in the node side:
+The last to arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' are executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is complete successfully (or not). The argunments or the 'feedback' is the arguments of the initial job plus all merged in the node side.
+Example:
+```ruby
+#in your 'job_file'
+job 'my_job' do |args|
+#do smth
+args.merge!(result: 'Yay!')
 
-                                                      
-
+#in your application
+#success feedback
+success = proc {|args| puts args}
+#enqueue job
+JR.enqueue('my_job', {arg1: 1}, {}, success)
+```
+In success proc args will be {arg1: 1, result: 'Yay!'}
 
 
 License
 ---------
 The MIT License - Copyright (c) 2012 Anton Mishchuk
-
-
-
 
 [0]: http://rubyeventmachine.com
 [1]: https://github.com/defunkt/resque
