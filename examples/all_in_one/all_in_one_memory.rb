@@ -36,5 +36,5 @@ error = Proc.new do |args|
 end
 
 sleep(1) until JR.ready?
-JR.enqueue('test_job', {arg1: 1, arg2: 2}, {:period => 1}, success, error)
+JR.enqueue('test_job', {arg1: 1, arg2: 2}, {}, success, error)
 sleep(1) until wake_up > 5

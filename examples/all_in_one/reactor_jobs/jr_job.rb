@@ -16,7 +16,6 @@ end
 job_callback 'test_job', 'second_callback' do |args|
   puts 'another_callback'
   puts args
-  asd
 end
 
 job_errback 'test_job', 'first_errback' do |args|
