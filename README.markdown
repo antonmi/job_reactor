@@ -49,7 +49,12 @@ And the last file - 'the worker code':
 require 'job_reactor'
 JR.config[:job_directory] = 'reactor_jobs' #this default config so you can omit this line
 JR.run! do
-  JR.start_node({:storage => 'memory_storage', :name => 'worker_1', :server => ['localhost', 5001], :distributors => [['localhost', 5000]] })
+  JR.start_node({
+  :storage => 'memory_storage',
+  :name => 'worker_1',
+  :server => ['localhost', 5001],
+  :distributors => [['localhost', 5000]]
+  })
 end
 ```
 Run 'application.rb' in one terminal window and 'worker.rb' in another.
@@ -108,8 +113,9 @@ There are no priorities like in Delayed::Job or Stalker. Bud there are flexible 
 You can specify the node which should execute the job and the node is forbidden for given job. You can reserve several nodes for high priority jobs.
 
 How it works
-------------
-1. You run JobReactor in your application initializer:
+============
+1. You run JobReactor in your application initializer
+-----------------------------------------------------
 ``` ruby
 JR.run do
   JR.start_distributor('localhost', 5000)
@@ -119,46 +125,82 @@ This code runs EventMachine reactor loop in the new thread and call the block gi
 JR.start_distributor starts EventMachine TCP server on given host and port.
 And now JobReactor is ready to work.
 
-2. You run JobReactor Node in the different process or different machine:
+2. You run JobReactor Node in the different process or different machine
+------------------------------------------------------------------------
+
 ``` ruby
 JR.run! do
-  JR.start_node({:storage => 'redis_storage', :name => 'redis_node1', :server => ['localhost', 5001], :distributors => [['localhost', 5000]] })
+  JR.start_node({
+    :storage => 'redis_storage',
+    :name => 'redis_node1',
+    :server => ['localhost', 5001],
+    :distributors => [['localhost', 5000]] 
+})
 end
 ```
-This code ruтs EventMachine reactor loop (in the main thread: there is a difference between `run` and `run!`).
+
+This code runs EventMachine reactor loop (in the main thread: this is the difference between `run` and `run!`).
 And start the Node inside the reactor.
 When node starts it:
-- parse the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
-- starts it's own TCP server;
-- connect to Distributor server and send the information about it's server;
-- when distributor receives the credentials it connects to Node server;
-- and now there is a full duplex-connection between Distributor and Node.
+* parses the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
+* tries to 'retry' the job (if you use 'redis_storage' and `JR.config[:retry_jobs_at_start]` is true) 
+* starts it's own TCP server;
+* connects to Distributor server and send the information about it's server;
+When distributor receives the credentials it connects to Node server. And now there is a full duplex-connection between Distributor and Node.
 
-3. You enqueue the job in your application:
+3. You enqueue the job in your application
+------------------------------------------
+
 ```ruby
-JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 20}, success, error)
+JR.enqueue('my_job',{arg1: 1, arg2: 2}, {after: 20}, success, error)
 ```
-The first argument is the name of the job, the second is the arguments will be sent to the job.
-The third is the options. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
-- `after: seconds` - node will try run the job after  `seconds` seconds;
-- `run_at: time` - node will try run the job at given time;
-- `period: seconds` - node will run job periodically, each `seconds` seconds;
+
+The first argument is the name of the job, the second is the arguments hash for the job.
+The third is the options hash. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
+* `after: seconds` - node will try run the job after  `seconds` seconds;
+* `run_at: time` - node will try run the job at given time;
+* `period: seconds` - node will run job periodically, each `seconds` seconds;
 You can add `node: 'node_name'` and `not_node: 'node_name'` to the options. This specify the node on which the job should or shouldn't be run. For example:
+
 ```ruby
-JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node})
+JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_node: 'do_not_use_this_node'})
 ```
-The last to arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' are executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is complete successfully (or not). The argunments or the 'feedback' is the arguments of the initial job plus all merged in the node side:
 
-                                                      
+The rule to use specified node is not strict if `JR.config[:always_use_specified_node]` is false (default).
+This means that distributor will try to send the job to the given node at first. But if the node is `locked` (maybe you have just sent another job to it and it is very busy) distributor will look for other node.
+The last two arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' is executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is completed (successfully or not). The argunments for the 'feedback' are the arguments of the initial job plus all added on the node side.
+Example:
 
+```ruby
+#in your 'job_file'
+job 'my_job' do |args|
+#do smth
+args.merge!(result: 'Yay!')
+#in your application
+#success feedback
+success = proc {|args| puts args}
+#enqueue job
+JR.enqueue('my_job', {arg1: 1}, {}, success)
+```
+
+The 'success' proc args will be {arg1: 1, result: 'Yay!'}.
+The same story is with 'error feedback'. Note that error feedback will be launched after all attempts failed on the node side.
+See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
+
+4. You disconnect node (stop it manually or node fails itself)
+--------------------------------------------------------------
+* distributor will send jobs to any other nodes if present
+* distributor will store in memory enqueued jobs if there is no connected node (or specified node)
+* when node starts again, then distributor will send jobs to the node
+
+5. You stop the main application.
+---------------------------------
+* Nodes will continue to work, but you won't be able to receive the results from node when you start the application again because all feedbacks are stored in memory.
 
 
 License
----------
+=======
 The MIT License - Copyright (c) 2012 Anton Mishchuk
-
-
-
 
 [0]: http://rubyeventmachine.com
 [1]: https://github.com/defunkt/resque
