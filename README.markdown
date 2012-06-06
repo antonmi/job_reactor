@@ -15,10 +15,12 @@ So, read 'features' part and try JobReactor. You can do a lot with it.
 
 Note
 ====
-JobReactor is based on EventMachine. All jobs are launched in EM reactor loop in one thread.
-So, there are advantages and disadvantages. The main benefit is fast scheduling, saving and loading.
-The weak point is you shouldn't use JobReactor for background jobs that takes minutes and hour.
-They will block the reactor and break normal processing. If you can't divide THE BIG JOB into small peaces you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
+JobReactor is based on [EventMachine][0]. Jobs are launched in EM reactor loop in one thread.
+There are advantages and disadvantages. The main benefit is fast scheduling, saving and loading.
+The weak point is the processing of heave background jobs when each job takes minutes and hour.
+They will block the reactor and break normal processing.
+
+If you can't divide THE BIG JOB into small peaces you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
 
 __JobReactor is the right solution if you have thousands, millions, and (we hope:), billions relatively small jobs.__
 
@@ -208,11 +210,10 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 
 Job Storage
 ==========
-Redis
------
-Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`). Only the first, of course, 'really' persist the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (the difference in performance is not so great - Redis is very fast).
+Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
+Only the first, of course, 'really' persist the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
 
-The default host and port are:
+The default host and port for Redis server are:
 
 ```ruby
 JR.config[:redis_host] = 'localhost'
@@ -220,11 +221,11 @@ JR.config[:redis_port] = 6379
 ```
 
 JobReactor works asynchronously with Redis using [em-redis][8] library to uncrease the speed.
-Several nodes can use one Redis store.
+Several nodes can use one Redis storage.
 
 The informaion about jobs is saved several times during processing. This information includes:
 *id - the unique job id;
-*name - job name which defines what to do;
+*name - job name which 'defines' the job;
 *args - serialized arguments for the job;
 *run_at - the time when job was launched;
 *failed_at - the time when job was failed;
