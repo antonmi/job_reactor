@@ -13,6 +13,15 @@ Collaborators, you are welcome!
 
 So, read 'features' part and try JobReactor. You can do a lot with it.
 
+Note
+====
+JobReactor is based on EventMachine. All jobs are launched in EM reactor loop in one thread.
+So, there are advantages and disadvantages. The main benefit is fast scheduling, saving and loading.
+The weak point is you shouldn't use JobReactor for background jobs that takes minutes and hour. They will block the reactor and break normal processing. If you have such job choose [DelayedJob][4].
+
+JobReactor is the right solution if you have thousands, millions (and we hope :), billions) relatively small jobs.
+- - - - - - - - - - - - - - -
+
 Quick start
 ===========
 Use `gem install job_reactor --pre` to try it.
@@ -210,7 +219,7 @@ JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 ```
 
-JobReactor is work asynchronously with Redis using [em-redis][8] library to uncrease the speed.
+JobReactor works asynchronously with Redis using [em-redis][8] library to uncrease the speed.
 Several nodes can use one Redis store.
 
 The informaion about jobs is saved several times during processing. This information includes:
@@ -242,10 +251,10 @@ We provide simple `JR::RedisMonitor` module to check the Redis storage from irb 
 See methods:
 
 ```ruby
-JR::RedisMonitor#jobs_for(node_name)
-JR::RedisMonitor#load(job_id)
-JR::RedisMonitor#destroy(job_id)
-JR::RedisMonitor#destroy_all_jobs_for(node_name)
+JR::RedisMonitor.jobs_for(node_name)
+JR::RedisMonitor.load(job_id)
+JR::RedisMonitor.destroy(job_id)
+JR::RedisMonitor.destroy_all_jobs_for(node_name)
 ```
 
 
