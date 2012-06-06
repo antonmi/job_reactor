@@ -125,7 +125,7 @@ You can specify the node which should execute the job and the node is forbidden 
 
 How it works
 ============
-1. You run JobReactor in your application initializer
+1. You run JobReactor::Distributor in your application initializer
 -----------------------------------------------------
 ``` ruby
 JR.run do
@@ -136,7 +136,7 @@ This code runs EventMachine reactor loop in the new thread and call the block gi
 JR.start_distributor starts EventMachine TCP server on given host and port.
 And now JobReactor is ready to work.
 
-2. You run JobReactor Node in the different process or different machine
+2. You run JobReactor::Node in the different process or different machine
 ------------------------------------------------------------------------
 
 ``` ruby
