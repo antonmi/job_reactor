@@ -40,3 +40,19 @@ end
 job 'feedback_with_error' do |args|
   feed_back_error #undefined local variable or method `feed_back_error'
 end
+
+job 'will_cancel' do |args|
+  args[:arg] += 1
+  raise CancelJob if args[:arg] > 3
+end
+
+job 'will_cancel_in_errback' do |args|
+  args[:arg] += 1
+  some_error if args[:arg] > 3
+end
+
+job_errback 'will_cancel_in_errback' do |args|
+  raise CancelJob
+end
+
+

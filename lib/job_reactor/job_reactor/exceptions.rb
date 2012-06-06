@@ -2,7 +2,7 @@ module JobReactor
 
   class NoSuchJob < RuntimeError
   end
-  class CancelJob < RuntimeError
+  class CancelJob < Exception
   end
 
 end

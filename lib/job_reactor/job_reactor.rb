@@ -52,11 +52,11 @@ module JobReactor
     end
 
     def succ_feedbacks
-      @@callbacks ||= { }
+      @@succ_feedbacks ||= { }
     end
 
     def err_feedbacks
-      @@errbacks ||= { }
+      @@err_feedbacks ||= { }
     end
 
     # Here is the only method user can call inside the application (excepts start-up methods, of course).
@@ -107,8 +107,8 @@ module JobReactor
 
       hash.merge!('distributor' => "#{JR::Distributor.host}:#{JR::Distributor.port}")
 
-      add_succ_feedbacks!(hash, success_proc) if success_proc
-      add_err_feedbacks!(hash, error_proc) if error_proc
+      add_succ_feedbacks!(hash, success_proc) if success_proc.is_a? Proc
+      add_err_feedbacks!(hash, error_proc) if error_proc.is_a? Proc
 
       JR::Distributor.send_data_to_node(hash)
     end

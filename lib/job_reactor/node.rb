@@ -78,7 +78,7 @@ module JobReactor
           job.succeed(args)
           job['args'] = args
           job_completed(job)
-        rescue JobReactor::CancelJob
+        rescue CancelJob
           cancel_job(job)
         rescue Exception => e
           rescue_job(e, job)
@@ -121,7 +121,7 @@ module JobReactor
             job['args'] = args
             complete_rescue(job)
           rescue JobReactor::CancelJob
-            cancel_job(job) #If it was cancelled we destroy it or set status 'cancelled'
+            cancel_job(job, true) #If it was cancelled we destroy it or set status 'cancelled'
           rescue Exception => e  #Recsue Exceptions in errbacks
             job['args'].merge!(:errback_error => e) #So in args you now have :error and :errback_error
             complete_rescue(job)
@@ -148,8 +148,9 @@ module JobReactor
 
     # Cancels job. Remove or set 'cancelled status'
     #
-    def cancel_job(job)
-      report_error(job) if job['on_error']
+    def cancel_job(job, error = false)
+      report_success(job) if !error && job['on_success']
+      report_error(job) if error && job['on_error']
       if JR.config[:remove_cancelled_jobs]
         storage.destroy(job)
       else
