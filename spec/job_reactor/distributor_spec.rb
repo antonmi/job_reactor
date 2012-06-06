@@ -4,7 +4,7 @@ describe JobReactor::Distributor do
 
   before :all do
     EM.stop if EM.reactor_running?
-    sleep(3)
+    sleep(5)
   end
 
   it 'should try start server' do

@@ -16,6 +16,8 @@ end
 
 describe 'simple job', :slow => true do
   before :all do
+    EM.stop if EM.reactor_running?
+    sleep(5)
     JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
     JR.config[:merge_job_itself_to_args] = true
     JR.config[:retry_multiplier] = 0
@@ -118,7 +120,7 @@ describe 'simple job', :slow => true do
       JR.enqueue 'will_cancel_in_errback', {arg: 1}, {:period => 2}, {}, error
       sleep(10)
       result.size.should == 1
-      puts result.first[:error].should be_an_instance_of NameError
+      result.first[:error].should be_an_instance_of NameError
     end
 
   end

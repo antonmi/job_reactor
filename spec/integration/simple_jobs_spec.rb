@@ -10,6 +10,8 @@ end
 
 describe 'simple job', :slow => true do
   before :all do
+    EM.stop if EM.reactor_running?
+    sleep(5)
     ARRAY = []
     JR.config[:job_directory]    = File.expand_path('../../jobs', __FILE__)
     JR.config[:retry_multiplier] = 0
