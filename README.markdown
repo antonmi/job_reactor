@@ -224,19 +224,19 @@ JobReactor works asynchronously with Redis using [em-redis][8] library to increa
 Several nodes can use one Redis storage.
 
 The informaion about jobs is saved several times during processing. This information includes:
-*id - the unique job id;
-*name - job name which 'defines' the job;
-*args - serialized arguments for the job;
-*run_at - the time when job was launched;
-*failed_at - the time when job was failed;
-*last_error - the error occured;
-*period - period (for periodic jobs);
-*status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
-*attempt - the number of attempt;
-*make_after - when to start job again (in seconds after last save);
-*distributor - host and port of distributor server which sent the job (used for 'feedbacks');
-*on_success - the unique id of success feedback on the distributor side;
-*on_error - the unique id of error feedback on the distributor side;
+* id - the unique job id;
+* name - job name which 'defines' the job;
+* args - serialized arguments for the job;
+* run_at - the time when job was launched;
+* failed_at - the time when job was failed;
+* last_error - the error occured;
+* period - period (for periodic jobs);
+* status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
+* attempt - the number of attempt;
+* make_after - when to start job again (in seconds after last save);
+* distributor - host and port of distributor server which sent the job (used for 'feedbacks');
+* on_success - the unique id of success feedback on the distributor side;
+* on_error - the unique id of error feedback on the distributor side;
 
 By default JobReactor delete all completed and cancelled jobs, but you can configure it:
 The default options are:
