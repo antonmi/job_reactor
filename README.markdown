@@ -197,6 +197,57 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 ---------------------------------
 * Nodes will continue to work, but you won't be able to receive the results from node when you start the application again because all feedbacks are stored in memory.
 
+Job Storage
+==========
+Redis
+-----
+Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`). Only the first, of course, 'really' persist the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (the difference in performance is not so great - Redis is very fast).
+
+The default host and port are:
+
+```ruby
+JR.config[:redis_host] = 'localhost'
+JR.config[:redis_port] = 6379
+```
+
+JobReactor is work asynchronously with Redis using [em-redis][8] library to uncrease the speed.
+Several nodes can use one Redis store.
+
+The informaion about jobs is saved several times during processing. This information includes:
+*id - the unique job id;
+*name - job name which defines what to do;
+*args - serialized arguments for the job;
+*run_at - the time when job was launched;
+*failed_at - the time when job was failed;
+*last_error - the error occured;
+*period - period;
+*status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
+*attempt - the number of attempt;
+*make_after - when to start job again (in seconds after last save);
+*distributor - host and port of distributor server which sent the job (used for 'feedbacks');
+*on_success - the unique id of success feedback on the distributor side;
+*on_error - the unique id of error feedback on the distributor side;
+
+By default JobReactor delete all completed and cancelled jobs, but you can configure it:
+The default options are:
+
+```ruby
+JR.config[:remove_done_jobs] = true
+JR.config[:remove_cancelled_jobs] = true
+JR.config[:remove_failed_jobs] = false
+JR.config[:retry_jobs_at_start] = true
+```
+
+We provide simple `JR::RedisMonitor` module to check the Redis storage from irb console (or from your app).
+See methods:
+
+```ruby
+JR::RedisMonitor#jobs_for(node_name)
+JR::RedisMonitor#load(job_id)
+JR::RedisMonitor#destroy(job_id)
+JR::RedisMonitor#destroy_all_jobs_for(node_name)
+```
+
 
 License
 =======
@@ -210,3 +261,4 @@ The MIT License - Copyright (c) 2012 Anton Mishchuk
 [5]: http://redis.io
 [6]: https://github.com/igrigorik/em-http-request
 [7]: https://github.com/igrigorik/em-websocket
+[8]: https://github.com/madsimian/em-redis
