@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'em-redis'
 
   s.description = <<description
-    JobReactor is a library for creating and processing background jobs.
+    JobReactor is a library for creating, scheduling and processing background jobs.
     It is client-server distributed system based on EventMachine.
-    Inspired by DelayedJob, Resque, Beanstalkd, and etc
+    Inspired by DelayedJob, Resque, Beanstalkd, and etc.
 description
 end
