@@ -211,7 +211,7 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 Job Storage
 ==========
 Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
-Only the first, of course, 'really' persist the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
+Only the first, of course, 'really' persists the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
 
 The default host and port for Redis server are:
 
@@ -220,7 +220,7 @@ JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 ```
 
-JobReactor works asynchronously with Redis using [em-redis][8] library to uncrease the speed.
+JobReactor works asynchronously with Redis using [em-redis][8] library to increase the speed.
 Several nodes can use one Redis storage.
 
 The informaion about jobs is saved several times during processing. This information includes:
@@ -230,7 +230,7 @@ The informaion about jobs is saved several times during processing. This informa
 *run_at - the time when job was launched;
 *failed_at - the time when job was failed;
 *last_error - the error occured;
-*period - period;
+*period - period (for periodic jobs);
 *status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
 *attempt - the number of attempt;
 *make_after - when to start job again (in seconds after last save);
