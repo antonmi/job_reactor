@@ -17,10 +17,10 @@ Note
 ====
 JobReactor is based on [EventMachine][0]. Jobs are launched in EM reactor loop in one thread.
 There are advantages and disadvantages. The main benefit is fast scheduling, saving and loading.
-The weak point is the processing of heave background jobs when each job takes minutes and hour.
+The weak point is the processing of heavy background jobs when each job takes minutes and hours.
 They will block the reactor and break normal processing.
 
-If you can't divide THE BIG JOB into small peaces you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
+If you can't divide 'THE BIG JOB' into 'small peaces' you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
 
 __JobReactor is the right solution if you have thousands, millions, and (we hope:), billions relatively small jobs.__
 
