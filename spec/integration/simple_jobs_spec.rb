@@ -38,7 +38,7 @@ describe 'simple job', :slow => true do
 
     it 'should do 10 simple jobs' do
       10.times { JR.enqueue 'simple', { arg1: 'arg1' } }
-      sleep(5)
+      sleep(10)
       ARRAY.size.should == 10
     end
   end

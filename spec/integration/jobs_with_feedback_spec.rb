@@ -117,7 +117,6 @@ describe 'simple job', :slow => true do
       error = proc { |args| result << args }
       JR.enqueue 'will_cancel_in_errback', {arg: 1}, {:period => 2}, {}, error
       sleep(10)
-      puts result
       result.size.should == 1
       puts result.first[:error].should be_an_instance_of NameError
     end
