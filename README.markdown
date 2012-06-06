@@ -19,7 +19,7 @@ JobReactor is based on EventMachine. All jobs are launched in EM reactor loop in
 So, there are advantages and disadvantages. The main benefit is fast scheduling, saving and loading.
 The weak point is you shouldn't use JobReactor for background jobs that takes minutes and hour. They will block the reactor and break normal processing. If you have such job choose [DelayedJob][4].
 
-**JobReactor is the right solution if you have thousands, millions (and we hope :), billions) relatively small jobs.**
+__JobReactor is the right solution if you have thousands, millions (and we hope :), billions) relatively small jobs.__
 
 Quick start
 ===========
