@@ -69,6 +69,18 @@ describe 'simple job', :slow => true do
     end
   end
 
+  describe 'periodic job' do
+    it 'should do periodic job' do
+      JR.enqueue 'simple_after', { }, { period: 2 }
+      wait_until { ARRAY.size > 0 }
+      ARRAY.size.should == 1
+      wait_until { ARRAY.size > 1 }
+      ARRAY.size.should == 2
+      wait_until { ARRAY.size > 2 }
+      ARRAY.size.should == 3
+    end
+  end
+
   describe 'run "run_at" job' do
     it 'should run "run_at" job' do
       JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 1 }
