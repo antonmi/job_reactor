@@ -116,14 +116,14 @@ module JobReactor
         job['status']     = 'error'
         self.storage.save(job) do |job|
           begin
-            args = job['args'].merge!(:error => e).merge(JR.config[:merge_job_itself_to_args] ? { :job_itself => job.dup } : { })
+            args = job['args'].merge!(error: e).merge(JR.config[:merge_job_itself_to_args] ? { job_itself: job.dup } : { })
             job.fail(args) #Fire errbacks. You can access error in you errbacks (args[:error])
             job['args'] = args
             complete_rescue(job)
           rescue JobReactor::CancelJob
             cancel_job(job, true) #If it was cancelled we destroy it or set status 'cancelled'
           rescue Exception => e  #Recsue Exceptions in errbacks
-            job['args'].merge!(:errback_error => e) #So in args you now have :error and :errback_error
+            job['args'].merge!(errback_error: e) #So in args you now have :error and :errback_error
             complete_rescue(job)
           end
         end
@@ -179,7 +179,7 @@ module JobReactor
     #
     def retry_jobs
       storage.jobs_for(name) do |job_to_retry|
-        job_to_retry['args'].merge!(:retrying => true)
+        job_to_retry['args'].merge!(retrying: true)
         try_again(job_to_retry) if job_to_retry
       end
     end
@@ -190,7 +190,7 @@ module JobReactor
       host, port = job['distributor'].split(':')
       port = port.to_i
       distributor = self.connections[[host, port]]
-      data = {:success => { callback_id: job['on_success'], args: job['args']}}
+      data = { :success => { callback_id: job['on_success'], args: job['args']} }
       data[:success].merge!(do_not_delete: true) if job['period'] && job['period'].to_i > 0
       data = Marshal.dump(data)
       send_data_to_distributor(distributor, data)

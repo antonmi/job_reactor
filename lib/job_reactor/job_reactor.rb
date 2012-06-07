@@ -73,7 +73,7 @@ module JobReactor
     # (Do not use procs, objects with singleton methods, etc ... ).
     #
     # Example:
-    # JR.enqueue 'job', {:arg1 => 'arg1', :arg2 => 'arg2'}
+    # JR.enqueue 'job', {arg1: 'arg1', arg2: 'arg2'}
     #
     # You can add the following options:
     # :run_at - run at given time;
@@ -83,8 +83,8 @@ module JobReactor
     # :not_node - to do not send job to the node;
     #
     # Example:
-    # JR.enqueue 'job', {:arg1 => 'arg1'}, {:period => 100, :node => 'my_favorite_node'}
-    # JR.enqueue 'job', {:arg1 => 'arg1'}, {:after => 10, :not_node => 'some_node'}
+    # JR.enqueue 'job', {arg1: 'arg1'}, {period: 100, node: 'my_favorite_node'}
+    # JR.enqueue 'job', {arg1: 'arg1'}, {after: 10, not_node: 'some_node'}
     #
     # You can add 'success feedback' and 'error feedback'. We use term 'feedback' to distinguish them from callbacks and errbacks which are executed on the node side.
     # These feedbacks are the procs. The first is 'success feedback', the second - 'error feedback'.
@@ -93,7 +93,7 @@ module JobReactor
     # Example:
     # success = proc { |args| result = args }
     # error = proc { |args| result = args }
-    # JR.enqueue 'job', { :arg1 => 'arg1'}, {}, success, error
+    # JR.enqueue 'job', { arg1: 'arg1'}, {}, success, error
     #
     def enqueue(name, args = { }, opts = { }, success_proc = nil, error_proc = nil)
       hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new' }

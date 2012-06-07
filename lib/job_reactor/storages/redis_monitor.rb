@@ -51,7 +51,7 @@ module JobReactor
     #
     def destroy_all_jobs_for(name)
       pattern = "*#{name}_*"
-      storage.del(*storage.keys(pattern))
+      storage.del(*storage.keys(pattern)) unless storage.keys(pattern).empty?
     end
 
   end

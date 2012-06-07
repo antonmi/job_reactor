@@ -18,7 +18,7 @@ describe 'simple job', :slow => true do
     JR.config[:max_attempt]      = 5
     JR.run do
       JR::Distributor.start('localhost', 5002)
-      JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 7002], :distributors => [['localhost', 5002]] })
+      JR.start_node({ storage: 'memory_storage', name: 'memory_node', server: ['localhost', 7002], distributors: [['localhost', 5002]] })
     end
     wait_until { EM.reactor_running? }
   end
@@ -69,18 +69,53 @@ describe 'simple job', :slow => true do
     end
   end
 
+  describe 'periodic job' do
+    it 'should do periodic job' do
+      JR.enqueue 'simple_after', { }, { period: 2 }
+      wait_until { ARRAY.size > 0 }
+      ARRAY.size.should == 1
+      wait_until { ARRAY.size > 1 }
+      ARRAY.size.should == 2
+      wait_until { ARRAY.size > 2 }
+      ARRAY.size.should == 3
+    end
+  end
+
   describe 'run "run_at" job' do
     it 'should run "run_at" job' do
-      JR.enqueue 'simple_run_at', { }, { :run_at => Time.now + 1 }
+      JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 1 }
       wait_until { ARRAY.size == 1 }
       ARRAY.size.should == 1
     end
 
     it 'should not run "run_at" job' do
-      JR.enqueue 'simple_run_at', { }, { :run_at => Time.now + 2 }
+      JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 2 }
       sleep(1)
       ARRAY.size.should == 0
       wait_until { ARRAY.size != 0 }
+      ARRAY.size.should == 1
+    end
+  end
+
+  describe 'combined options' do
+    it 'should "after" with period' do
+      JR.enqueue 'simple_after', { }, { after: 3, period: 3 }
+      sleep(2)
+      ARRAY.size.should == 0
+      wait_until { ARRAY.size > 0 }
+      ARRAY.size.should == 1
+      wait_until { ARRAY.size > 1 }
+      ARRAY.size.should == 2
+    end
+
+    it 'should not run "run_at" job' do
+      JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 3, period: 3 }
+      sleep(2)
+      ARRAY.size.should == 0
+      wait_until { ARRAY.size > 0 }
+      ARRAY.size.should == 1
+      wait_until { ARRAY.size > 1 }
+      ARRAY.size.should == 2
     end
   end
 end

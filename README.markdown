@@ -20,7 +20,7 @@ There are advantages and disadvantages. The main benefit is fast scheduling, sav
 The weak point is the processing of heavy background jobs when each job takes minutes and hours.
 They will block the reactor and break normal processing.
 
-If you can't divide 'THE BIG JOB' into 'small peaces' you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
+If you can't divide 'THE BIG JOB' into 'small pieces' you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
 
 __JobReactor is the right solution if you have thousands, millions, and (we hope:), billions relatively small jobs.__
 
@@ -87,45 +87,50 @@ simple insignificant jobs in memory.
 And more: your nodes may create jobs for others nodes and communicate with each other. See page [advanced usage].
 3. Full job control
 -------------------
-You can add callback and errbacks to the job which will be called on the node.
+You can add 'callback' and 'errbacks' to the job which will be called on the node.
 You also can add 'success feedback' and 'error feedback' which will be called in your main application.
 When job is done on remote node, your application will receive the result inside corespondent 'feedback'.
-If error occur in the job you can see it in errbacks and do what you want.
-Inside the job you can get information about when it starts, which node execute job and etc.
-You also can add some arguments to the job on-the-fly which will be used in the subsequent callbacks and errbacks. See [advance usage].
-4. Reliability
+If error occur in the job you can see it in 'errbacks' and the in 'error feedback' and do what you want.
+4. Reflection and modifying
+---------------------------
+Inside the job you can get information about when it starts, when it fails, which node execute job and etc.
+You also can add some arguments to the job on-the-fly which will be used in the subsequent callbacks and errbacks.
+These arguments then can be send back to the distibutor.
+5. Reliability
 --------------
 You can run additional nodes and stop any nodes on-the-fly.
 Distributor is smart enough to send jobs to another node if someone is stopped or crashed.
 If no nodes are connected to distributor it will keep jobs in memory and send them when nodes start.
 If node is stopped or crashed it will retry stored jobs after start.
-5. EventMachine available
+6. EventMachine available
 -------------------------
 Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
-Use asynchronous [em-http-request][6], [em-websocket][7], [etc.], [etc.], and [etc]. See page [advance usage].
-6. Deferred and periodic jobs
+Use asynchronous [em-http-request][6], [em-websocket][7], [etc.], [etc.], and [etc].
+7. Thread safe
+Eventmachine reactor loop runs in one thread. So the code in jobs executed in the given node is absolutely threadsafe.  
+8. Deferred and periodic jobs
 -----------------------------
 You can use deferred jobs which will run 'after' some time or 'run_at' given time.
 You can create periodic jobs which will run every given time period and cancel them on condition.
-7. No polling
+9. No polling
 -------------
 There is no storage polling. Absolutely. When node receives job (no matter instant, periodic or deferred) there will be EventMachine timer created
 which will start job at the right time.
-8. Job retrying
+10. Job retrying
 --------------
 If job fails it will be retried. You can choose global retrying strategy or manage separate jobs.
-9. Predefined nodes
+11. Predefined nodes
 -------------------
 You can specify node for jobs, so they will be executed in that node environment. And you can specify which node is forbidden for the job.
 If no nodes are specified distributor will try to send the job to the first free node.
-10. Node based priorities
+12. Node based priorities
 -----------------------
 There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
 You can specify the node which should execute the job and the node is forbidden for given job. You can reserve several nodes for high priority jobs.
 
 How it works
 ============
-1. You run JobReactor in your application initializer
+1. You run JobReactor::Distributor in your application initializer
 -----------------------------------------------------
 ``` ruby
 JR.run do
@@ -136,7 +141,7 @@ This code runs EventMachine reactor loop in the new thread and call the block gi
 JR.start_distributor starts EventMachine TCP server on given host and port.
 And now JobReactor is ready to work.
 
-2. You run JobReactor Node in the different process or different machine
+2. You run JobReactor::Node in the different process or different machine
 ------------------------------------------------------------------------
 
 ``` ruby
@@ -211,7 +216,7 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 Job Storage
 ==========
 Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
-Only the first, of course, 'really' persist the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
+Only the first, of course, 'really' persists the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
 
 The default host and port for Redis server are:
 
@@ -220,23 +225,23 @@ JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 ```
 
-JobReactor works asynchronously with Redis using [em-redis][8] library to uncrease the speed.
+JobReactor works asynchronously with Redis using [em-redis][8] library to increase the speed.
 Several nodes can use one Redis storage.
 
 The informaion about jobs is saved several times during processing. This information includes:
-*id - the unique job id;
-*name - job name which 'defines' the job;
-*args - serialized arguments for the job;
-*run_at - the time when job was launched;
-*failed_at - the time when job was failed;
-*last_error - the error occured;
-*period - period;
-*status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
-*attempt - the number of attempt;
-*make_after - when to start job again (in seconds after last save);
-*distributor - host and port of distributor server which sent the job (used for 'feedbacks');
-*on_success - the unique id of success feedback on the distributor side;
-*on_error - the unique id of error feedback on the distributor side;
+* id - the unique job id;
+* name - job name which 'defines' the job;
+* args - serialized arguments for the job;
+* run_at - the time when job was launched;
+* failed_at - the time when job was failed;
+* last_error - the error occured;
+* period - period (for periodic jobs);
+* status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
+* attempt - the number of attempt;
+* make_after - when to start job again (in seconds after last save);
+* distributor - host and port of distributor server which sent the job (used for 'feedbacks');
+* on_success - the unique id of success feedback on the distributor side;
+* on_error - the unique id of error feedback on the distributor side;
 
 By default JobReactor delete all completed and cancelled jobs, but you can configure it:
 The default options are:

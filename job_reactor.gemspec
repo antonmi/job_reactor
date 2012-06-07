@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.description = <<description
     JobReactor is a library for creating, scheduling and processing background jobs.
-    It is client-server distributed system based on EventMachine.
+    It is asynchronous client-server distributed system based on EventMachine.
     Inspired by DelayedJob, Resque, Beanstalkd, and etc.
 description
 end

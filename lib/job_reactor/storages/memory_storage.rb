@@ -11,9 +11,11 @@ module JobReactor
 
       def load(hash, &block)
         hash      = storage[hash['id']]
-        hash_copy = { }
-        hash.each { |k, v| hash_copy.merge!(k => v) }
-        block.call(hash_copy) if block_given?
+        if hash
+          hash_copy = { }
+          hash.each { |k, v| hash_copy.merge!(k => v) }
+          block.call(hash_copy) if block_given?
+        end
       end
 
       def save(hash, &block)

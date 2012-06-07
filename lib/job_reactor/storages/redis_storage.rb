@@ -17,15 +17,17 @@ module JobReactor
         hash_copy = {'node' => hash['node']} #need new object, because old one has been 'failed'
 
         storage.hmget(key, *ATTRS) do |record|
-          ATTRS.each_with_index do |attr, i|
-            hash_copy[attr] = record[i]
-          end
-          ['attempt', 'period', 'make_after'].each do |attr|
-            hash_copy[attr] = hash_copy[attr].to_i
-          end
-          hash_copy['args'] = Marshal.load(hash_copy['args'])
+          unless record.compact.empty?
+            ATTRS.each_with_index do |attr, i|
+              hash_copy[attr] = record[i]
+            end
+            ['attempt', 'period', 'make_after'].each do |attr|
+              hash_copy[attr] = hash_copy[attr].to_i
+            end
+            hash_copy['args'] = Marshal.load(hash_copy['args'])
 
-          block.call(hash_copy) if block_given?
+            block.call(hash_copy) if block_given?
+          end
         end
       end
 
