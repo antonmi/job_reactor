@@ -87,8 +87,8 @@ describe 'simple job', :slow => true do
 
   describe 'combined options' do
     it 'should "after" with period' do
-      JR.enqueue 'simple_after', { }, { after: 5, period: 3 }
-      sleep(4)
+      JR.enqueue 'simple_after', { }, { after: 3, period: 3 }
+      sleep(2)
       ARRAY.size.should == 0
       wait_until { ARRAY.size > 0 }
       ARRAY.size.should == 1
@@ -97,8 +97,8 @@ describe 'simple job', :slow => true do
     end
 
     it 'should not run "run_at" job' do
-      JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 2, period: 3 }
-      sleep(1)
+      JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 3, period: 3 }
+      sleep(2)
       ARRAY.size.should == 0
       wait_until { ARRAY.size > 0 }
       ARRAY.size.should == 1
