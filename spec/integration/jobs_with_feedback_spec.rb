@@ -16,7 +16,7 @@ module JobReactor
   end
 end
 
-describe 'simple job', :slow => true do
+describe 'simple job' do
   before :all do
     EM.stop if EM.reactor_running?
     wait_until { !EM.reactor_running? }
@@ -26,7 +26,7 @@ describe 'simple job', :slow => true do
     JR.config[:max_attempt]              = 5
     JR.run do
       JR::Distributor.start('localhost', 5001)
-      JR.start_node({ :storage => 'memory_storage', :name => 'memory_node', :server => ['localhost', 7001], :distributors => [['localhost', 5001]] })
+      JR.start_node({ storage: 'memory_storage', name: 'memory_node', server: ['localhost', 7001], distributors: [['localhost', 5001]] })
     end
     wait_until { EM.reactor_running? }
   end
@@ -110,7 +110,7 @@ describe 'simple job', :slow => true do
       JR.succ_feedbacks = { }
       result            = []
       success           = proc { |args| result << args }
-      JR.enqueue 'will_cancel', { arg: 1 }, { :period => 2 }, success
+      JR.enqueue 'will_cancel', { arg: 1 }, { period: 2 }, success
       wait_until(10) { result.size == 3 }
       result.size.should == 3
     end
@@ -119,7 +119,7 @@ describe 'simple job', :slow => true do
       JR.err_feedbacks = { }
       result           = []
       error            = proc { |args| result << args }
-      JR.enqueue 'will_cancel_in_errback', { arg: 1 }, { :period => 2 }, { }, error
+      JR.enqueue 'will_cancel_in_errback', { arg: 1 }, { period: 2 }, { }, error
       sleep(6)
       result.size.should == 1
       result.first[:error].should be_an_instance_of NameError

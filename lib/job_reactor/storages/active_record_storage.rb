@@ -5,10 +5,10 @@ module JobReactor
   class ActiveRecordStorage < ::ActiveRecord::Base
 
     establish_connection(
-        :adapter => JR.config[:active_record_adapter],
-        :database => JR.config[:active_record_database],
-        :user => JR.config[:active_record_user],
-        :password => JR.config[:active_record_password]
+        adapter: JR.config[:active_record_adapter],
+        database: JR.config[:active_record_database],
+        user: JR.config[:active_record_user],
+        password: JR.config[:active_record_password]
     ) if JR.config[:use_custom_active_record_connection]
 
     serialize :args, Hash
