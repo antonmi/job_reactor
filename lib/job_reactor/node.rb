@@ -57,7 +57,9 @@ module JobReactor
           self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
         end
       else
-        self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
+        EM.next_tick do
+          self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
+        end
       end
     end
 
