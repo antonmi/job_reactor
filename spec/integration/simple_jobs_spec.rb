@@ -17,8 +17,8 @@ describe 'simple job', :slow => true do
     JR.config[:retry_multiplier] = 0
     JR.config[:max_attempt]      = 5
     JR.run do
-      JR::Distributor.start('localhost', 5432)
-      JR.start_node({ storage: 'memory_storage', name: 'memory_node', server: ['localhost', 7654], distributors: [['localhost', 5432]] })
+      JR::Distributor.start('localhost', 5009)
+      JR.start_node({ storage: 'memory_storage', name: 'memory_node', server: ['localhost', 7009], distributors: [['localhost', 5009]] })
     end
     wait_until { EM.reactor_running? }
   end
