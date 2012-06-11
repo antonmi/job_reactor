@@ -8,10 +8,10 @@ It is asynchronous client-server distributed system based on [EventMachine][0].
 Inspired by [Resque][1], [Beanstalkd][2]([Stalker][3]), [DelayedJob][4], and etc.
 
 JobReactor has not 'rails' integration for the time being.
-But it is very close. We need test the system with different servers (clusters) and automatize initialization and restart processes.
+But it is very close. We need to test the system with different servers (clusters) and automate the initialization and re-start processes.
 Collaborators, you are welcome!
 
-So, read 'features' part and try JobReactor. You can do a lot with it.
+So, read the 'features' section and try JobReactor. You can do a lot with it.
 
 Note
 ====
@@ -22,7 +22,7 @@ They will block the reactor and break normal processing.
 
 If you can't divide 'THE BIG JOB' into 'small pieces' you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
 
-__JobReactor is the right solution if you have thousands, millions, and (we hope:), billions relatively small jobs.__
+__JobReactor is the right solution if you have thousands, millions, and, we hope:), billions relatively small jobs.__
 
 Quick start
 ===========
@@ -31,7 +31,7 @@ Use `gem install job_reactor --pre` to try it.
 You need to install [Redis][5] if you want to persist your jobs.
 ``$ sudo apt-get install redis-server ``
 
-In you main application:
+In your main application:
 `application.rb`
 ``` ruby
 require 'job_reactor'
@@ -58,7 +58,7 @@ And the last file - 'the worker code':
 `worker.rb`
 ``` ruby
 require 'job_reactor'
-JR.config[:job_directory] = 'reactor_jobs' #this default config so you can omit this line
+JR.config[:job_directory] = 'reactor_jobs' #this default config, so you can omit this line
 JR.run! do
   JR.start_node({
   :storage => 'memory_storage',
@@ -95,7 +95,7 @@ If error occur in the job you can see it in 'errbacks' and the in 'error feedbac
 ---------------------------
 Inside the job you can get information about when it starts, when it fails, which node execute job and etc.
 You also can add some arguments to the job on-the-fly which will be used in the subsequent callbacks and errbacks.
-These arguments then can be send back to the distibutor.
+These arguments then can be sent back to the distibutor.
 5. Reliability
 --------------
 You can run additional nodes and stop any nodes on-the-fly.
@@ -125,7 +125,7 @@ You can specify node for jobs, so they will be executed in that node environment
 If no nodes are specified distributor will try to send the job to the first free node.
 12. Node based priorities
 -----------------------
-There are no priorities like in Delayed::Job or Stalker. Bud there are flexible node-based priorities.
+There are no priorities like in Delayed::Job or Stalker. But there are flexible node-based priorities.
 You can specify the node which should execute the job and the node is forbidden for given job. You can reserve several nodes for high priority jobs.
 
 How it works
@@ -161,7 +161,7 @@ When node starts it:
 * parses the 'reactor jobs' files (recursively parse all files specified in JR.config[:job_directory] directory, default is 'reactor_jobs' directory) and create hash of jobs callbacks and errbacs (see [JobReator jobs]);
 * tries to 'retry' the job (if you use 'redis_storage' and `JR.config[:retry_jobs_at_start]` is true) 
 * starts it's own TCP server;
-* connects to Distributor server and send the information about it's server;
+* connects to Distributor server and sends the information about needed to establish the connection;
 When distributor receives the credentials it connects to Node server. And now there is a full duplex-connection between Distributor and Node.
 
 3. You enqueue the job in your application
