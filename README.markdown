@@ -26,7 +26,7 @@ Quick start
 ===========
 ```gem install job_reactor```
 
-You need to install [Redis][5] if you want to persist your jobs.
+__You should install [Redis][5] if you want to persist your jobs.__
 ```$ sudo apt-get install redis-server```
 
 In your main application:
@@ -44,7 +44,7 @@ loop do
   JR.enqueue 'my_job', {arg1: 'Hello'}
 end
 ```
-Define the 'my_job' in separate directory (files with job's definitions must be in separate directory):
+Define the 'my_job' in separate directory (files with job's definitions **must** be in separate directory):
 `reactor_jobs/my_jobs.rb`
 ``` ruby
 include JobReactor
