@@ -22,6 +22,8 @@ JR.config[:remove_failed_jobs] = false
 JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 
+JR.config[:logger_method] = :puts
+
 #TODO next releases with rails support
 #JR.config[:active_record_adapter] = 'mysql2'
 #JR.config[:active_record_database] = 'em'
