@@ -1,7 +1,5 @@
 JobReactor
 ==========
-Now we are in beta (need to complete documentation and fix some bugs)
----------------------------------------------------
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
@@ -26,10 +24,10 @@ __JobReactor is the right solution if you have thousands, millions, and, we hope
 
 Quick start
 ===========
-Use `gem install job_reactor --pre` to try it.
+```gem install job_reactor```
 
 You need to install [Redis][5] if you want to persist your jobs.
-``$ sudo apt-get install redis-server ``
+```$ sudo apt-get install redis-server```
 
 In your main application:
 `application.rb`
