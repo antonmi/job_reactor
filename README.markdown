@@ -1,4 +1,4 @@
-JobReactor
+JobReactor [][https://secure.travis-ci.org/antonmi/job_reactor.png]
 ==========
 
 JobReactor is a library for creating, scheduling and processing background jobs.
