@@ -3,7 +3,7 @@ JobReactor
 
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
-Inspired by [Resque][1], [Beanstalkd][2]([Stalker][3]), [DelayedJob][4], and etc.
+Inspired by [Resque][1], [Beanstalkd][2] ([Stalker][3]), [DelayedJob][4], and etc.
 
 JobReactor has not 'rails' integration for the time being.
 But it is very close. We need to test the system with different servers (clusters) and automate the initialization and re-start processes.
