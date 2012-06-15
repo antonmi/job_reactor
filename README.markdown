@@ -27,6 +27,7 @@ Quick start
 ```gem install job_reactor```
 
 __You should install [Redis][5] if you want to persist your jobs.__
+
 ```$ sudo apt-get install redis-server```
 
 In your main application:
