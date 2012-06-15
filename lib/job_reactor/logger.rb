@@ -23,7 +23,7 @@ module JobReactor
     # Builds string for job event and log it
     #
     def self.log_event(event, job)
-      log("#{event} #{job['name']}")
+      log("#{event} '#{job['name']}'")
     end
 
   end

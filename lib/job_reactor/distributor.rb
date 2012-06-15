@@ -52,6 +52,7 @@ module JobReactor
         data = Marshal.dump(hash)
         connection.send_data(data)
         connection.lock
+        JR::Logger.log "Distributor sent job '#{hash['name']}' to '#{connection.name}'"
       else
         EM.next_tick do
           send_data_to_node(hash)
