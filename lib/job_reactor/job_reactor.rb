@@ -105,7 +105,7 @@ module JobReactor
       hash.merge!('node' => opts[:node]) if opts[:node]
       hash.merge!('not_node' => opts[:not_node]) if opts[:not_node]
 
-      hash.merge!('distributor' => "#{JR::Distributor.host}:#{JR::Distributor.port}")
+      hash.merge!('distributor' => JR::Distributor.server)
 
       add_succ_feedbacks!(hash, success_proc) if success_proc.is_a? Proc
       add_err_feedbacks!(hash, error_proc) if error_proc.is_a? Proc

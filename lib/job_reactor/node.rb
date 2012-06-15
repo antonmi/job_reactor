@@ -4,7 +4,7 @@ module JobReactor
   class Node
 
     def initialize(opts)
-      @config = { storage: opts[:storage], name: opts[:name], server: opts[:server], distributors: opts[:distributors]}
+      @config = { storage: opts[:storage], name: opts[:name], server: opts[:server], connect_to: opts[:connect_to], distributors: opts[:distributors]}
     end
 
     def config
@@ -23,6 +23,10 @@ module JobReactor
     #
     def connections
       @connections ||= {}
+    end
+
+    def server
+      config[:connect_to] || config[:server]
     end
 
     # Retrying jobs if any,

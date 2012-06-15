@@ -28,9 +28,14 @@ module JobReactor
       @@connections ||= []
     end
 
+    def server
+      @@connect_to || "#{@@host}:#{@@port}"
+    end
+
     #Starts distributor on given hast and port
     #
-    def start(host, port)
+    def start(host, port, opts = {})
+      @@connect_to = opts[:connect_to] && opts[:connect_to].join(':')
       @@host = host
       @@port = port
       JR::Logger.log "Distributor listens #{host}:#{port}"

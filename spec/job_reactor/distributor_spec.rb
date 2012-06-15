@@ -12,6 +12,18 @@ describe JobReactor::Distributor do
     JobReactor::Distributor.start('host', 'port')
   end
 
+  it 'should return server address' do
+    EM.should_receive(:start_server).with('host', 'port', JobReactor::Distributor::Server)
+    JobReactor::Distributor.start('host', 'port')
+    JobReactor::Distributor.server.should == 'host:port'
+  end
+
+  it 'should return the right server address' do
+    EM.should_receive(:start_server).with('host', 'port', JobReactor::Distributor::Server)
+    JobReactor::Distributor.start('host', 'port', :connect_to => ['new_host', 'new_port'])
+    JobReactor::Distributor.server.should == 'new_host:new_port'
+  end
+
   context 'server' do
     it 'should start server' do
       JobReactor::Distributor::Server.any_instance.should_receive(:post_init)

@@ -35,7 +35,7 @@ module JobReactor
       #
       def connection_completed
         JR::Logger.log('Begin distributor handshake')
-        data = {node_info: {name: @node.config[:name], server: @node.config[:server]} }
+        data = {node_info: {name: @node.config[:name], server: @node.server} }
         data = Marshal.dump(data)
         send_data(data)
       end
