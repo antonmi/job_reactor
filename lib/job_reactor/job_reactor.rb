@@ -39,6 +39,14 @@ module JobReactor
     # Parses jobs.
     # Requires storage.
     # Creates and start node.
+    # Options are:
+    # :storage - now available: 'memory_storage' and 'redis_storage';
+    # :name - uniq node name like 'my_favorite_memory_node';
+    # :server - address where node server starts (example: ['123.123.123.123', 1234];
+    # :distributors - address or addresses of distributor(s) node will try to connect (example: [['111.111.111.111', 5000], ['localhost', 5001]]);
+    # :connect_to - use this option if you have different ip-address to access your machine from outside world. Example (connect_to: ['213.122.132.231', 8000]).
+    # If you specify :connect_to option the connected distributor will use this host and port to connect the node.
+    # If not, distributor will use host and port from :server option.
     #
     def start_node(opts)
       parse_jobs
@@ -47,6 +55,12 @@ module JobReactor
       node.start
     end
 
+    # Starts distributor server on given host and port.
+    # If you have different ip-address to access your machine from outside world use additional option :connect_to.
+    # For example:
+    # JR.start_distributor('0.0.0.0', 5000, connect_to: ['123,223,234,213', 5000]).
+    # So the node will use '123,223,234,213:5000' to send the 'feedbacks' to distributor
+    #
     def start_distributor(host, port, opts = {})
       JR::Distributor.start(host, port, opts)
     end
