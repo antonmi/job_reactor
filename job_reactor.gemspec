@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = 'job_reactor'
-  s.version           = '0.5.0'
+  s.version           = '0.5.1.beta1'
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           = 'Simple, powerful and high scalable job queueing and background workers system based on EventMachine'
   s.homepage          = 'http://github.com/antonmi/job_reactor'
