@@ -47,8 +47,8 @@ module JobReactor
       node.start
     end
 
-    def start_distributor(host, port)
-      JR::Distributor.start(host, port)
+    def start_distributor(host, port, opts = {})
+      JR::Distributor.start(host, port, opts)
     end
 
     def succ_feedbacks
