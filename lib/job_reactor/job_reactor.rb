@@ -184,7 +184,7 @@ module JobReactor
     # Adds success callback which will launch when node reports success
     #
     def add_succ_feedbacks!(hash, callback)
-      distributor = "#{JR::Distributor.host}:#{JR::Distributor.port}"
+      distributor = JR::Distributor.server
       feedback_id = "#{distributor}_#{Time.now.utc.to_f}"
       succ_feedbacks.merge!(feedback_id => callback)
       hash.merge!('on_success' => feedback_id)
@@ -193,7 +193,7 @@ module JobReactor
     # Adds error callback which will launch when node reports error
     #
     def add_err_feedbacks!(hash, errback)
-      distributor = "#{JR::Distributor.host}:#{JR::Distributor.port}"
+      distributor = JR::Distributor.server
       feedback_id = "#{distributor}_#{Time.now.utc.to_f}"
       err_feedbacks.merge!(feedback_id => errback)
       hash.merge!('on_error' => feedback_id)

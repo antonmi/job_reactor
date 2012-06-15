@@ -5,14 +5,6 @@ module JobReactor
   module Distributor
     extend self
 
-    def host
-      @@host
-    end
-
-    def port
-      @@port
-    end
-
     # Gets nodes
     # You can monitor available nodes connections in you application.
     # For example
