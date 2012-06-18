@@ -20,7 +20,7 @@ They will block the reactor and break normal processing.
 
 If you can't divide 'THE BIG JOB' into 'small pieces' you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
 
-__JobReactor is the right solution if you have thousands, millions, and, we hope:), billions relatively small jobs.__
+__JobReactor is the right solution if you have thousands, millions, and, we hope, billions relatively small jobs.__
 
 Quick start
 ===========
