@@ -184,7 +184,7 @@ JR.enqueue('my_job', {arg1: 1}, {period: 100, node: 'my_favourite_node', not_nod
 The rule to use specified node is not strict if `JR.config[:always_use_specified_node]` is false (default).
 This means that distributor will try to send the job to the given node at first. But if the node is `locked` (maybe you have just sent another job to it and it is very busy) distributor will look for other node.
 
-The last two arguments are optional too. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' is executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is completed (successfully or not). The argunments for the 'feedback' are the arguments of the initial job plus all added on the node side.
+The last two arguments are optional. The first is 'success feedback' and the last is 'error feedback'. We use term 'feedback' to distinguish from 'callbacks' and 'errbacks'. 'feedback' is executed on the main application side while 'callbacks' on the node side. 'feedbacks' are the procs which will be called when node sent message that job is completed (successfully or not). The argunments for the 'feedback' are the arguments of the initial job plus all added on the node side.
 
 Example:
 
