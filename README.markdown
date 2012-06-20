@@ -35,7 +35,7 @@ In your main application:
 ``` ruby
 require 'job_reactor'
 JR.run do
-  JR.start_distributor('localhost', 5000)  #see documentation
+  JR.start_distributor('localhost', 5000)  #see lib/job_reactor/job_reactor.rb
 end
 sleep(1) until(JR.ready?)
 
@@ -64,7 +64,7 @@ JR.run! do
   :name => 'worker_1',
   :server => ['localhost', 5001],
   :distributors => [['localhost', 5000]]
-  })                                         #see documentation
+  })                                         #see lib/job_reactor/job_reactor.rb
 end
 ```
 Run 'application.rb' in one terminal window and 'worker.rb' in another.
