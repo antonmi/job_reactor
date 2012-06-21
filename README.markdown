@@ -275,21 +275,19 @@ end
 ```
 __Note__, if error occurs you can't see additional arguments in job errbacks.
 
-Another trick is `JR.config[:merge_job_itself_to_args]` option which is `false` by default. If you set this option to `true` you can see `:job_itself` key in `args`. The value contain many usefull information about job ('name', 'attempt', 'status', 'make_after', 'node' and etc.
+Another trick is `JR.config[:merge_job_itself_to_args]` option which is `false` by default. If you set this option to `true` you can see `:job_itself` key in `args`. The value contains many usefull information about job ('name', 'attempt', 'status', 'make_after', 'node', etc).
 
-Feedbacks are defined as a Proc object and atteched to the 'job' when it is enqueued on the application side.
+Feedbacks are defined as a Proc object and attached to the 'job' when it is enqueued on the application side.
 
 ```ruby
-
 success = Proc.new { |args| puts 'Success' }
 error = Proc.new { |args| puts 'Error' }
 JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 100}, success, error)
-
 ```
 
-This procs will be called when Node inform about success or error. The 'args' for the corresponding proc will the same 'args' which is in the job (and it's callbacks) on the node side. So you can, for example, return any result by merging it to 'args' in the job (or it's callbacks).
+This procs will be called when Node informs about success or error. The 'args' for the corresponding proc will be the same 'args' which is in the job (and it's callbacks) on the node side. So you can, for example, return any result by merging it to 'args' in the job (or it's callbacks).
 
-__Note__, feedbacks are in memory in main application, so theydisappear when you restart the application.
+__Note__, feedbacks are kept in memory in your application, so they disappear when you restart the application.
 
 Job Storage
 ==========
