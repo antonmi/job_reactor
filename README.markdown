@@ -201,7 +201,7 @@ JR.enqueue('my_job', {arg1: 1}, {}, success)
 ```
 
 The 'success' proc args will be {arg1: 1, result: 'Yay!'}.
-The same story is with 'error feedback'. Note that error feedback will be launched after all attempts failed on the node side.
+The same story is with 'error feedback'. __Note__, that error feedback will be launched after all attempts failed on the node side.
 See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 
 4. You disconnect node (stop it manually or node fails itself)
@@ -222,7 +222,6 @@ To define `'job'` you use `JobReactor.job` method (see 'Quick start' section). T
 
 You can define any number of callbacks and errbacks for the given job. Just use `JobReactor.job_callback` and `JobRector.job_errback` methods. The are three arguments for calbacks and errbacks. The name of the job, the name of callback/errback (optional) and the block.
 
-Example:
 ```ruby
 
 job 'test_job' do |args|
@@ -247,11 +246,43 @@ end
 
 ```
 
-Callbacks and errbacks acts as ordinary EventMachine::Deferrable callbacks and errbacks. The `'job'` is the first callack, first `'job_callback'` becomes second callback and so on. When Node start job it calls `succeed` method on the 'job object' with given argument (args). This runs all callbacks sequentially. If error occurs in any callback Node calls `fail` method on the 'deferrable' object with the same args (plus merged `:error => 'Error message`).
+Callbacks and errbacks acts as ordinary EventMachine::Deferrable callbacks and errbacks. The `'job'` is the first callack, first `'job_callback'` becomes second callback and so on. See `lib/job_reactor/job_reactor/job_parser.rb` for more information. When Node start job it calls `succeed` method on the 'job object' with given argument (args). This runs all callbacks sequentially. If error occurs in any callback Node calls `fail` method on the 'deferrable' object with the same args (plus merged `:error => 'Error message`).
 
-See `lib/job_reactor/job_reactor/job_parser.rb` for more information.
+__Note__, you define jobs, callbacks and errbacks in top-level scope, so the `self` is `main` object.
 
-Note, when you defined job, it's callbacks and errbacks in the 'job_file' you 
+You can `merge!` additional key-value pairs to 'args' in the job to exchange information between job and it's callbacks.
+
+```ruby
+job 'test_job' do |args|
+  args.merge!(result: 'Hello')
+end
+
+job_callback 'test_job', 'first_callback' do |args|
+  puts args[:result]
+  args.merge!(another_result: 'world')
+end
+
+job_callback 'test_job', 'second_callback' do |args|
+  puts "#{args[:result]} #{args[:another_result]}"
+end
+```
+__Note__, if error occurs you can't see additional arguments in job errbacks.
+
+Another trick is `JR.config[:merge_job_itself_to_args]` option which is `false` by default. If you set this option to `true` you can see `:job_itself` key in `args`. The value contain many usefull information about job ('name', 'attempt', 'status', 'make_after', 'node' and etc.
+
+Feedbacks are defined as a Proc object and atteched to the 'job' when it is enqueued on the application side.
+
+```ruby
+
+success = Proc.new { |args| puts 'Success' }
+error = Proc.new { |args| puts 'Error' }
+JR.enqueue('my_job', {arg1: 1, arg2: 2}, {after: 100}, success, error)
+
+```
+
+This procs will be called when Node inform about success or error. The 'args' for the corresponding proc will the same 'args' which is in the job (and it's callbacks) on the node side. So you can, for example, return any result by merging it to 'args' in the job (or it's callbacks).
+
+__Note__, feedbacks are in memory in main application, so theydisappear when you restart the application.
 
 Job Storage
 ==========
