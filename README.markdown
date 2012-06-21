@@ -214,9 +214,9 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 ---------------------------------
 * Nodes will continue to work, but you won't be able to receive the results from node when you start the application again because all feedbacks are stored in memory.
 
-Job, callbacks and feedbacks
+Callbacks and feedbacks
 ============================
-'job', 'callbacks', 'errbacks', 'success feedback', and 'error feedback' helps you divide the __job__ into small relatively independent parts.
+'callbacks', 'errbacks', 'success feedback', and 'error feedback' helps you divide the __job__ into small relatively independent parts.
 
 To define `'job'` you use `JobReactor.job` method (see 'Quick start' section). The only arguments are 'job_name' and the block which is the job itself.
 
