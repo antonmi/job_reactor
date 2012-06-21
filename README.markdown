@@ -225,8 +225,8 @@ You can define any number of callbacks and errbacks for the given job. Just use 
 Example:
 ```ruby
 
-job 'test_job' do
-  |args| puts "job with args #{args}" 
+job 'test_job' do |args|
+  puts "job with args #{args}" 
 end
 
 job_callback 'test_job', 'first_callback' do |args|
