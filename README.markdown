@@ -216,7 +216,7 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 
 Job, callbacks and feedbacks
 ============================
-`'job'`, `'callbacks'`, `'errbacks'`, `'success feedback'`, and `'error feedback'` helps you divide the __job__ into small relatively independent parts.
+'job', 'callbacks', 'errbacks', 'success feedback', and 'error feedback' helps you divide the __job__ into small relatively independent parts.
 
 To define `'job'` you use `JobReactor.job` method (see 'Quick start' section). The only arguments are 'job_name' and the block which is the job itself.
 
