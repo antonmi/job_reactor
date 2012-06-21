@@ -34,9 +34,11 @@ In your main application:
 `application.rb`
 ``` ruby
 require 'job_reactor'
+
 JR.run do
   JR.start_distributor('localhost', 5000)  #see lib/job_reactor/job_reactor.rb
 end
+
 sleep(1) until(JR.ready?)
 
 # The application
@@ -49,6 +51,7 @@ Define the 'my_job' in separate directory (files with job's definitions **must**
 `reactor_jobs/my_jobs.rb`
 ``` ruby
 include JobReactor
+
 job 'my_job' do |args|
   puts args[:arg1]
 end
@@ -57,7 +60,9 @@ And the last file - 'the worker code':
 `worker.rb`
 ``` ruby
 require 'job_reactor'
+
 JR.config[:job_directory] = 'reactor_jobs' #this default config, so you can omit this line
+
 JR.run! do
   JR.start_node({
   :storage => 'memory_storage',
@@ -223,6 +228,7 @@ To define `'job'` you use `JobReactor.job` method (see 'Quick start' section). T
 You can define any number of callbacks and errbacks for the given job. Just use `JobReactor.job_callback` and `JobRector.job_errback` methods. The are three arguments for calbacks and errbacks. The name of the job, the name of callback/errback (optional) and the block.
 
 ```ruby
+include JobReactor
 
 job 'test_job' do |args|
   puts "job with args #{args}" 
@@ -243,7 +249,6 @@ end
 job_errback 'test_job', 'second_errback' do |args|
   puts 'another errback'
 end
-
 ```
 
 Callbacks and errbacks acts as ordinary EventMachine::Deferrable callbacks and errbacks. The `'job'` is the first callack, first `'job_callback'` becomes second callback and so on. See `lib/job_reactor/job_reactor/job_parser.rb` for more information. When Node start job it calls `succeed` method on the 'job object' with given argument (args). This runs all callbacks sequentially. If error occurs in any callback Node calls `fail` method on the 'deferrable' object with the same args (plus merged `:error => 'Error message`).
@@ -253,6 +258,8 @@ __Note__, you define jobs, callbacks and errbacks in top-level scope, so the `se
 You can `merge!` additional key-value pairs to 'args' in the job to exchange information between job and it's callbacks.
 
 ```ruby
+include JobReactor
+
 job 'test_job' do |args|
   args.merge!(result: 'Hello')
 end
