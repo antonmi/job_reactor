@@ -214,6 +214,18 @@ See config: `JR.config[:max_attempt] = 10` and `JR.config[:retry_multiplier]`
 ---------------------------------
 * Nodes will continue to work, but you won't be able to receive the results from node when you start the application again because all feedbacks are stored in memory.
 
+Job, callbacks and feedbacks
+============================
+`'job'`, `'callbacks'`, `'errbacks'`, `'success feedback'`, and `'error feedback'` helps you divide the __job__ into small relatively independent parts.
+
+To define `'job'` you use `JobReactor.job` method (see 'Quick start' section). The only arguments are 'job_name' and the block which is the job itself.
+
+You can define any number of callbacks and errbacks for the given job. Just use `JobReactor.job_callback` and `JobRector.job_errback` methods. The are three arguments for calbacks and errbacks. The name of the job, the name of callback/errback (optional) and the block. Callbacks and errbacks acts as ordinary EventMachine::Deferrable callbacks and errbacks.
+
+The `'job'` is the first callack, first `'job_callback'` becomes second callback and so on. When node start job it calls `succeed` method on the 'job object' with given arguments. This runs all callbacks sequentially.
+
+See `lib/job_reactor/job_reactor/job_parser.rb` for more information.
+
 Job Storage
 ==========
 Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
