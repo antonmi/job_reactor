@@ -220,11 +220,38 @@ Job, callbacks and feedbacks
 
 To define `'job'` you use `JobReactor.job` method (see 'Quick start' section). The only arguments are 'job_name' and the block which is the job itself.
 
-You can define any number of callbacks and errbacks for the given job. Just use `JobReactor.job_callback` and `JobRector.job_errback` methods. The are three arguments for calbacks and errbacks. The name of the job, the name of callback/errback (optional) and the block. Callbacks and errbacks acts as ordinary EventMachine::Deferrable callbacks and errbacks.
+You can define any number of callbacks and errbacks for the given job. Just use `JobReactor.job_callback` and `JobRector.job_errback` methods. The are three arguments for calbacks and errbacks. The name of the job, the name of callback/errback (optional) and the block.
 
-The `'job'` is the first callack, first `'job_callback'` becomes second callback and so on. When node start job it calls `succeed` method on the 'job object' with given arguments. This runs all callbacks sequentially.
+Example:
+```ruby
+
+job 'test_job' do
+  |args| puts "job with args #{args}" 
+end
+
+job_callback 'test_job', 'first_callback' do |args|
+  puts "first callback with args #{args}"
+end
+
+job_callback 'test_job', 'second_callback' do |args|
+  puts "second callback with args #{args}"
+end
+
+job_errback 'test_job', 'first_errback' do |args|
+  puts "first errback with error #{args[:error]}"
+end
+
+job_errback 'test_job', 'second_errback' do |args|
+  puts 'another errback'
+end
+
+```
+
+Callbacks and errbacks acts as ordinary EventMachine::Deferrable callbacks and errbacks. The `'job'` is the first callack, first `'job_callback'` becomes second callback and so on. When Node start job it calls `succeed` method on the 'job object' with given argument (args). This runs all callbacks sequentially. If error occurs in any callback Node calls `fail` method on the 'deferrable' object with the same args (plus merged `:error => 'Error message`).
 
 See `lib/job_reactor/job_reactor/job_parser.rb` for more information.
+
+Note, when you defined job, it's callbacks and errbacks in the 'job_file' you 
 
 Job Storage
 ==========
