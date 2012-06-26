@@ -9,7 +9,7 @@
 
 # Defines storages for lazy loading
 
-# TODO 'NEXT RELEASE'
+# TODO
 # require 'active_record'
 # class JobReactor::ActiveRecordStorage < ::ActiveRecord::Base; end
 
