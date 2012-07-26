@@ -319,7 +319,7 @@ The informaion about jobs is saved several times during processing. This informa
 * on_success - the unique id of success feedback on the distributor side;
 * on_error - the unique id of error feedback on the distributor side;
 
-By default JobReactor delete all completed and cancelled jobs, but you can configure it:
+By default JobReactor deletes all completed and cancelled jobs, but you can configure it:
 The default options are:
 
 ```ruby
