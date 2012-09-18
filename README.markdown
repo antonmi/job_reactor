@@ -111,7 +111,7 @@ If node is stopped or crashed it will retry stored jobs after start.
 6. EventMachine available
 -------------------------
 Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
-Use asynchronous [em-http-request][6], [em-websocket][7], [etc.], [etc.], and [etc].
+Use asynchronous [em-http-request][6], [em-websocket][7], and etc.
 7. Thread safe
 --------------
 Eventmachine reactor loop runs in one thread. So the code in jobs executed in the given node is absolutely threadsafe.
