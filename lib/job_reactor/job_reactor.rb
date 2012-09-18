@@ -90,6 +90,9 @@ module JobReactor
     # JR.enqueue 'job', {arg1: 'arg1', arg2: 'arg2'}
     #
     # You can add the following options:
+    # :defer - run job in EM.defer block (in separate thread). Default is false.
+    #  Be careful, the default threadpool size is 20 for EM.
+    #  You can increase it by setting EM.threadpool_size = 'your value', but it is not recommended.
     # :run_at - run at given time;
     # :after - run after some time (in seconds);
     # :period - will make periodic job which will be launched every opts[:period] seconds;
@@ -97,7 +100,7 @@ module JobReactor
     # :not_node - to do not send job to the node;
     #
     # Example:
-    # JR.enqueue 'job', {arg1: 'arg1'}, {period: 100, node: 'my_favorite_node'}
+    # JR.enqueue 'job', {arg1: 'arg1'}, {period: 100, node: 'my_favorite_node', defer: true}
     # JR.enqueue 'job', {arg1: 'arg1'}, {after: 10, not_node: 'some_node'}
     #
     # You can add 'success feedback' and 'error feedback'. We use term 'feedback' to distinguish them from callbacks and errbacks which are executed on the node side.
