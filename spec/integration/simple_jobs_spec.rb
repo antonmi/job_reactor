@@ -118,4 +118,48 @@ describe 'simple job', :slow => true do
       ARRAY.size.should == 2
     end
   end
+
+  context 'Defer job' do
+    describe 'EM.defer' do
+      it 'EM should receive :defer' do
+        EM.should_receive(:defer)
+        JR.enqueue 'simple', { arg1: 'arg1' }, { defer: true }
+        sleep(2)
+      end
+
+      it 'EM should NOT receive :defer' do
+        EM.should_not_receive(:defer)
+        JR.enqueue 'simple', { arg1: 'arg1' }
+        sleep(2)
+      end
+    end
+
+    describe 'Do defer job' do
+      it 'should do defer job' do
+        JR.enqueue 'simple', { arg1: 'arg1' }, { defer: true }
+        wait_until(2) { ARRAY.size == 1}
+        ARRAY.size.should == 1
+        ARRAY.first[0].should == 'simple'
+        ARRAY.first[1].should be_instance_of(Hash)
+      end
+
+      it 'should do 10 defer jobs' do
+        10.times { JR.enqueue 'simple', { arg1: 'arg1' }, { defer: true } }
+        wait_until(10) { ARRAY.size == 10 }
+        ARRAY.size.should == 10
+      end
+
+      it 'should "after" with period' do
+        JR.enqueue 'simple_after', { }, { after: 3, period: 3, defer: true }
+        sleep(2)
+        ARRAY.size.should == 0
+        wait_until { ARRAY.size > 0 }
+        ARRAY.size.should == 1
+        wait_until { ARRAY.size > 1 }
+        ARRAY.size.should == 2
+      end
+    end
+
+  end
+
 end

@@ -13,7 +13,7 @@ module JobReactor
 
     serialize :args, Hash
 
-    ATTRS = %w(name args last_error run_at failed_at attempt period make_after node status distributor on_success on_error)
+    ATTRS = %w(name args last_error run_at failed_at attempt period make_after node status distributor on_success on_error defer)
     attr_accessible *ATTRS
 
     self.table_name = JR.config[:active_record_table_name]

@@ -56,14 +56,22 @@ module JobReactor
     # It makes a job and run do_job.
     #
     def schedule(hash)
-      if hash['make_after'].to_i > 0
-        EM::Timer.new(hash['make_after']) do
-          self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
+      run_job = Proc.new do
+        if hash['make_after'].to_i > 0
+          EM::Timer.new(hash['make_after']) do
+            self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
+          end
+        else
+          EM.next_tick do
+            self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
+          end
         end
+      end
+
+      if hash['defer'] == 'true'
+        EM.defer { run_job.call }
       else
-        EM.next_tick do
-          self.storage.load(hash) { |hash| do_job(JR.make(hash)) }
-        end
+        run_job.call
       end
     end
 

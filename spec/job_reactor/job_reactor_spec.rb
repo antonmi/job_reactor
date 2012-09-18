@@ -43,6 +43,11 @@ describe JobReactor do
   end
 
   describe 'enqueue job' do
+
+    let(:hash) { { 'name' => 'test_job', 'args' => {},
+                   'attempt' => 0, 'status' => 'new',
+                   'make_after' => 0, 'defer' => 'false',
+                   'distributor' => 'localhost:3000'  }    }
     before do
       EM.stub(:start_server).and_return(true)
       JobReactor.start_distributor('localhost', '3000')
@@ -51,38 +56,30 @@ describe JobReactor do
     end
 
     it 'should enqueue simple job' do
-      hash = { 'name' => 'test_job', 'args' => {}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'distributor' => 'localhost:3000' }
       JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
       JR.enqueue('test_job')
     end
 
     it 'should enqueue job with args' do
-      hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'distributor' => 'localhost:3000' }
+      hash.merge!('args' => {a: 1, b: 2})
       JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
       JR.enqueue('test_job', { a: 1, b: 2 })
     end
 
     it 'should enqueue "after" job with args' do
-      hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 1, 'distributor' => 'localhost:3000' }
+      hash.merge!('args' => {a: 1, b: 2}, 'make_after' => 1)
       JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
       JR.enqueue('test_job', { a: 1, b: 2 }, { after: 1 })
     end
 
-    #TODO
-    #it 'should enqueue "run_at" with args' do
-    #  hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 1 }
-    #  JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
-    #  JR.enqueue('test_job', { a: 1, b: 2 }, { run_at: Time.now + 1 })
-    #end
-
     it 'should enqueue "periodic" job with args' do
-      hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'period' => 5, 'distributor' => 'localhost:3000' }
+      hash.merge!('args' => {a: 1, b: 2}, 'period' => 5)
       JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
       JR.enqueue('test_job', { a: 1, b: 2 }, { period: 5 })
     end
 
     it 'should enqueue job for specific node' do
-      hash = { 'name' => 'test_job', 'args' => {a: 1, b: 2}, 'attempt' => 0, 'status' => 'new', 'make_after' => 0, 'node' => 'A', 'not_node' => 'B', 'distributor' => 'localhost:3000' }
+      hash.merge!('args' => {a: 1, b: 2}, 'node' => 'A', 'not_node' => 'B')
       JobReactor::Distributor.should_receive(:send_data_to_node).with(hash)
       JR.enqueue('test_job', { a: 1, b: 2 }, { node: 'A', not_node: 'B' })
     end

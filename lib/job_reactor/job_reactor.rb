@@ -110,7 +110,7 @@ module JobReactor
     # JR.enqueue 'job', { arg1: 'arg1'}, {}, success, error
     #
     def enqueue(name, args = { }, opts = { }, success_proc = nil, error_proc = nil)
-      hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new' }
+      hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new', 'defer' => 'false' }
 
       hash.merge!('period' => opts[:period]) if opts[:period]
       opts[:after] = (opts[:run_at] - Time.now) if opts[:run_at]
@@ -120,6 +120,8 @@ module JobReactor
       hash.merge!('not_node' => opts[:not_node]) if opts[:not_node]
 
       hash.merge!('distributor' => JR::Distributor.server)
+
+      hash.merge!('defer' => 'true') if opts[:defer]
 
       add_succ_feedbacks!(hash, success_proc) if success_proc.is_a? Proc
       add_err_feedbacks!(hash, error_proc) if error_proc.is_a? Proc

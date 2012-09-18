@@ -127,4 +127,40 @@ describe 'simple job' do
 
   end
 
+  context 'defer job' do
+    describe 'feedbacks for periodic job' do
+      it 'should run feedbacks several times' do
+        JR.succ_feedbacks = { }
+        result            = []
+        success           = proc { |args| result << args }
+        JR.enqueue 'feedback', { arg1: 'arg1' }, { period: 5, defer: true }, success
+        sleep(3)
+        result.size.should == 1
+        JR.succ_feedbacks.size.should == 1
+        sleep(5)
+        result.size.should == 2
+      end
+
+      it 'should run success feedback when job is cancelled' do
+        JR.succ_feedbacks = { }
+        result            = []
+        success           = proc { |args| result << args }
+        JR.enqueue 'will_cancel', { arg: 1 }, { period: 2, defer: true }, success
+        wait_until(10) { result.size == 3 }
+        result.size.should == 3
+      end
+
+      it 'should run error feedback when job is cancelled' do
+        JR.err_feedbacks = { }
+        result           = []
+        error            = proc { |args| result << args }
+        JR.enqueue 'will_cancel_in_errback', { arg: 1 }, { period: 2, defer: true }, { }, error
+        sleep(6)
+        result.size.should == 1
+        result.first[:error].should be_an_instance_of NameError
+      end
+
+    end
+  end
+
 end

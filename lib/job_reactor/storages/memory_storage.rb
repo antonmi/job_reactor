@@ -10,7 +10,7 @@ module JobReactor
       end
 
       def load(hash, &block)
-        hash      = storage[hash['id']]
+        hash = storage[hash['id']]
         if hash
           hash_copy = { }
           hash.each { |k, v| hash_copy.merge!(k => v) }
