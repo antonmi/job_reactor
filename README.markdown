@@ -76,7 +76,7 @@ end
 ```
 Run 'application.rb' in one terminal window and 'worker.rb' in another.
 Node connects to distributor, receives the job and works.
-Cool! But it was the simplest example. See 'examples' directory and read 'advanced usage'(coming soon).
+Cool! But it was the simplest example. See 'examples' directory.
 
 Features
 =============
@@ -90,7 +90,7 @@ If you don't have many jobs you can leave only one node which will be connected 
 Nodes and distributors are connected via TCP. So, you can run them on any machine you can connect to.
 Nodes may use different storage or the same one. You can store vitally important jobs in database and
 simple insignificant jobs in memory.
-And more: your nodes may create jobs for others nodes and communicate with each other. See page [advanced usage].
+And more: You can run node and distributor inside one EMreactor, so your nodes may create jobs for others nodes and communicate with each other.
 3. Full job control
 -------------------
 You can add 'callback' and 'errbacks' to the job which will be called on the node.
@@ -113,7 +113,8 @@ If node is stopped or crashed it will retry stored jobs after start.
 Remember, your jobs will be run inside EventMachine reactor! You can easily use the power of async nature of EventMachine.
 Use asynchronous [em-http-request][6], [em-websocket][7], [etc.], [etc.], and [etc].
 7. Thread safe
-Eventmachine reactor loop runs in one thread. So the code in jobs executed in the given node is absolutely threadsafe.  
+Eventmachine reactor loop runs in one thread. So the code in jobs executed in the given node is absolutely threadsafe.
+The only exception is 'defer' job, when you tell the node to run job in EM.defer block (so job will be executed in separate thread).
 8. Deferred and periodic jobs
 -----------------------------
 You can use deferred jobs which will run 'after' some time or 'run_at' given time.
@@ -179,6 +180,7 @@ JR.enqueue('my_job',{arg1: 1, arg2: 2}, {after: 20}, success, error)
 
 The first argument is the name of the job, the second is the arguments hash for the job.
 The third is the options hash. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
+* `defer: true or false` - node will run the job in 'EM.defer' block;  Be careful, the default threadpool size is 20 for EM. You can increase it by setting EM.threadpool_size = 'your value', but it is not recommended.
 * `after: seconds` - node will try run the job after  `seconds` seconds;
 * `run_at: time` - node will try run the job at given time;
 * `period: seconds` - node will run job periodically, each `seconds` seconds;
@@ -314,6 +316,7 @@ The informaion about jobs is saved several times during processing. This informa
 * failed_at - the time when job was failed;
 * last_error - the error occured;
 * period - period (for periodic jobs);
+* defer - 'true' or 'false', flag to run job in EM.defer block;
 * status - job status ('new', 'in progress', 'queued', 'complete', 'error', 'failed', 'cancelled');
 * attempt - the number of attempt;
 * make_after - when to start job again (in seconds after last save);
