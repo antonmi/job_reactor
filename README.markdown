@@ -181,7 +181,7 @@ JR.enqueue('my_job',{arg1: 1, arg2: 2}, {after: 20}, success, error)
 
 The first argument is the name of the job, the second is the arguments hash for the job.
 The third is the options hash. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
-* `defer: true or false` - node will run the job in 'EM.defer' block;  Be careful, the default threadpool size is 20 for EM. You can increase it by setting EM.threadpool_size = 'your value', but it is not recommended.
+* `defer: true or false` - node will run the job in 'EM.defer' block. Be careful, the default threadpool size is 20 for EM. You can increase it by setting EM.threadpool_size = 'your value', but it is not recommended;
 * `after: seconds` - node will try run the job after  `seconds` seconds;
 * `run_at: time` - node will try run the job at given time;
 * `period: seconds` - node will run job periodically, each `seconds` seconds;
