@@ -348,7 +348,7 @@ JR::RedisMonitor.destroy_all_jobs_for(node_name)
 
 License
 =======
-The MIT License - Copyright (c) 2012 Anton Mishchuk
+The MIT License - Copyright (c) 2012-2013 Anton Mishchuk
 
 [0]: http://rubyeventmachine.com
 [1]: https://github.com/defunkt/resque
