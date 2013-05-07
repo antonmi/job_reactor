@@ -201,8 +201,10 @@ Example:
 ```ruby
 #in your 'job_file'
 job 'my_job' do |args|
-#do smth
-args.merge!(result: 'Yay!')
+  #do smth
+  args.merge!(result: 'Yay!')
+end
+
 #in your application
 #success feedback
 success = proc {|args| puts args}
