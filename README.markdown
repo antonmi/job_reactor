@@ -155,10 +155,10 @@ And now JobReactor is ready to work.
 ``` ruby
 JR.run! do
   JR.start_node({
-    :storage => 'redis_storage',
-    :name => 'redis_node1',
-    :server => ['localhost', 5001],
-    :distributors => [['localhost', 5000]] 
+    storage: 'redis_storage',
+    name: 'redis_node1',
+    server: ['localhost', 5001],
+    distributors: [['localhost', 5000]] 
 })
 end
 ```
