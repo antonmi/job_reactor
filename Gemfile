@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 group :development do
   gem 'pry'
   gem 'pry-em'
-  gem 'activerecord'
-  gem 'mysql2'
 end
 
 gem 'eventmachine'

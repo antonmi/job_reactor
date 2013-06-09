@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
 
   s.files             = Dir["lib/**/*.rb"]
   s.files             += Dir['README.markdown']
-  s.files.delete('lib/job_reactor/storages/active_record_storage.rb') #TODO next releases
 
   s.require_path     = 'lib'
 
