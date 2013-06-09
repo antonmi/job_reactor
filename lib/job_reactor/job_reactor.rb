@@ -22,18 +22,18 @@ module JobReactor
     # Accessors to jobs.
     #
     def jobs
-      @@jobs ||= { }
+      @jobs ||= { }
     end
 
     # Ready flag.
     # @@ready is true when block is called inside EM reactor.
     #
     def ready!
-      @@ready = true
+      @ready = true
     end
 
     def ready?
-      (@@ready ||= false) && EM.reactor_running?
+      (@ready ||= false) && EM.reactor_running?
     end
 
     # Parses jobs.
@@ -66,11 +66,11 @@ module JobReactor
     end
 
     def succ_feedbacks
-      @@succ_feedbacks ||= { }
+      @succ_feedbacks ||= { }
     end
 
     def err_feedbacks
-      @@err_feedbacks ||= { }
+      @err_feedbacks ||= { }
     end
 
     # Here is the only method user can call inside the application (excepts start-up methods, of course).

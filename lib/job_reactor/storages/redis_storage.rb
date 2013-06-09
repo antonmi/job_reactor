@@ -1,15 +1,15 @@
 # TODO comment it
-require 'em-redis'
+require 'em-hiredis'
 
 module JobReactor
   module RedisStorage
-    @@storage = EM::Protocols::Redis.connect(host: JobReactor.config[:redis_host], port: JobReactor.config[:redis_port])
+    @storage =  EM::Hiredis.connect(JobReactor.config[:redis_url])
     ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error defer)
 
     class << self
 
       def storage
-        @@storage
+        @storage
       end
 
       def load(hash, &block)

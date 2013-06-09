@@ -25,7 +25,7 @@ describe JobReactor::Logger do
       JR::Logger.stdout = stream
     end
     after { JR::Logger.stdout = @old_stdout }
-    it("should set @@stdout") { JR::Logger.class_variable_get(:@@stdout).should == stream }
+    it("should set @stdout") { JR::Logger.instance_variable_get(:@stdout).should == stream }
     context ":rails_logger" do
       let(:logger) { mock('rails_logger') }
       before do

@@ -2,7 +2,7 @@
 # TODO
 module JobReactor
   def self.config
-    @@config ||= {}
+    @config ||= {}
   end
 end
 
@@ -19,15 +19,8 @@ JR.config[:remove_done_jobs] = true
 JR.config[:remove_cancelled_jobs] = true
 JR.config[:remove_failed_jobs] = false
 
+JR.config[:hiredis_url] = "redis://127.0.0.1:6379"
 JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 
 JR.config[:logger_method] = :puts
-
-#TODO next releases with rails support
-#JR.config[:active_record_adapter] = 'mysql2'
-#JR.config[:active_record_database] = 'em'
-#JR.config[:active_record_user] = ''
-#JR.config[:active_record_password] = ''
-#JR.config[:active_record_table_name] = 'reactor_jobs'
-#JR.config[:use_custom_active_record_connection] = true

@@ -7,7 +7,7 @@ module JobReactor
     extend self
 
     def storage
-      @@storage ||= Redis.new(host: JR.config[:redis_host], port: JR.config[:redis_port])
+      @storage ||= Redis.new(host: JR.config[:redis_host], port: JR.config[:redis_port])
     end
 
     # Returns all job for given node.

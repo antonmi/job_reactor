@@ -3,9 +3,10 @@ GEM
   specs:
     coderay (1.0.6)
     diff-lcs (1.1.3)
-    em-redis (0.3.0)
-      eventmachine
+    em-hiredis (0.2.1)
+      hiredis (~> 0.4.0)
     eventmachine (0.12.10)
+    hiredis (0.4.5)
     method_source (0.7.1)
     multi_json (1.3.5)
     pry (0.9.9.6)
@@ -35,7 +36,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  em-redis
+  em-hiredis
   eventmachine
   pry
   pry-em

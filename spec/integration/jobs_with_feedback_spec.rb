@@ -2,16 +2,16 @@ require 'spec_helper'
 
 module JobReactor
   def self.succ_feedbacks=(value)
-    @@succ_feedbacks = value
+    @succ_feedbacks = value
   end
 
   def self.err_feedbacks=(value)
-    @@err_feedbacks = value
+    @err_feedbacks = value
   end
 
   module MemoryStorage
     def self.flush_storage
-      @@storage = { }
+      @storage = {}
     end
   end
 end

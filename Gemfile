@@ -6,7 +6,7 @@ group :development do
 end
 
 gem 'eventmachine'
-gem 'em-redis'
+gem 'em-hiredis'
 gem 'redis'
 
 group :test do

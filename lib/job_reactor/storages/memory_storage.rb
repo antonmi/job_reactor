@@ -2,17 +2,16 @@
 module JobReactor
   module MemoryStorage
 
-    @@storage = { }
 
     class << self
       def storage
-        @@storage
+        @storage ||= {}
       end
 
       def load(hash, &block)
         hash = storage[hash['id']]
         if hash
-          hash_copy = { }
+          hash_copy = {}
           hash.each { |k, v| hash_copy.merge!(k => v) }
           block.call(hash_copy) if block_given?
         end

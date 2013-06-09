@@ -13,8 +13,6 @@ require 'job_reactor'
 #Job directory
 JR.config[:job_directory] = 'examples/all_in_one/reactor_jobs'
 #Default Redis host, port options
-JR.config[:redis_host] = 'localhost'
-JR.config[:redis_port] = 6379
 JR.config[:retry_jobs_at_start] = false
 
 #This code you should place in application initializer.

@@ -3,7 +3,7 @@ require 'spec_helper'
 module JobReactor
   module MemoryStorage
     def self.flush_storage
-      @@storage = { }
+      @storage = {}
     end
   end
 end

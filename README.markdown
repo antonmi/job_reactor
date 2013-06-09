@@ -299,14 +299,14 @@ __Note__, feedbacks are kept in memory in your application, so they disappear wh
 Job Storage
 ==========
 Now you can store your jobs in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
+We use [em-hiredis](https://github.com/mloughran/em-hiredis) gem
 Only the first, of course, 'really' persists the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
 You can easily integrate your own storage. Just make it EventMachine compatible.
 
-The default host and port for Redis server are:
+The default url for Redis server are:
 
 ```ruby
-JR.config[:redis_host] = 'localhost'
-JR.config[:redis_port] = 6379
+JR.config[:hiredis_url] = "redis://127.0.0.1:6379/0"
 ```
 
 JobReactor works asynchronously with Redis using [em-redis][8] library to increase the speed.
@@ -339,6 +339,16 @@ JR.config[:retry_jobs_at_start] = true
 ```
 
 We provide simple `JR::RedisMonitor` module to check the Redis storage from irb console (or from your app).
+We use synchronous [redis](https://github.com/redis/redis-rb) gem.
+Connect to Redis by:
+
+```ruby
+JR.config[:redis_host] = 'localhost'
+JR.config[:redis_port] = 6379
+```
+
+
+
 See methods:
 
 ```ruby

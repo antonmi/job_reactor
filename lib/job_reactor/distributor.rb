@@ -10,26 +10,26 @@ module JobReactor
     # EM::PeriodicTimer.new(10) { JR::Logger.log nodes}.
     #
     def nodes
-      @@nodes ||= []
+      @nodes ||= []
     end
 
     # Contains connections pool - all node connections.
     #
     def connections
-      @@connections ||= []
+      @connections ||= []
     end
 
     def server
-      @@connect_to || "#{@@host}:#{@@port}"
+      @connect_to || "#{@host}:#{@port}"
     end
 
     # Starts distributor on given hast and port.
     # See JR.start_distributor documentation.
     #
     def start(host, port, opts = {})
-      @@connect_to = opts[:connect_to] && opts[:connect_to].join(':')
-      @@host = host
-      @@port = port
+      @connect_to = opts[:connect_to] && opts[:connect_to].join(':')
+      @host = host
+      @port = port
       JR::Logger.log "Distributor listens #{host}:#{port}"
       EM.start_server(host, port, JobReactor::Distributor::Server)
     end

@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'eventmachine'
   s.add_dependency 'redis'
-  s.add_dependency 'em-redis'
+  s.add_dependency 'em-hiredis'
 
   s.description = <<description
     JobReactor is a library for creating, scheduling and processing background jobs.
