@@ -298,8 +298,9 @@ __Note__, feedbacks are kept in memory in your application, so they disappear wh
 
 Job Storage
 ==========
-Now you can store your job in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
+Now you can store your jobs in [Redis][5] storage (`'redis_storage`') or in memory (`'memory_storage'`).
 Only the first, of course, 'really' persists the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
+You can easily integrate your own storage. Just make it EventMachine compatible.
 
 The default host and port for Redis server are:
 
