@@ -17,7 +17,7 @@ module JobReactor
 end
 
 describe 'simple job' do
-  before :all do
+  before do
     EM.stop if EM.reactor_running?
     wait_until { !EM.reactor_running? }
     JR.config[:job_directory]            = File.expand_path('../../jobs', __FILE__)
