@@ -63,7 +63,7 @@ describe 'simple job', :slow => true do
 
     it 'should not run "after" job immediately' do
       JR.enqueue 'simple_after', { }, { :after => 2 }
-      sleep(1)
+      wait_until(1) { ARRAY.size == 0 }
       ARRAY.size.should == 0
       wait_until { ARRAY.size != 0 }
     end
@@ -90,7 +90,7 @@ describe 'simple job', :slow => true do
 
     it 'should not run "run_at" job' do
       JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 2 }
-      sleep(1)
+      wait_until(1) { ARRAY.size == 0 }
       ARRAY.size.should == 0
       wait_until { ARRAY.size != 0 }
       ARRAY.size.should == 1
@@ -100,7 +100,7 @@ describe 'simple job', :slow => true do
   describe 'combined options' do
     it 'should "after" with period' do
       JR.enqueue 'simple_after', { }, { after: 3, period: 3 }
-      sleep(2)
+      wait_until(2) { ARRAY.size == 0 }
       ARRAY.size.should == 0
       wait_until { ARRAY.size > 0 }
       ARRAY.size.should == 1
@@ -110,7 +110,7 @@ describe 'simple job', :slow => true do
 
     it 'should not run "run_at" job' do
       JR.enqueue 'simple_run_at', { }, { run_at: Time.now + 3, period: 3 }
-      sleep(2)
+      wait_until(2) { ARRAY.size == 0 }
       ARRAY.size.should == 0
       wait_until { ARRAY.size > 0 }
       ARRAY.size.should == 1
@@ -124,13 +124,13 @@ describe 'simple job', :slow => true do
       it 'EM should receive :defer' do
         EM.should_receive(:defer)
         JR.enqueue 'simple', { arg1: 'arg1' }, { defer: true }
-        sleep(2)
+        wait_until(2) {}
       end
 
       it 'EM should NOT receive :defer' do
         EM.should_not_receive(:defer)
         JR.enqueue 'simple', { arg1: 'arg1' }
-        sleep(2)
+        wait_until(2) {}
       end
     end
 
@@ -151,7 +151,7 @@ describe 'simple job', :slow => true do
 
       it 'should "after" with period' do
         JR.enqueue 'simple_after', { }, { after: 3, period: 3, defer: true }
-        sleep(2)
+        wait_until(2) {}
         ARRAY.size.should == 0
         wait_until { ARRAY.size > 0 }
         ARRAY.size.should == 1

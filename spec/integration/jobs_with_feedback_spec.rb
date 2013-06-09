@@ -99,10 +99,10 @@ describe 'simple job' do
       result            = []
       success           = proc { |args| result << args }
       JR.enqueue 'feedback', { arg1: 'arg1' }, { :period => 5 }, success
-      sleep(3)
+      wait_until(3) { result.size == 1 }
       result.size.should == 1
       JR.succ_feedbacks.size.should == 1
-      sleep(5)
+      wait_until(5) { result.size == 2 }
       result.size.should == 2
     end
 
@@ -120,7 +120,7 @@ describe 'simple job' do
       result           = []
       error            = proc { |args| result << args }
       JR.enqueue 'will_cancel_in_errback', { arg: 1 }, { period: 2 }, { }, error
-      sleep(6)
+      wait_until(6) { result.size == 1 }
       result.size.should == 1
       result.first[:error].should be_an_instance_of NameError
     end
@@ -134,10 +134,10 @@ describe 'simple job' do
         result            = []
         success           = proc { |args| result << args }
         JR.enqueue 'feedback', { arg1: 'arg1' }, { period: 5, defer: true }, success
-        sleep(3)
+        wait_until(3) { result.size == 1 }
         result.size.should == 1
         JR.succ_feedbacks.size.should == 1
-        sleep(5)
+        wait_until(5) { result.size == 2 }
         result.size.should == 2
       end
 
@@ -155,7 +155,7 @@ describe 'simple job' do
         result           = []
         error            = proc { |args| result << args }
         JR.enqueue 'will_cancel_in_errback', { arg: 1 }, { period: 2, defer: true }, { }, error
-        sleep(6)
+        wait_until(6) { result.size == 1 }
         result.size.should == 1
         result.first[:error].should be_an_instance_of NameError
       end
