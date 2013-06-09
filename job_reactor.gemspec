@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
   s.name              = 'job_reactor'
-  s.version           = '0.5.2'
+  s.version           = '0.6.0'
   s.date              = Time.now.strftime('%Y-%m-%d')
   s.summary           = 'Simple, powerful and high scalable job queueing and background workers system based on EventMachine'
   s.homepage          = 'http://github.com/antonmi/job_reactor'
   s.email             = 'anton.mishchuk@gmial.com'
-  s.authors           = [ "Anton Mishchuk", "Andrey Rozhkovskiy" ]
+  s.authors           = [ "Anton Mishchuk" ]
   s.platform          = Gem::Platform::RUBY
 
   s.files             = Dir["lib/**/*.rb"]
@@ -20,6 +20,5 @@ Gem::Specification.new do |s|
   s.description = <<description
     JobReactor is a library for creating, scheduling and processing background jobs.
     It is asynchronous client-server distributed system based on EventMachine.
-    Inspired by DelayedJob, Resque, Beanstalkd, and etc.
 description
 end
