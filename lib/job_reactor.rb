@@ -1,6 +1,6 @@
 require 'eventmachine'
 require 'job_reactor/job_reactor'
-require 'job_reactor/logger'
+require 'job_reactor/job_logger'
 require 'job_reactor/node'
 require 'job_reactor/distributor'
 
@@ -15,27 +15,27 @@ require 'job_reactor/distributor'
 module JobReactor
   extend self
 
-  def run(&block)
+  def run
     Thread.new do
       if EM.reactor_running?
-        block.call if block_given?
+        yield if block_given?
         JR.ready!
       else
         EM.run do
-          block.call if block_given?
+          yield if block_given?
           JR.ready!
         end
       end
     end
   end
 
-  def run!(&block)
+  def run!
     if EM.reactor_running?
-      block.call if block_given?
+      yield if block_given?
       JR.ready!
     else
       EM.run do
-        block.call if block_given?
+        yield if block_given?
         JR.ready!
       end
     end

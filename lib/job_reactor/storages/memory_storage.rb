@@ -8,30 +8,30 @@ module JobReactor
         @storage ||= {}
       end
 
-      def load(hash, &block)
+      def load(hash)
         hash = storage[hash['id']]
         if hash
           hash_copy = {}
           hash.each { |k, v| hash_copy.merge!(k => v) }
-          block.call(hash_copy) if block_given?
+          yield hash_copy if block_given?
         end
       end
 
-      def save(hash, &block)
+      def save(hash)
         unless (hash['id'])
           id = Time.now.to_f.to_s
           hash.merge!('id' => id)
         end
         storage.merge!(hash['id'] => hash)
 
-        block.call(hash) if block_given?
+        yield hash if block_given?
       end
 
       def destroy(hash)
         storage.delete(hash['id'])
       end
 
-      def jobs_for(name, &block)  #No persistance
+      def jobs_for(name, &block)  #No persistence
         nil
       end
     end

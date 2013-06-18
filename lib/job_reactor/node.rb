@@ -4,7 +4,13 @@ module JobReactor
   class Node
 
     def initialize(opts)
-      @config = { storage: opts[:storage], name: opts[:name], server: opts[:server], connect_to: opts[:connect_to], distributors: opts[:distributors]}
+      @config = {
+          storage: opts[:storage],
+          name: opts[:name],
+          server: opts[:server],
+          connect_to: opts[:connect_to],
+          distributors: opts[:distributors]
+      }
     end
 
     def config
@@ -45,7 +51,7 @@ module JobReactor
     #
     def connect_to(distributor)
       if connections[distributor]
-        JR::Logger.log "Searching for distributor #{distributor.join(' ')}"
+        JR::JobLogger.log "Searching for distributor #{distributor.join(' ')}"
         connections[distributor].reconnect(*distributor)
       else
         connections.merge!(distributor => EM.connect(*distributor, Client, self, distributor))

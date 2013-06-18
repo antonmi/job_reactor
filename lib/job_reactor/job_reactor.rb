@@ -26,7 +26,7 @@ module JobReactor
     end
 
     # Ready flag.
-    # @@ready is true when block is called inside EM reactor.
+    # @ready is true when block is called inside EM reactor.
     #
     def ready!
       @ready = true
@@ -112,7 +112,7 @@ module JobReactor
     # error = proc { |args| result = args }
     # JR.enqueue 'job', { arg1: 'arg1'}, {}, success, error
     #
-    def enqueue(name, args = { }, opts = { }, success_proc = nil, error_proc = nil)
+    def enqueue(name, args = {}, opts = {}, success_proc = nil, error_proc = nil)
       hash = { 'name' => name, 'args' => args, 'attempt' => 0, 'status' => 'new', 'defer' => 'false' }
 
       hash.merge!('period' => opts[:period]) if opts[:period]
@@ -222,7 +222,7 @@ module JobReactor
     #
     def add_start_callback(job)
       job.callback do
-        JR::Logger.log_event(:start, job)
+        JR::JobLogger.log_event(:start, job)
       end
     end
 
@@ -230,7 +230,7 @@ module JobReactor
     #
     def add_last_callback(job)
       job.callback do
-        JR::Logger.log_event(:complete, job)
+        JR::JobLogger.log_event(:complete, job)
       end
     end
 
@@ -238,7 +238,7 @@ module JobReactor
     #
     def add_start_errback(job)
       job.errback do
-        JR::Logger.log_event(:error, job)
+        JR::JobLogger.log_event(:error, job)
       end
     end
 
@@ -246,7 +246,7 @@ module JobReactor
     #
     def add_complete_errback(job)
       job.errback do
-        JR::Logger.log_event(:error_complete, job)
+        JR::JobLogger.log_event(:error_complete, job)
       end
     end
 

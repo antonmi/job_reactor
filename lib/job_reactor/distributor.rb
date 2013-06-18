@@ -30,7 +30,7 @@ module JobReactor
       @connect_to = opts[:connect_to] && opts[:connect_to].join(':')
       @host = host
       @port = port
-      JR::Logger.log "Distributor listens #{host}:#{port}"
+      JR::JobLogger.log "Distributor listens #{host}:#{port}"
       EM.start_server(host, port, JobReactor::Distributor::Server)
     end
 
@@ -44,7 +44,7 @@ module JobReactor
         data = Marshal.dump(hash)
         connection.send_data(data)
         connection.lock
-        JR::Logger.log "Distributor sent job '#{hash['name']}' to '#{connection.name}'"
+        JR::JobLogger.log "Distributor sent job '#{hash['name']}' to '#{connection.name}'"
       else
         EM.next_tick do
           send_data_to_node(hash)

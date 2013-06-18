@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe JobReactor::Logger do
-  subject { JobReactor::Logger }
+describe JR::JobLogger do
+  subject { JR::JobLogger }
   let(:stdout) { StringIO.new }
   before { subject.stdout = stdout }
 
@@ -21,11 +21,11 @@ describe JobReactor::Logger do
   describe '.stdout=' do
     let(:stream){mock('stream')}
     before do
-      @old_stdout = JR::Logger.stdout
-      JR::Logger.stdout = stream
+      @old_stdout = JR::JobLogger.stdout
+      JR::JobLogger.stdout = stream
     end
-    after { JR::Logger.stdout = @old_stdout }
-    it("should set @stdout") { JR::Logger.instance_variable_get(:@stdout).should == stream }
+    after { JR::JobLogger.stdout = @old_stdout }
+    it("should set @stdout") { JR::JobLogger.instance_variable_get(:@stdout).should == stream }
     context ":rails_logger" do
       let(:logger) { mock('rails_logger') }
       before do

@@ -12,7 +12,7 @@ module JobReactor
         @storage
       end
 
-      def load(hash, &block)
+      def load(hash)
         key = "#{hash['node']}_#{hash['id']}"
         hash_copy = {'node' => hash['node']} #need new object, because old one has been 'failed'
 
@@ -26,13 +26,13 @@ module JobReactor
             end
             hash_copy['args'] = Marshal.load(hash_copy['args'])
 
-            block.call(hash_copy) if block_given?
+            yield hash_copy if block_given?
           end
         end
       end
 
 
-      def save(hash, &block)
+      def save(hash)
         hash.merge!('id' => Time.now.to_f.to_s) unless hash['id']
         key = "#{hash['node']}_#{hash['id']}"
         args, hash['args'] = hash['args'], Marshal.dump(hash['args'])
@@ -40,7 +40,7 @@ module JobReactor
         storage.hmset(key, *ATTRS.map{|attr| [attr, hash[attr]]}.flatten) do
           hash['args'] = args
 
-          block.call(hash) if block_given?
+          yield hash if block_given?
         end
       end
 
@@ -53,7 +53,7 @@ module JobReactor
         storage.del(*storage.keys(pattern))
       end
 
-      def jobs_for(name, &block)
+      def jobs_for(name)
         pattern = "*#{name}_*"
         storage.keys(pattern) do |keys|
           keys.each do |key|
@@ -64,7 +64,7 @@ module JobReactor
               self.load(hash) do |hash|
                 if hash['status'] != 'complete' && hash['status'] != 'cancelled' && hash['status'] != 'failed'
                 else
-                  block.call(hash)
+                  yield hash if block_given?
                 end
               end
             end

@@ -31,7 +31,7 @@ module JobReactor
       end
 
       def unbind
-        JR::Logger.log "#{@name} disconnected"
+        JR::JobLogger.log "#{@name} disconnected"
         close_connection
         JobReactor::Distributor.connections.delete(self)
       end

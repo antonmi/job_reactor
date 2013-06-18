@@ -1,5 +1,5 @@
 module JobReactor
-  module Logger
+  module JobLogger
 
     # Sets the output stream
     #

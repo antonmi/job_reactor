@@ -8,7 +8,7 @@ module JobReactor
       end
 
       def post_init
-        JR::Logger.log("Searching for distributor: #{@distributor.join(' ')} ...")
+        JR::JobLogger.log("Searching for distributor: #{@distributor.join(' ')} ...")
       end
 
       def lock
@@ -34,7 +34,7 @@ module JobReactor
       # Sends node credentials to distributor.
       #
       def connection_completed
-        JR::Logger.log('Begin distributor handshake')
+        JR::JobLogger.log('Begin distributor handshake')
         data = {node_info: {name: @node.config[:name], server: @node.server} }
         data = Marshal.dump(data)
         send_data(data)

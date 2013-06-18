@@ -6,6 +6,7 @@ module JobReactor
       @storage = {}
     end
   end
+
 end
 
 describe 'simple job', :slow => true do
@@ -22,6 +23,7 @@ describe 'simple job', :slow => true do
     end
     wait_until { EM.reactor_running? }
     JR::MemoryStorage.flush_storage
+    #JR::RedisStorage.destroy_all_jobs_for('memory_node')
     ARRAY.clear
   end
 
