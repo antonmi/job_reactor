@@ -3,19 +3,17 @@ require 'em-hiredis'
 
 module JobReactor
   module RedisStorage
-    @storage =  EM::Hiredis.connect(JobReactor.config[:redis_url])
     ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error defer)
 
     class << self
 
       def storage
-        @storage
+        @storage ||= EM::Hiredis.connect(JobReactor.config[:hiredis_url])
       end
 
       def load(hash)
         key = "#{hash['node']}_#{hash['id']}"
         hash_copy = {'node' => hash['node']} #need new object, because old one has been 'failed'
-
         storage.hmget(key, *ATTRS) do |record|
           unless record.compact.empty?
             ATTRS.each_with_index do |attr, i|
@@ -39,13 +37,14 @@ module JobReactor
 
         storage.hmset(key, *ATTRS.map{|attr| [attr, hash[attr]]}.flatten) do
           hash['args'] = args
-
           yield hash if block_given?
         end
       end
 
       def destroy(hash)
-        storage.del("#{hash['node']}_#{hash['id']}")
+        storage.del("#{hash['node']}_#{hash['id']}") do
+          yield hash if block_given?
+        end
       end
 
       def destroy_all_jobs_for(name)

@@ -19,7 +19,7 @@ JR.config[:remove_done_jobs] = true
 JR.config[:remove_cancelled_jobs] = true
 JR.config[:remove_failed_jobs] = false
 
-JR.config[:hiredis_url] = "redis://127.0.0.1:6379"
+JR.config[:hiredis_url] = "redis://localhost:6379"
 JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 

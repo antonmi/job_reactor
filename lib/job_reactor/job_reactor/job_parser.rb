@@ -17,10 +17,11 @@
 #     errbacks: [[]]
 #  }
 # }
+#
 # Names of callbacks and errbacks are optional and may be used just for description
 #
 # Job and job_callbacks are absolutely identical on the node side.
-# They become callback of the Deferrable instance. 'job' is the first callback, 'job_callbacks' are the next
+# They become callbacks of the Deferrable instance. 'job' is the first callback, 'job_callbacks' are the next
 #
 # Use job_callbacks to split your job into small parts.
 # You can send additional arguments from one callback to another by merging them into 'args'.
@@ -35,7 +36,7 @@
 # end
 #
 # This is true for errbacks too. Note that you can't access additional arguments added in callbacks in your errbacks
-# In errbacks you also have :error key in args which point the error message
+# In errbacks you also have :error key in args which point the error message.
 #
 # Note, that callbacks and errbacks are called one after another synchronously in one EM tick.
 #
