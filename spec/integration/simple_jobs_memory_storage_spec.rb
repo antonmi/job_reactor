@@ -9,7 +9,7 @@ module JobReactor
 
 end
 
-describe 'simple job', :slow => true do
+describe 'simple job', slow: true do
   before do
     EM.stop if EM.reactor_running?
     wait_until { !EM.reactor_running? }
@@ -27,7 +27,5 @@ describe 'simple job', :slow => true do
   end
 
   require 'integration/shared_examples_for_simple_jobs'
-
-
   it_behaves_like 'Simple Jobs'
 end

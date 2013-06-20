@@ -2,7 +2,7 @@ require 'redis'
 module JobReactor
   module RedisMonitor
 
-    ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error)
+    ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error defer)
 
     extend self
 

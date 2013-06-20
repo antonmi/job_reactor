@@ -4,6 +4,8 @@ require 'job_reactor/storages/redis_monitor'
 describe 'Redis storage' do
 
   before do
+    EM.stop if EM.reactor_running?
+    wait_until { !EM.reactor_running? }
     @job = { 'node' => 'redis', 'name' => 'test_job', 'args' => 'args'}
     JR::RedisMonitor.destroy_all_jobs_for('redis')
     Thread.new do
