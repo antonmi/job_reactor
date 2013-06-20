@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'JR::RedisMonitor' do
-  ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error)
+  ATTRS = %w(id name args last_error run_at failed_at attempt period make_after status distributor on_success on_error defer)
 
   before do
     @storage = Redis.new
@@ -18,7 +18,8 @@ describe 'JR::RedisMonitor' do
         "status" => "in progresss",
         "distributor" => "localhost:5000",
         "on_success" => "localhost:5000_1338721758.0794044",
-        "on_error" => "localhost:5000_1338721758.0794218"
+        "on_error" => "localhost:5000_1338721758.0794218",
+        "defer" => "false"
     }
     @node = 'test_redis_node'
     key = "#{@node}_#{@hash['id']}"

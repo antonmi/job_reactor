@@ -1,20 +1,33 @@
 require 'spec_helper'
 require 'job_reactor/storages/redis_monitor'
 
+module JobReactor
+  module RedisStorage
+    def self.nil_storage
+      @storage = nil
+    end
+  end
+end
+
 describe 'Redis storage' do
 
   before do
-    EM.stop if EM.reactor_running?
-    wait_until { !EM.reactor_running? }
+    if EM.reactor_running?
+      if defined?(JR::RedisStorage.storage)
+        JR::RedisStorage.storage.close_connection
+        wait_until { !JR::RedisStorage.storage.connected? }
+        JR::RedisStorage.nil_storage
+      end
+      EM.stop
+      wait_until { !EM.reactor_running? }
+    end
     @job = { 'node' => 'redis', 'name' => 'test_job', 'args' => 'args'}
     JR::RedisMonitor.destroy_all_jobs_for('redis')
     Thread.new do
-      EM.run do
-        require 'job_reactor/storages/redis_storage'
-      end unless EM.reactor_running?
+      EM.run { require 'job_reactor/storages/redis_storage' }
     end
-
-    wait_until(1, true) { defined?(JR::RedisStorage.storage) && JR::RedisStorage.storage.connected? }
+    wait_until(1, true) { EM.reactor_running? }
+    wait_until(5, true) { JR::RedisStorage.storage.connected? }
   end
 
   it 'should save job' do

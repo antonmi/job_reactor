@@ -124,7 +124,7 @@ module JobReactor
 
       hash.merge!('distributor' => JR::Distributor.server)
 
-      hash.merge!('defer' => 'true') if opts[:defer]
+      hash.merge!('defer' => opts[:defer] ? 'true' : 'false')
 
       add_succ_feedbacks!(hash, success_proc) if success_proc.is_a? Proc
       add_err_feedbacks!(hash, error_proc) if error_proc.is_a? Proc
