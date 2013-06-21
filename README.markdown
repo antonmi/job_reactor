@@ -4,11 +4,9 @@ JobReactor <img src='https://secure.travis-ci.org/antonmi/job_reactor.png'>
 JobReactor is a library for creating, scheduling and processing background jobs.
 It is asynchronous client-server distributed system based on [EventMachine][0].
 
-To use JobReactor with [Ruby on Rails][9] you should start distributor in initializer using `JR.run` method (it launches EventMachine in separate thread).
-Then add rake task(s) which will run the node(s). If you use server the solution is more complicated because 'Thin' use EventMachine too.
-So, 'rails' integration is not complete for the time being.
-We need to test the system with different servers (clusters) and automate the initialization and re-start processes.
-Collaborators, you are welcome!
+To use JobReactor with [Sinatra][11] or [Ruby on Rails][9] you should start distributor in initializer using `JR.run` method (it launches EventMachine in separate thread).
+Then add rake task(s) which will run the node(s).
+If you use server based on EventMachine such [Thin][12] use JR.wait_em_and_run method which will initialize JobReactor when EventMachine started.
 
 So, read the 'features' section and try JobReactor. You can do a lot with it.
 
@@ -373,3 +371,5 @@ The MIT License - Copyright (c) 2012-2013 Anton Mishchuk
 [8]: https://github.com/madsimian/em-redis
 [9]: http://rubyonrails.org/
 [10]: http://code.macournoyer.com/thin/
+[11]: http://www.sinatrarb.com/
+[12]: http://code.macournoyer.com/thin/
