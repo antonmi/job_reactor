@@ -11,7 +11,6 @@ module JobReactor
         @storage ||= EM::Hiredis.connect(JobReactor.config[:hiredis_url])
       end
 
-
       def load(hash)
         key = "#{hash['node']}_#{hash['id']}"
         hash_copy = {'node' => hash['node']} #need new object, because old one has been 'failed'
@@ -29,7 +28,6 @@ module JobReactor
           end
         end
       end
-
 
       def save(hash)
         hash.merge!('id' => Time.now.to_f.to_s) unless hash['id']

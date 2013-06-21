@@ -16,8 +16,10 @@ module JobReactor
     # Logs message to output stream
     #
     def self.log(msg)
-      stdout.public_send(@logger_method, '-'*100)
-      stdout.public_send(@logger_method, msg)
+      if @logger_method
+        stdout.public_send(@logger_method, '-'*100)
+        stdout.public_send(@logger_method, msg)
+      end
     end
 
     # Builds string for job event and log it
