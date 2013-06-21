@@ -27,7 +27,7 @@ describe 'simple job, redis storage', slow: true do
       JR.start_node({ storage: 'redis_storage', name: 'redis_node', server: ['localhost', 7009], distributors: [['localhost', 5009]] })
     end
     wait_until { EM.reactor_running? }
-    wait_until(1, true) { defined?(JR::RedisStorage.storage) && JR::RedisStorage.storage.connected? }
+    wait_until(3, true) { defined?(JR::RedisStorage.storage) && JR::RedisStorage.storage.connected? }
     ARRAY.clear
     JR::RedisMonitor.destroy_all_jobs_for('redis_node')
   end
