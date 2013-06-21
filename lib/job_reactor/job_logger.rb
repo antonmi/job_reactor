@@ -3,7 +3,9 @@ module JobReactor
 
     # Sets the output stream
     #
-    @logger_method = JR.config[:logger_method]
+    def self.logger_method
+      @logger_method ||= JR.config[:logger_method]
+    end
 
     def self.stdout=(value)
       @stdout = value
@@ -16,9 +18,9 @@ module JobReactor
     # Logs message to output stream
     #
     def self.log(msg)
-      if @logger_method
-        stdout.public_send(@logger_method, '-'*100)
-        stdout.public_send(@logger_method, msg)
+      if logger_method
+        stdout.public_send(logger_method, '-'*100)
+        stdout.public_send(logger_method, msg)
       end
     end
 
