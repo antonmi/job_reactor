@@ -17,7 +17,6 @@ JR.config[:retry_jobs_at_start] = false
 
 #This code you should place in application initializer.
 #It should be run only once
-#You see wait_em_and_run method which you should use if your application use EventMachine
 JR.run! do
   JR.start_distributor('localhost', 5000)
   #Starts node in the same process

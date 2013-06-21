@@ -41,4 +41,14 @@ module JobReactor
     end
   end
 
+  def wait_em_and_run
+    Thread.new do
+      sleep(0.1) until EM.reactor_running?
+      EM.schedule do
+        yield if block_given?
+        JR.ready!
+      end
+    end
+  end
+
 end
