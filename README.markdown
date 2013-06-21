@@ -27,10 +27,10 @@ JobReactor is the best solution for I/O intensive web application powered by eve
 While all requests are processed in one thread you should avoid blocking reactor loop.
 So you should (and must) delegate intensive calculation to another process.
 
-__Use JobReactor to send the blocking calculations to another process__
+__Use JobReactor to send the blocking calculations to another process.__
 
-JobReactor keeps you in evented paradigm by allowing to register callback for the tasks wich will be trigerred when work is done.  
-See simple examlple of using with AsyncSinatra [here][13].
+JobReactor keeps you in evented paradigm by allowing to register callback for the tasks which will be triggered when work is done.
+See simple example of using with AsyncSinatra [here][13].
 
 Quick start
 ===========
@@ -109,7 +109,7 @@ If error occur in the job you can see it in 'errbacks' and the in 'error feedbac
 ---------------------------
 Inside the job you can get information about when it starts, when it fails, which node execute job and etc.
 You also can add some arguments to the job on-the-fly which will be used in the subsequent callbacks and errbacks.
-These arguments then can be sent back to the distibutor.
+These arguments then can be sent back to the distributor.
 5. Reliability
 --------------
 You can run additional nodes and stop any nodes on-the-fly.
@@ -122,7 +122,7 @@ Remember, your jobs will be run inside EventMachine reactor! You can easily use 
 Use asynchronous [em-http-request][6], [em-websocket][7], and etc.
 7. Thread safe
 --------------
-Eventmachine reactor loop runs in one thread. So the code in jobs executed in the given node is absolutely threadsafe.
+EventMachine reactor loop runs in one thread. So the code in jobs executed in the given node is absolutely threadsafe.
 The only exception is 'defer' job, when you tell the node to run job in EM.defer block (so job will be executed in separate thread).
 8. Deferred and periodic jobs
 -----------------------------
@@ -189,7 +189,7 @@ JR.enqueue('my_job',{arg1: 1, arg2: 2}, {after: 20}, success, error)
 
 The first argument is the name of the job, the second is the arguments hash for the job.
 The third is the options hash. If you don't specify any option job will be instant job and will be sent to any free node. You can use the following options:
-* `defer: true or false` - node will run the job in 'EM.defer' block. Be careful, the default threadpool size is 20 for EM. You can increase it by setting EM.threadpool_size = 'your value', but it is not recommended;
+* `defer: true or false` - node will run the job in 'EM.defer' block. Be careful, the default thread pool size is 20 for EM. You can increase it by setting EM.threadpool_size = 'your value', but it is not recommended;
 * `after: seconds` - node will try run the job after  `seconds` seconds;
 * `run_at: time` - node will try run the job at given time;
 * `period: seconds` - node will run job periodically, each `seconds` seconds;
