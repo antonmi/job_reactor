@@ -305,7 +305,7 @@ __Note__, feedbacks are kept in memory in your application, so they disappear wh
 
 Job Storage
 ==========
-Now you can store your jobs in [Redis][5] storage (`'redis_storage`') ([em-hiredis](https://github.com/mloughran/em-hiredis)) or in memory (`'memory_storage'`).
+Now you can store your jobs in [Redis][5] storage (`'redis_storage`') ([em-hiredis][8]) or in memory (`'memory_storage'`).
 Only the first, of course, 'really' persists the jobs. You can use the last one if you don't want install Redis, don't need retry jobs and need more speed (by the way, the difference in performance is not so great - Redis is very fast).
 You can easily integrate your own storage. Just make it EventMachine compatible.
 
@@ -315,7 +315,7 @@ The default url for Redis server are:
 JR.config[:hiredis_url] = "redis://127.0.0.1:6379/0"
 ```
 
-JobReactor works asynchronously with Redis using [em-redis][8] library to increase the speed.
+JobReactor works asynchronously with Redis using [em-hiredis][8] library to increase the speed.
 Several nodes can use one Redis storage.
 
 The informaion about jobs is saved several times during processing. This information includes:
@@ -377,7 +377,7 @@ The MIT License - Copyright (c) 2012-2013 Anton Mishchuk
 [5]: http://redis.io
 [6]: https://github.com/igrigorik/em-http-request
 [7]: https://github.com/igrigorik/em-websocket
-[8]: https://github.com/madsimian/em-redis
+[8]: https://github.com/mloughran/em-hiredis
 [9]: http://rubyonrails.org/
 [10]: http://code.macournoyer.com/thin/
 [11]: http://www.sinatrarb.com/
