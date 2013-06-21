@@ -6,7 +6,9 @@ It is asynchronous client-server distributed system based on [EventMachine][0].
 
 To use JobReactor with [Sinatra][11] or [Ruby on Rails][9] you should start distributor in initializer using `JR.run` method (it launches EventMachine in separate thread).
 Then add rake task(s) which will run the node(s).
-If you use server based on EventMachine such [Thin][12] use JR.wait_em_and_run method which will initialize JobReactor when EventMachine started.
+
+If you use server based on EventMachine ([Thin][12]) use `JR.wait_em_and_run` method which will initialize JobReactor when EventMachine started.
+
 
 So, read the 'features' section and try JobReactor. You can do a lot with it.
 
@@ -20,6 +22,15 @@ They will block the reactor and break normal processing.
 If you can't divide 'THE BIG JOB' into 'small pieces' you shouldn't use JobReactor. See alternatives such [DelayedJob][4] or [Resque][1].
 
 __JobReactor is the right solution if you have thousands, millions, and, we hope, billions relatively small jobs.__
+
+JobReactor is the best solution for I/O intensive web application powered by evented web servers such [Thin][12].
+While all requests are processed in one thread you should avoid blocking reactor loop.
+So you should (and must) delegate intensive calculation to another process.
+
+__Use JobReactor to send the blocking calculations to another process__
+
+JobReactor keeps you in evented paradigm by allowing to register callback for the tasks wich will be trigerred when work is done.  
+See simple examlple of using with AsyncSinatra [here][13].
 
 Quick start
 ===========
@@ -373,3 +384,4 @@ The MIT License - Copyright (c) 2012-2013 Anton Mishchuk
 [10]: http://code.macournoyer.com/thin/
 [11]: http://www.sinatrarb.com/
 [12]: http://code.macournoyer.com/thin/
+[13]: https://github.com/antonmi/sinatra_with_job_reactor
