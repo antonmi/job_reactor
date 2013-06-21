@@ -19,7 +19,7 @@ module JobReactor
     #
     def self.log(msg)
       if logger_method
-        stdout.public_send(logger_method, '-'*100)
+        stdout.public_send(logger_method, "-----#{Time.now.utc}-----")
         stdout.public_send(logger_method, msg)
       end
     end

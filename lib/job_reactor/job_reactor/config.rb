@@ -1,5 +1,3 @@
-# Names are informative
-# TODO
 module JobReactor
   def self.config
     @config ||= {}
@@ -23,4 +21,4 @@ JR.config[:hiredis_url] = "redis://localhost:6379"
 JR.config[:redis_host] = 'localhost'
 JR.config[:redis_port] = 6379
 
-JR.config[:logger_method] = :puts
+JR.config[:logger_method] = :puts  #nil for complete disable any messages
