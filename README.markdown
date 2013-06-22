@@ -6,11 +6,11 @@ It is asynchronous client-server distributed system based on [EventMachine][0].
 
 JobReactor is the best solution for I/O intensive web application powered by evented web servers such [Thin][12].
 While all requests are processed in one thread you should avoid blocking reactor loop.
-So you should (and must) delegate intensive calculation to another process.
+So you should (and must) delegate intensive calculations to another process.
 
-__Use JobReactor to send the blocking calculations to another process.__
+__Use JobReactor to avoid blocking calculations.__
 
-JobReactor keeps you in evented paradigm by allowing to register callback for the tasks which will be triggered when work is done.
+JobReactor keeps you in the evented paradigm by allowing to register callback for the tasks which will be triggered when work is done.
 See simple example of using with AsyncSinatra [here][13].
 
 To use JobReactor with [Sinatra][11] or [Ruby on Rails][9] you should start distributor in initializer using `JR.run` method (it launches EventMachine in separate thread).
